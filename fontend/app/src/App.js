@@ -1,24 +1,24 @@
-import React, { Suspense, useState } from "react";
+import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-//import "antd/dist/antd.css";
-import Loading from "./component/Loading";
+import Formlogin from "./component/formlogin";
 import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "./component/style.scss";
-
-const Formlogin = React.lazy(() => import("./component/formlogin"));
-const Dangkilop = React.lazy(() => import("./component/dangkilop"));
-// const Register = React.lazy(() => import("./containers/register"));
-// const Admin = React.lazy(() => import("./containers/adminpage"));
+import Home from "./component/home";
+import Footer from "./component/footer";
 
 const App = () => {
-  const [account, setAccount] = useState("Phạm Văn Quyền");
-  localStorage.setItem("account", account);
-
-  const handleClick = () => {
-    setAccount("");
-    console.log(localStorage.getItem("account"));
+  const handleLogout = () => {
+    localStorage.removeItem("account");
+    if (!localStorage.getItem("account")) {
+      window.location.reload();
+    }
   };
+  let user = "";
+  if (localStorage.getItem("account")) {
+    user = JSON.parse(localStorage.getItem("account"));
+  }
+
   return (
     <div className="body">
       <BrowserRouter>
@@ -30,42 +30,40 @@ const App = () => {
             <h3>ĐĂNG KÍ HỌC TẬP</h3>
             <h2>TRƯỜNG ĐẠI HỌC BÁCH KHÓA HÀ NỘI</h2>
           </div>
-          <div
-            className="header-account"
-            style={{
-              display: (`${account}` === "") | null ? "none" : "block",
-            }}
-          >
-            <div className="header-account-top">
-              <div className="header-account-icon">
-                <UserOutlined className="site-form-item-icon" />
-              </div>
-              <div className="header-account-name">
-                {localStorage.getItem("account")}
-              </div>
-            </div>
-            <div className="header-account-bot">
-              <p className="dangxuat" to="" onClick={handleClick}>
-                Đăng xuất
-              </p>
-              <Link className="doipass" to="">
-                Đổi mật khẩu
-              </Link>
-            </div>
-          </div>
+          {user && <Logout handleLogout={handleLogout} user={user} />}
         </div>
-        <Suspense fallback={<Loading />}>
-          <Switch>
-            <Redirect exact from="/" to="/Account" />
-            <Route exact path="/Account" component={Formlogin} />
-            <Route exact path="/dangkilop" component={Dangkilop} />
 
-            {/* <Route component={NotFound} /> */}
-          </Switch>
-        </Suspense>
+        <Switch>
+          <Redirect exact from="/" to="/Account" />
+          <Route path="/Account" component={Formlogin} />
+          <Route path="/home" component={Home} />
+          {/* <Route component={NotFound} /> */}
+        </Switch>
       </BrowserRouter>
+      <Footer />
     </div>
   );
 };
 
 export default App;
+
+export const Logout = ({ user, handleLogout }) => {
+  return (
+    <div className="header-account">
+      <div className="header-account-top">
+        <div className="header-account-icon">
+          <UserOutlined className="site-form-item-icon" />
+        </div>
+        <div className="header-account-name">{user.name}</div>
+      </div>
+      <div className="header-account-bot">
+        <p className="dangxuat" onClick={handleLogout}>
+          Đăng xuất
+        </p>
+        <Link className="doipass" to="">
+          Đổi mật khẩu
+        </Link>
+      </div>
+    </div>
+  );
+};
