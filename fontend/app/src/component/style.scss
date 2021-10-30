@@ -177,7 +177,12 @@
 
 .doipass {
     text-decoration: none;
-    color: rgb(176, 188, 143)
+    color: rgb(176, 188, 143);
+    border: none;
+}
+
+.doipass:focus {
+    border: none;
 }
 
 .doipass:hover {
@@ -283,8 +288,8 @@
 
 .footer {
     text-align: center;
-    min-height: 60px;
-    background-color: rgb(235, 43, 43);
+    min-height: 80px;
+    background-color: rgb(161, 11, 11);
     padding-top: 20px;
     color: white;
     font-size: 13px;
@@ -343,11 +348,20 @@ li {
     margin: 20px auto;
     font-size: 18px;
     font-weight: 700;
-    color: rgb(235, 43, 43);
+    color: rgb(161, 11, 11);
 }
 
 .hr-style {
     box-shadow: 10px 10px 100px burlywood;
     font-weight: 700;
     color: rgb(235, 43, 43);
+}
+
+#alert-dialog-description {
+    font-weight: 300;
+    opacity: 1;
+}
+
+.dialogpass {
+    margin: 40px;
 }

@@ -1,11 +1,24 @@
-import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import React, { useState } from "react";
+import {
+  BrowserRouter,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 import Formlogin from "./component/formlogin";
 import { UserOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 import "./component/style.scss";
 import Home from "./component/home";
 import Footer from "./component/footer";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from "@material-ui/core";
 
 const App = () => {
   const handleLogout = () => {
@@ -48,6 +61,19 @@ const App = () => {
 export default App;
 
 export const Logout = ({ user, handleLogout }) => {
+  const [open, setOpen] = useState(false);
+  const handleshowDialog = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleSub = () => {
+    setOpen(false);
+
+    localStorage.removeItem("account");
+    window.location.reload();
+  };
   return (
     <div className="header-account">
       <div className="header-account-top">
@@ -57,12 +83,48 @@ export const Logout = ({ user, handleLogout }) => {
         <div className="header-account-name">{user.name}</div>
       </div>
       <div className="header-account-bot">
-        <p className="dangxuat" onClick={handleLogout}>
+        <button className="dangxuat doipass" onClick={handleLogout}>
           Đăng xuất
-        </p>
-        <Link className="doipass" to="">
+        </button>
+        <button className="doipass" onClick={handleshowDialog}>
           Đổi mật khẩu
-        </Link>
+        </button>
+        <Dialog open={open} onClose={handleClose}>
+          {/* <DialogTitle>Subscribe</DialogTitle> */}
+          <DialogContent className="dialogpass">
+            <DialogContentText style={{ color: "red", paddingBottom: "20px" }}>
+              Nhập đầy đủ thông tin.
+            </DialogContentText>
+            <TextField
+              margin="dense"
+              autoFocus
+              label="Mật khẩu hiện tại"
+              type="password"
+              fullWidth
+              variant="filled"
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Mật khẩu mới"
+              type="password"
+              fullWidth
+              variant="filled"
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Xác nhận mật khẩu"
+              type="password"
+              fullWidth
+              variant="filled"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Trở lại</Button>
+            <Button onClick={handleSub}>Xác nhận</Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   );

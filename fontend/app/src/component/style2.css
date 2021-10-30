@@ -21,10 +21,40 @@
 .thongtincanhan-table th,
 .thongtincanhan-table td {
     text-align: left;
-    padding: 8px;
+    padding: 2px;
     opacity: 0.7;
 }
 
 table {
     border-collapse: collapse;
+    outline-style: none;
+}
+
+.thongtincanhan-content {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.thongtincanhan-left {
+    width: 60%;
+    flex: 1;
+}
+
+.thongtincanhan-right {
+    width: 30%;
+}
+
+.imageInfo {
+    width: 80%;
+    height: 85%;
+    margin-top: 50px;
+    border-image-source: inherit;
+    border: 1px;
+    border-style: dotted;
+    text-align: center;
+}
+
+#outlined-basic {
+    padding: 8px;
 }

@@ -12,6 +12,8 @@ import "./style.scss";
 const Dangkihocphan = React.lazy(() => import("./dangkihocphan"));
 const Thongtinsinhvien = React.lazy(() => import("./thongtinsinhvien"));
 const Dangkilophoc = React.lazy(() => import("./dangkilophoc"));
+const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
+
 function Home(props) {
   const match = useRouteMatch();
   const history = useHistory();
@@ -62,6 +64,11 @@ function Home(props) {
               path={`${match.path}/dangkilophoc`}
               component={Dangkilophoc}
             />
+            <Route
+              path={`${match.path}/thongtinlopmo`}
+              component={Thongtinlopmo}
+            />
+
             {/* <Route component={NotFound} /> */}
           </Switch>
         </Suspense>
@@ -98,6 +105,14 @@ export const MenuSV = () => {
           to={`${match.url}/thongtincanhan`}
         >
           Thông tin cá nhân
+        </Link>
+      </li>
+      <li style={{ paddingTop: "5px", listStyle: "none" }}>
+        <Link
+          style={{ textDecoration: "none" }}
+          to={`${match.url}/thongtinlopmo`}
+        >
+          Thông tin lớp mở
         </Link>
       </li>
     </ul>

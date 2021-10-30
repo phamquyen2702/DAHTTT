@@ -4,29 +4,21 @@ import "./style.scss";
 const hocphan = [
   {
     mahocphan: "IT4444",
-    tenhocphan: "Phân tích và thiết kế hệ thống thông tin",
+    malop: "112313",
+    toida: 45,
     sotinchi: 3,
-  },
-  {
-    mahocphan: "IT4455",
-    tenhocphan: "Đồ án 3",
-    sotinchi: 2,
-  },
-  {
-    mahocphan: "IT4455",
-    tenhocphan: "Đồ án 3",
-    sotinchi: 2,
   },
 ];
 
-function Dangkihocphan(props) {
+function Thongtinlopmo(props) {
   const row = hocphan.map((data, index) => (
     <tr>
       <td>{index}</td>
       <td>{data.mahocphan}</td>
-      <td>{data.tenhocphan}</td>
+      <td>{data.malop}</td>
       <td>{data.sotinchi}</td>
-      <td>Xóa</td>
+      <td>{data.toida}</td>
+      <td>Thêm</td>
     </tr>
   ));
   return (
@@ -34,15 +26,15 @@ function Dangkihocphan(props) {
       <div className="search-header">
         <div className="search-malop">
           <TextField
-            autoFocus
             id="outlined-input"
             label="Mã học phần"
             type="text"
             style={{ width: "200px", margin: "20px" }}
+            autoFocus
           />
           <Button
             style={{
-              width: "150px",
+              width: "250px",
               margin: "32px",
               fontWeight: "400",
               background: "rgb(235, 43, 43)",
@@ -50,10 +42,10 @@ function Dangkihocphan(props) {
             }}
             variant="contained"
           >
-            Đăng kí ngay
+            Tìm kiếm theo Mã HP
           </Button>
         </div>
-        <div className="search-hearder-right">Số tín chỉ tối đa: 24</div>
+        <div className="search-hearder-right">Tìm thấy n kết quả</div>
       </div>
 
       <div className="table-dangki">
@@ -61,9 +53,10 @@ function Dangkihocphan(props) {
           <tr>
             <th>STT</th>
             <th>Mã học phần</th>
-            <th>Tên học phần</th>
+            <th>Mã Lớp</th>
             <th>Số tín chỉ</th>
-            <th>Thay đổi</th>
+            <th>Tối đa</th>
+            <th>Thêm vào D/S đăng kí</th>
           </tr>
           {row}
         </table>
@@ -77,4 +70,4 @@ function Dangkihocphan(props) {
   );
 }
 
-export default Dangkihocphan;
+export default Thongtinlopmo;

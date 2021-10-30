@@ -106,6 +106,7 @@ function Formlogin(props) {
               />
             </RadioGroup>
             <TextField
+              autoFocus
               id="outlined-input"
               {...register("email")}
               label="email"
@@ -143,7 +144,7 @@ function Formlogin(props) {
             }}
             variant="contained"
           >
-            Thời khóa biểu dự kiến
+            Download thời khóa biểu dự kiến
           </Button>
         </div>
         <div className="content-login-right-bot">
@@ -156,7 +157,7 @@ function Formlogin(props) {
             }}
             variant="contained"
           >
-            Thông tin danh sách lớp mở
+            Download danh sách lớp mở
           </Button>
         </div>
       </div>
