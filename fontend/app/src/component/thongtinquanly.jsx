@@ -4,7 +4,7 @@ import Customtext from "./customtext";
 import Customselect from "./customselect";
 import "./style2.css";
 
-function Detailsv(props) {
+function Thongtinquanly(props) {
   const currencies = [
     {
       value: "Viện Công nghệ Thông tin và Truyền thông",
@@ -35,7 +35,7 @@ function Detailsv(props) {
   return (
     <div className="thongtincanhan">
       <p className="thongtincanhan-title">Thông tin cá nhân</p>
-      <hr style={{ opacity: "0.3", width: "50%", marginLeft: "25%" }} />
+      <hr style={{ opacity: "0.3", width: "100%" }} />
       <div className="thongtincanhan-content">
         <div className="thongtincanhan-left">
           <div className="thongtincanhan-table">
@@ -50,15 +50,15 @@ function Detailsv(props) {
               </tr>
               <tr>
                 <Customtext
-                  labelField="Chương trình"
-                  valueField="CT Nhóm ngành CNTT-TT 2-2015"
+                  labelField="Bộ môn"
+                  valueField="Hệ thống thông tin"
                   statusField={edit}
                 ></Customtext>
               </tr>
               <tr>
                 <Customtext
                   labelField="Bậc đào tạo"
-                  valueField="Đại học đại trà"
+                  valueField="Thạc sĩ"
                   statusField={edit}
                 ></Customtext>
               </tr>
@@ -78,20 +78,7 @@ function Detailsv(props) {
                   statusField={edit}
                 ></Customselect>
               </tr>
-              <tr>
-                <Customtext
-                  labelField="Lớp"
-                  valueField="CNTT2-1 K60"
-                  statusField={edit}
-                ></Customtext>
-              </tr>
-              <tr>
-                <Customtext
-                  labelField="Khóa học"
-                  valueField="60"
-                  statusField={edit}
-                ></Customtext>
-              </tr>
+
               <tr>
                 <Customtext
                   disabled="true"
@@ -114,21 +101,14 @@ function Detailsv(props) {
                   statusField={edit}
                 ></Customtext>
               </tr>
-              <tr>
-                <Customtext
-                  disabled="true"
-                  labelField="Tình trạng học tập"
-                  valueField="học"
-                  statusField={edit}
-                ></Customtext>
-              </tr>
+
               <tr>
                 {!edit && (
                   <Button
                     style={{
                       width: "250px",
                       marginTop: "40px",
-                      marginLeft: "6px",
+                      marginLeft: "9px",
                       fontWeight: "400",
                       background: "rgb(235, 43, 43)",
                       color: "white",
@@ -144,7 +124,7 @@ function Detailsv(props) {
                     style={{
                       width: "250px",
                       marginTop: "40px",
-                      marginLeft: "6px",
+                      marginLeft: "3px",
                       fontWeight: "400",
                       background: "rgb(235, 43, 43)",
                       color: "white",
@@ -159,12 +139,10 @@ function Detailsv(props) {
             </table>
           </div>
         </div>
-        <div className="thongtincanhan-right">
-          <div className="imageInfo">Empty</div>
-        </div>
+        <div className="thongtincanhan-right"></div>
       </div>
     </div>
   );
 }
 
-export default Detailsv;
+export default Thongtinquanly;

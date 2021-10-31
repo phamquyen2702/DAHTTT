@@ -1,18 +1,23 @@
 import React, { Suspense } from "react";
 import {
   Switch,
-  Link,
   Route,
   useRouteMatch,
   Redirect,
   useHistory,
+  NavLink,
 } from "react-router-dom";
 import Loading from "./Loading";
 import "./style.scss";
 const Dangkihocphan = React.lazy(() => import("./dangkihocphan"));
-const Thongtinsinhvien = React.lazy(() => import("./thongtinsinhvien"));
+const Thongtincanhan = React.lazy(() => import("./thongtincanhan"));
 const Dangkilophoc = React.lazy(() => import("./dangkilophoc"));
 const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
+
+const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
+const Quanlysinhvien = React.lazy(() => import("./quanlysinhvien"));
+const Quanlylophoc = React.lazy(() => import("./quanlylophoc/quanlylophoc"));
+const Quanlyhocphan = React.lazy(() => import("./quanlyhocphan/quanlyhocphan"));
 
 function Home(props) {
   const match = useRouteMatch();
@@ -47,14 +52,16 @@ function Home(props) {
       <div className="dangki-content-right">
         <Suspense fallback={<Loading />}>
           <Switch>
-            <Redirect
-              exact
-              from={`${match.path}`}
-              to={`${match.path}/thongtincanhan`}
-            />
+            <Route exact path={`${match.path}`}>
+              {user && JSON.parse(user).role === "ROLE_SV" ? (
+                <Redirect to={`${match.path}/thongtinsinhvien`} />
+              ) : (
+                <Redirect to={`${match.path}/thongtinquanly`} />
+              )}
+            </Route>
             <Route
-              path={`${match.path}/thongtincanhan`}
-              component={Thongtinsinhvien}
+              path={`${match.path}/thongtinsinhvien`}
+              component={Thongtincanhan}
             />
             <Route
               path={`${match.path}/dangkihocphan`}
@@ -68,7 +75,22 @@ function Home(props) {
               path={`${match.path}/thongtinlopmo`}
               component={Thongtinlopmo}
             />
-
+            <Route
+              path={`${match.path}/thongtinquanly`}
+              component={Thongtinquanly}
+            />
+            <Route
+              path={`${match.path}/quanlytaikhoan`}
+              component={Quanlysinhvien}
+            />
+            <Route
+              path={`${match.path}/quanlylophoc`}
+              component={Quanlylophoc}
+            />
+            <Route
+              path={`${match.path}/quanlyhocphan`}
+              component={Quanlyhocphan}
+            />
             {/* <Route component={NotFound} /> */}
           </Switch>
         </Suspense>
@@ -84,36 +106,52 @@ export const MenuSV = () => {
   return (
     <ul className="chucnang">
       <li style={{ paddingTop: "5px", listStyle: "none" }}>
-        <Link
+        <NavLink
           style={{ textDecoration: "none" }}
           to={`${match.url}/dangkilophoc`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
         >
           Đăng kí lớp học
-        </Link>
+        </NavLink>
       </li>
       <li style={{ paddingTop: "5px", listStyle: "none" }}>
-        <Link
+        <NavLink
           style={{ textDecoration: "none" }}
           to={`${match.url}/dangkihocphan`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
         >
           Đăng kí học phần
-        </Link>
+        </NavLink>
       </li>
       <li style={{ paddingTop: "5px", listStyle: "none" }}>
-        <Link
+        <NavLink
           style={{ textDecoration: "none" }}
-          to={`${match.url}/thongtincanhan`}
+          to={`${match.url}/thongtinsinhvien`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
         >
-          Thông tin cá nhân
-        </Link>
+          Thông tin sinh viên
+        </NavLink>
       </li>
       <li style={{ paddingTop: "5px", listStyle: "none" }}>
-        <Link
+        <NavLink
           style={{ textDecoration: "none" }}
           to={`${match.url}/thongtinlopmo`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
         >
           Thông tin lớp mở
-        </Link>
+        </NavLink>
       </li>
     </ul>
   );
@@ -123,25 +161,40 @@ export const Menuadmin = () => {
   return (
     <ul className="chucnang">
       <li style={{ paddingTop: "5px" }}>
-        <Link
+        <NavLink
           style={{ textDecoration: "none" }}
           to={`${match.url}/quanlytaikhoan`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
         >
           Quản lý tài khoản sinh viên
-        </Link>
+        </NavLink>
       </li>
       <li style={{ paddingTop: "5px" }}>
-        <Link
+        <NavLink
           style={{ textDecoration: "none" }}
           to={`${match.url}/quanlylophoc`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
         >
           Quản lý lớp học
-        </Link>
+        </NavLink>
       </li>
       <li style={{ paddingTop: "5px" }}>
-        <Link style={{ textDecoration: "none" }} to={`${match.url}/detail`}>
-          Thông tin tài khoản
-        </Link>
+        <NavLink
+          style={{ textDecoration: "none" }}
+          to={`${match.url}/thongtinquanly`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
+        >
+          Thông tin cá nhân
+        </NavLink>
       </li>
     </ul>
   );
@@ -152,17 +205,28 @@ export const Menutm = () => {
   return (
     <ul className="chucnang">
       <li style={{ paddingTop: "5px" }}>
-        <Link
+        <NavLink
           style={{ textDecoration: "none" }}
           to={`${match.url}/quanlyhocphan`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
         >
           Quản lý học phần
-        </Link>
+        </NavLink>
       </li>
       <li style={{ paddingTop: "5px" }}>
-        <Link style={{ textDecoration: "none" }} to={`${match.url}/detail`}>
+        <NavLink
+          style={{ textDecoration: "none" }}
+          to={`${match.url}/thongtinquanly`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
+        >
           Thông tin tài khoản
-        </Link>
+        </NavLink>
       </li>
     </ul>
   );

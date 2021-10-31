@@ -13,7 +13,7 @@ function Customtext(props) {
   if (!statusField) {
     return (
       <>
-        <th>{labelField} :</th>
+        <th style={{ padding: "12px" }}>{labelField} :</th>
         <td>{valueField}</td>
       </>
     );

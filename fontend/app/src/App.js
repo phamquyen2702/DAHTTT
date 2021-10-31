@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter,
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Formlogin from "./component/formlogin";
 import { UserOutlined } from "@ant-design/icons";
+import "antd/dist/antd.css";
 import "./component/style.scss";
 import Home from "./component/home";
 import Footer from "./component/footer";
@@ -48,7 +43,10 @@ const App = () => {
 
         <Switch>
           <Redirect exact from="/" to="/Account" />
-          <Route path="/Account" component={Formlogin} />
+          <Route path="/Account">
+            {user ? <Redirect to="/home" /> : <Formlogin />}
+          </Route>
+          {/* <Route path="/Account" component={Formlogin} /> */}
           <Route path="/home" component={Home} />
           {/* <Route component={NotFound} /> */}
         </Switch>
