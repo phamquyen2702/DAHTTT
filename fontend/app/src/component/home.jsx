@@ -172,18 +172,7 @@ export const Menuadmin = () => {
           Quản lý tài khoản sinh viên
         </NavLink>
       </li>
-      <li style={{ paddingTop: "5px" }}>
-        <NavLink
-          style={{ textDecoration: "none" }}
-          to={`${match.url}/quanlylophoc`}
-          activeStyle={{
-            fontWeight: "bold",
-            color: "rgb(161, 11, 11)",
-          }}
-        >
-          Quản lý lớp học
-        </NavLink>
-      </li>
+
       <li style={{ paddingTop: "5px" }}>
         <NavLink
           style={{ textDecoration: "none" }}
@@ -214,6 +203,18 @@ export const Menutm = () => {
           }}
         >
           Quản lý học phần
+        </NavLink>
+      </li>
+      <li style={{ paddingTop: "5px" }}>
+        <NavLink
+          style={{ textDecoration: "none" }}
+          to={`${match.url}/quanlylophoc`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
+        >
+          Quản lý lớp học
         </NavLink>
       </li>
       <li style={{ paddingTop: "5px" }}>

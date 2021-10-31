@@ -102,7 +102,7 @@ function Formlogin(props) {
               <FormControlLabel
                 value="ROLE_TM"
                 control={<Radio />}
-                label="Quản trị học phần"
+                label="Quản trị đào tạo"
               />
             </RadioGroup>
             <TextField
