@@ -77,9 +77,12 @@ function Formlogin(props) {
       window.location.href = "/home";
       form.reset();
     } else {
-      enqueueSnackbar("email or password is incorrect", {
-        variant: "error",
-      });
+      enqueueSnackbar(
+        "email or password is incorrect, đăng kí account tại file dummydb/dbaccount.jsx",
+        {
+          variant: "error",
+        }
+      );
     }
   };
 
