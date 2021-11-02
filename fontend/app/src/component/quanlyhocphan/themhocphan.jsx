@@ -1,40 +1,44 @@
-import { Button } from "@material-ui/core";
-import React from "react";
-import Customtext from "../customtext";
-import Customselect from "../customselect";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Button, MenuItem, TextField } from "@material-ui/core";
+import { useSnackbar } from "notistack";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { listkhoavien } from "../../dummydb/khoavien";
 import "../style2.css";
 
 function Themhocphan(props) {
-  const currencies = [
-    {
-      value: "Viện Công nghệ Thông tin và Truyền thông",
-      label: "Viện Công nghệ Thông tin và Truyền thông",
+  const { enqueueSnackbar } = useSnackbar();
+
+  const schema = yup.object().shape({});
+  const form = useForm({
+    defaultValues: {
+      mahocphan: "IT444",
+      tenhocphan: "Nhập môn công nghệ thông tin",
+      chuongtrinh: "CT Nhóm ngành CNTT-TT 2-2015",
+      khoavien: "Viện Công nghệ Thông tin và Truyền thông",
+      sotinchi: 3,
+      trangthaihocphan: "mở",
+      soluongdangki: 1000,
     },
-    {
-      value: "Ngoại ngữ",
-      label: "Ngoại ngữ",
-    },
-  ];
-  const gioitinh = [
-    {
-      value: "Nam",
-      label: "Nam",
-    },
-    {
-      value: "Nữ",
-      label: "Nữ",
-    },
-  ];
-  const tinhtranghoc = [
-    {
-      value: "Học",
-      label: "Học",
-    },
-    {
-      value: "Nghỉ học",
-      label: "Nghỉ học",
-    },
-  ];
+    resolver: yupResolver(schema),
+  });
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+  const handleOnSubmit = (value) => {
+    enqueueSnackbar("Success", {
+      variant: "success",
+    });
+    console.log(value);
+  };
+  const [khoavien, setKhoavien] = useState(getValues("khoavien"));
+  const handleChangeKhoavien = (event) => {
+    setKhoavien(event.target.value);
+  };
 
   return (
     <div>
@@ -43,62 +47,120 @@ function Themhocphan(props) {
         <hr style={{ opacity: "0.3", width: "100%" }} />
         <div className="thongtincanhan-content">
           <div className="thongtincanhan-table">
-            <form>
+            <form onSubmit={handleSubmit(handleOnSubmit)}>
               <table>
                 <tr>
-                  <Customtext
-                    focus="true"
-                    labelField="Mã học phần"
-                    valueField="IT444"
-                    statusField="true"
-                  ></Customtext>
+                  <th>Mã học phần :</th>
+                  <td>
+                    <TextField
+                      {...register("mahocphan")}
+                      name="mahocphan"
+                      autoFocus
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                    />
+                  </td>
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Tên học phần"
-                    valueField="Nhập môn công nghệ thông tin"
-                    statusField="true"
-                  ></Customtext>
+                  <th>Tên học phần :</th>
+                  <td>
+                    <TextField
+                      {...register("tenhocphan")}
+                      name="tenhocphan"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                    />
+                  </td>
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Chương trình"
-                    valueField="CT Nhóm ngành CNTT-TT 2-2015"
-                    statusField="true"
-                  ></Customtext>
+                  <th>Chương trình :</th>
+                  <td>
+                    <TextField
+                      {...register("chuongtrinh")}
+                      name="chuongtrinh"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                    />
+                  </td>
                 </tr>
 
                 <tr>
-                  <Customselect
-                    labelField="Khoa/Viện quản lý"
-                    valueField="Viện Công nghệ Thông tin và Truyền thông"
-                    currencies={currencies}
-                    statusField="true"
-                  ></Customselect>
+                  <th>Khoa/Viện quản lý :</th>
+                  <td>
+                    <TextField
+                      {...register("khoavien")}
+                      name="khoavien"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                      select
+                      value={khoavien}
+                      onChange={handleChangeKhoavien}
+                    >
+                      {listkhoavien.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </td>
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Số tín chỉ"
-                    valueField={3}
-                    statusField="true"
-                  ></Customtext>
+                  <th>Số tín chỉ :</th>
+                  <td>
+                    <TextField
+                      {...register("sotinchi")}
+                      name="sotinchi"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                    />
+                  </td>
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Trạng thái học phần"
-                    valueField="đang mở"
-                    statusField="true"
-                  ></Customtext>
+                  <th>Trạng thái học phần :</th>
+                  <td>
+                    <TextField
+                      {...register("trangthaihocphan")}
+                      name="trangthaihocphan"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                    />
+                  </td>
                 </tr>
-                {/* <tr>
-                  <Customtext
-                    labelField="Khối lượng sv đk"
-                    valueField={1000}
-                    statusField="true"
-                  ></Customtext>
-                </tr> */}
+                <tr>
+                  <th>Khối lượng sv đk :</th>
+                  <td>
+                    <TextField
+                      {...register("soluongdangki")}
+                      name="soluongdangki"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                    />
+                  </td>
+                </tr>
                 <tr>
                   <Button
+                    type="submit"
                     style={{
                       width: "250px",
                       marginTop: "40px",
@@ -109,7 +171,7 @@ function Themhocphan(props) {
                     }}
                     variant="contained"
                   >
-                    Cập nhật thông tin
+                    Thêm học phần
                   </Button>
                 </tr>
                 <tr>

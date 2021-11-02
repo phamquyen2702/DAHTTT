@@ -1,16 +1,15 @@
 import React from "react";
-import "./style.scss";
+import "../style2.css";
 
-function Footer(props) {
+function Chucnangkhac(props) {
   return (
     <div>
-      <div className="footer">
+      <div className="quanlysinhvien-content">
         <p>Mọi thắc mắc liên hệ đến phòng giáo dục và đào tạo</p>
         <p>TRƯỜNG ĐẠI HỌC BÁCH KHOA HÀ NỘI</p>
-        <p>Liên hệ: 012313131321</p>
       </div>
     </div>
   );
 }
 
-export default Footer;
+export default Chucnangkhac;

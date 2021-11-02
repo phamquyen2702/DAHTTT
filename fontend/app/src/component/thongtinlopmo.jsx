@@ -1,4 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 import React from "react";
 import "./style.scss";
 const hocphan = [
@@ -11,6 +12,12 @@ const hocphan = [
 ];
 
 function Thongtinlopmo(props) {
+  const { enqueueSnackbar } = useSnackbar();
+  const handleThem = () => {
+    enqueueSnackbar("Success", {
+      variant: "success",
+    });
+  };
   const row = hocphan.map((data, index) => (
     <tr>
       <td>{index}</td>
@@ -18,9 +25,12 @@ function Thongtinlopmo(props) {
       <td>{data.malop}</td>
       <td>{data.sotinchi}</td>
       <td>{data.toida}</td>
-      <td>Thêm</td>
+      <td className="them" onClick={handleThem}>
+        Thêm
+      </td>
     </tr>
   ));
+
   return (
     <div>
       <div className="search-header">

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import "./style.scss";
+import { ErrorMessage } from "@hookform/error-message";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
   FormControlLabel,
@@ -8,52 +7,58 @@ import {
   RadioGroup,
   TextField,
 } from "@material-ui/core";
+import { useSnackbar } from "notistack";
+import React, { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-const account = [
-  {
-    email: "tung.pv153093@sis.hust.edu.vn",
-    password: "123456",
-    name: "Phạm Văn Tùng",
-    role: "ROLE_ADMIN",
-  },
-  {
-    email: "quyen.pv153093@sis.hust.edu.vn",
-    password: "123456",
-    name: "Phạm Văn Quyền",
-    role: "ROLE_SV",
-  },
+import * as yup from "yup";
+import { dbaccount } from "../dummydb/dbaccount";
+import "./style.scss";
 
-  {
-    email: "trung.pv153093@sis.hust.edu.vn",
-    password: "123456",
-    name: "Phạm Văn Trung",
-    role: "ROLE_TM",
-  },
-];
-function CheckRole(role) {
-  for (let i = 0; i < account.length; i++) {
-    if (account[i].role === role) {
+function checkAccount(role, email, password) {
+  for (let i = 0; i < dbaccount.length; i++) {
+    if (
+      dbaccount[i].role === role &&
+      dbaccount[i].email === email &&
+      dbaccount[i].password === password
+    ) {
       return true;
       // eslint-disable-next-line no-unreachable
       break;
     }
   }
 }
-function GetUserByRole(role) {
-  for (let i = 0; i < account.length; i++) {
-    if (account[i].role === role) {
-      return account[i];
-      // eslint-disable-next-line no-unreachable
-      break;
-    }
-  }
-}
-function Formlogin(props) {
-  const [valueRole, setValueRole] = useState("ROLE_SV");
 
+function Formlogin(props) {
+  const { enqueueSnackbar } = useSnackbar();
+  localStorage.setItem("dbaccount", JSON.stringify(dbaccount));
+  const [valueRole, setValueRole] = useState("ROLE_SV");
   const history = useHistory();
 
-  const { register, handleSubmit } = useForm();
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .required("please enter your email")
+      .email("please enter a valid"),
+    password: yup
+      .string()
+      .required("please enter your password")
+      .min(6, "Please enter at least 6 characters"),
+  });
+  const form = useForm({
+    defaultValues: {
+      role: "ROLE_SV",
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(schema),
+  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
   const handleChangeRole = (event) => {
     setValueRole(event.target.value);
   };
@@ -61,16 +66,20 @@ function Formlogin(props) {
   if (localStorage.getItem("account")) {
     history.push("/home");
   }
+  const [isVeryFied, setIsVeryFied] = useState(false);
+  const onChangeCapcha = (value) => {
+    // console.log("Captcha value:", value);
+    setIsVeryFied(true);
+  };
   const handleOnSubmit = (value) => {
-    console.log(value);
-    console.log(valueRole);
-
-    if (!localStorage.getItem("account") && CheckRole(valueRole)) {
-      localStorage.setItem("account", JSON.stringify(GetUserByRole(valueRole)));
-    }
-
-    if (localStorage.getItem("account")) {
+    if (checkAccount(value.role, value.email, value.password)) {
+      localStorage.setItem("account", JSON.stringify(value));
       window.location.href = "/home";
+      form.reset();
+    } else {
+      enqueueSnackbar("email or password is incorrect", {
+        variant: "error",
+      });
     }
   };
 
@@ -89,17 +98,20 @@ function Formlogin(props) {
               value={valueRole}
             >
               <FormControlLabel
+                {...register("role")}
                 value="ROLE_SV"
                 control={<Radio />}
                 label="Sinh viên"
                 className="radio"
               />
               <FormControlLabel
+                {...register("role")}
                 value="ROLE_ADMIN"
                 control={<Radio />}
                 label="Quản trị hệ thống"
               />
               <FormControlLabel
+                {...register("role")}
                 value="ROLE_TM"
                 control={<Radio />}
                 label="Quản trị đào tạo"
@@ -111,21 +123,36 @@ function Formlogin(props) {
               {...register("email")}
               label="email"
               type="text"
-              style={{ width: "400px" }}
+              style={{ width: "95%" }}
             />
+            <p style={{ color: "red", fontSize: "12px", marginBottom: "0px" }}>
+              <ErrorMessage errors={errors} name="email" />
+            </p>
+
             <br />
             <TextField
+              style={{ width: "95%" }}
               id="outlined-password-input"
               {...register("password")}
               label="password"
               type="password"
               autoComplete="current-password"
-              style={{ width: "400px" }}
             />
+            <p style={{ color: "red", fontSize: "12px", marginBottom: "0px" }}>
+              <ErrorMessage errors={errors} name="password" />
+            </p>
             <br />
+            <div>
+              <ReCAPTCHA
+                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                onChange={onChangeCapcha}
+              />
+            </div>
+
             <Button
+              disabled={!isVeryFied}
               type="submit"
-              style={{ width: "400px", marginTop: "20px" }}
+              style={{ width: "303px", marginTop: "20px" }}
               variant="contained"
             >
               Đăng nhập

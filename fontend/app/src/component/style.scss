@@ -105,6 +105,7 @@
     padding: 7px;
     width: 60px;
     height: auto;
+    cursor: pointer;
 }
 
 .logo {
@@ -200,7 +201,7 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    min-height: 500px;
+    min-height: 600px;
 }
 
 .content-login-left {
@@ -364,5 +365,24 @@ li {
 }
 
 .dialogpass {
-    margin: 40px;
+    margin: 20px;
+    text-align: center;
+}
+
+.delete {
+    cursor: pointer;
+}
+
+.delete:hover {
+    color: red;
+    padding: 2px;
+}
+
+.them {
+    cursor: pointer;
+}
+
+.them:hover {
+    color: red;
+    padding: 2px;
 }

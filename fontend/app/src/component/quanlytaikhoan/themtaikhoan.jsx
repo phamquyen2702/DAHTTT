@@ -1,30 +1,36 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, TextField } from "@material-ui/core";
+import { Button, MenuItem, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { listgioitinh } from "../../dummydb/gioitinh";
+import { listkhoavien } from "../../dummydb/khoavien";
 import "../style2.css";
 
-function Themlophoc(props) {
+function Themtaikhoan(props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const schema = yup.object().shape({});
   const form = useForm({
     defaultValues: {
-      malophoc: 123131,
-      mahocphan: "IT444",
-      phonghoc: "TC204",
-      khoahoc: "k60",
-      thoigian: "6h45-9h30",
-      thu: 3,
-      soluongdangki: 150,
-      toida: 200,
+      fullName: "Phạm Văn Quyền",
+      chuongtrinh: "CT Nhóm ngành CNTT-TT 2-2015",
+      bacdaotao: "Đại học đại trà",
+      khoavien: "Viện Công nghệ Thông tin và Truyền thông",
+      gioitinh: "Nam",
+      lop: "CNTT2.1 K60",
+      khoa: "60",
+      email: "quyen.pv153093@sis.hust.edu.vn",
+      sodienthoai: "0969456215",
+      cmt: "142844602",
+      tinhtranghoctap: "học",
     },
     resolver: yupResolver(schema),
   });
   const {
     register,
+    getValues,
     handleSubmit,
     formState: { errors },
   } = form;
@@ -34,21 +40,30 @@ function Themlophoc(props) {
     });
     console.log(value);
   };
+  const [khoavien, setKhoavien] = useState(getValues("khoavien"));
+  const handleChangeKhoavien = (event) => {
+    setKhoavien(event.target.value);
+  };
+  const [gioitinh, setGioitinh] = useState(getValues("gioitinh"));
+  const handleChangeGioitinh = (event) => {
+    setGioitinh(event.target.value);
+  };
+
   return (
     <div>
       <div className="quanlysinhvien-content">
-        <p className="thongtincanhan-title">Nhập thông tin lớp học</p>
+        <p className="thongtincanhan-title">Nhập thông tin cá nhân</p>
         <hr style={{ opacity: "0.3", width: "100%" }} />
         <div className="thongtincanhan-content">
           <div className="thongtincanhan-table">
             <form onSubmit={handleSubmit(handleOnSubmit)}>
               <table>
                 <tr>
-                  <th>Mã lớp học :</th>
+                  <th>Hẹ và tên :</th>
                   <td>
                     <TextField
-                      {...register("malophoc")}
-                      name="malophoc"
+                      {...register("fullName")}
+                      name="fullName"
                       autoFocus
                       className="outlined-basic"
                       variant="outlined"
@@ -59,11 +74,12 @@ function Themlophoc(props) {
                   </td>
                 </tr>
                 <tr>
-                  <th>Mã học phần :</th>
+                  <th>Chương trình :</th>
                   <td>
                     <TextField
-                      {...register("mahocphan")}
-                      name="mahocphan"
+                      {...register("chuongtrinh")}
+                      name="chuongtrinh"
+                      autoFocus
                       className="outlined-basic"
                       variant="outlined"
                       required
@@ -73,11 +89,11 @@ function Themlophoc(props) {
                   </td>
                 </tr>
                 <tr>
-                  <th>Phòng học :</th>
+                  <th>Bậc đào tạo :</th>
                   <td>
                     <TextField
-                      {...register("phonghoc")}
-                      name="phonghoc"
+                      {...register("bacdaotao")}
+                      name="bacdaotao"
                       className="outlined-basic"
                       variant="outlined"
                       required
@@ -87,11 +103,58 @@ function Themlophoc(props) {
                   </td>
                 </tr>
                 <tr>
-                  <th>Khóa học :</th>
+                  <th>Khoa/Viện quản lý :</th>
                   <td>
                     <TextField
-                      {...register("khoahoc")}
-                      name="khoahoc"
+                      {...register("khoavien")}
+                      name="khoavien"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                      select
+                      value={khoavien}
+                      onChange={handleChangeKhoavien}
+                    >
+                      {listkhoavien.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Giới tính :</th>
+                  <td>
+                    <TextField
+                      {...register("gioitinh")}
+                      name="gioitinh"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                      select
+                      value={gioitinh}
+                      onChange={handleChangeGioitinh}
+                    >
+                      {listgioitinh.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Lớp :</th>
+                  <td>
+                    <TextField
+                      {...register("lop")}
+                      name="lop"
+                      autoFocus
                       className="outlined-basic"
                       variant="outlined"
                       required
@@ -101,11 +164,12 @@ function Themlophoc(props) {
                   </td>
                 </tr>
                 <tr>
-                  <th>Thời gian :</th>
+                  <th>Khóa :</th>
                   <td>
                     <TextField
-                      {...register("thoigian")}
-                      name="thoigian"
+                      {...register("khoa")}
+                      name="khoa"
+                      autoFocus
                       className="outlined-basic"
                       variant="outlined"
                       required
@@ -115,11 +179,26 @@ function Themlophoc(props) {
                   </td>
                 </tr>
                 <tr>
-                  <th>Thứ :</th>
+                  <th>Email :</th>
                   <td>
                     <TextField
-                      {...register("thu")}
-                      name="thu"
+                      {...register("email")}
+                      name="email"
+                      className="outlined-basic"
+                      variant="outlined"
+                      required
+                      margin="dense"
+                      fullWidth
+                      disabled="true"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Số điện thoại :</th>
+                  <td>
+                    <TextField
+                      {...register("sodienthoai")}
+                      name="sodienthoai"
                       className="outlined-basic"
                       variant="outlined"
                       required
@@ -129,11 +208,11 @@ function Themlophoc(props) {
                   </td>
                 </tr>
                 <tr>
-                  <th>Số lượng đăng kí :</th>
+                  <th>CMT/CCCD :</th>
                   <td>
                     <TextField
-                      {...register("soluongdangki")}
-                      name="soluongdangki"
+                      {...register("cmt")}
+                      name="cmt"
                       className="outlined-basic"
                       variant="outlined"
                       required
@@ -143,11 +222,12 @@ function Themlophoc(props) {
                   </td>
                 </tr>
                 <tr>
-                  <th>Tối đa :</th>
+                  <th>Tình trạng học tập :</th>
                   <td>
                     <TextField
-                      {...register("toida")}
-                      name="toida"
+                      disabled
+                      {...register("tinhtranghoctap")}
+                      name="tinhtranghoctap"
                       className="outlined-basic"
                       variant="outlined"
                       required
@@ -169,7 +249,7 @@ function Themlophoc(props) {
                     }}
                     variant="contained"
                   >
-                    Thêm lớp học
+                    Thêm tài khoản
                   </Button>
                 </tr>
                 <tr>
@@ -196,4 +276,4 @@ function Themlophoc(props) {
   );
 }
 
-export default Themlophoc;
+export default Themtaikhoan;

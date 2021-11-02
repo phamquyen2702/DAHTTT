@@ -3,11 +3,12 @@ import {
   NavLink,
   Redirect,
   Route,
-  useRouteMatch,
   Switch,
+  useRouteMatch,
 } from "react-router-dom";
-import Loading from "./Loading";
-import "./style2.css";
+import Loading from "../Loading";
+import NotFound from "../NotFound";
+import "../style2.css";
 const Danhsachtaikhoan = React.lazy(() => import("./danhsachtaikhoan"));
 const Themtaikhoan = React.lazy(() => import("./themtaikhoan"));
 const Chucnangkhac = React.lazy(() => import("./chucnangkhac"));
@@ -67,7 +68,6 @@ function Quanlysinhvien(props) {
               from={`${match.path}`}
               to={`${match.path}/danhsachtaikhoan`}
             />
-
             <Route
               exact
               path={`${match.path}/danhsachtaikhoan`}
@@ -85,8 +85,7 @@ function Quanlysinhvien(props) {
               path={`${match.path}/chucnangkhac`}
               component={Chucnangkhac}
             />
-
-            {/* <Route component={NotFound} /> */}
+            <Route component={NotFound} />
           </Switch>
         </Suspense>
       </div>

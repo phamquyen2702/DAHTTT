@@ -1,48 +1,27 @@
 import {
   Button,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 import React, { useState } from "react";
-
+import { lophocs } from "../dummydb/dblophocdk";
 import "./style.scss";
 
 function Dangkilophoc(props) {
+  const { enqueueSnackbar } = useSnackbar();
+  const handleSave = () => {
+    enqueueSnackbar("Success", {
+      variant: "success",
+    });
+  };
   const [status, setStatus] = useState(false);
-  const lophocs = [
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4444",
-      tenhocphan: "Phân tích và thiết kế hệ thống thông tin",
-      phonghoc: "TC401",
-      sotinchi: 3,
-    },
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4455",
-      tenhocphan: "Đồ án 3",
-      phonghoc: "TC401",
-      sotinchi: 2,
-    },
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4455",
-      tenhocphan: "Đồ án 3",
-      phonghoc: "TC401",
-      sotinchi: 2,
-    },
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4455",
-      tenhocphan: "Đồ án 3",
-      phonghoc: "TC401",
-      sotinchi: 2,
-    },
-  ];
+  const [deletes, setDelete] = useState(false);
+
   const content = "Vui lòng chọn mã lớp khác,hiện tại lớp học này đã đầy";
   const title = "";
 
@@ -53,6 +32,14 @@ function Dangkilophoc(props) {
   const handleClose = () => {
     setStatus(false);
   };
+  const handleOpenDelete = () => {
+    setDelete(true);
+  };
+
+  const handleCloseDelete = () => {
+    setDelete(false);
+  };
+
   const row = lophocs.map((data, index) => (
     <tr key={index}>
       <td>{index}</td>
@@ -61,7 +48,9 @@ function Dangkilophoc(props) {
       <td className="td-tenhocphan">{data.tenhocphan}</td>
       <td>{data.phonghoc}</td>
       <td>{data.sotinchi}</td>
-      <td>Xóa</td>
+      <td className="delete" onClick={handleOpenDelete}>
+        Xóa
+      </td>
     </tr>
   ));
   return (
@@ -112,6 +101,30 @@ function Dangkilophoc(props) {
               </Button>
             </DialogActions>
           </Dialog>
+          <Dialog
+            open={deletes}
+            onClose={handleCloseDelete}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{`${title}`}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Bạn có chắc chắn muốn xóa?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              {/* <Button onClick={handleClose}>Disagree</Button> */}
+              <Button onClick={handleCloseDelete}>Disagree</Button>
+              <Button
+                onClick={handleCloseDelete}
+                autoFocus
+                style={{ background: "white", fontWeight: "600" }}
+              >
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
         <div className="search-hearder-right">Số tín chỉ tối đa: 24</div>
       </div>
@@ -130,6 +143,7 @@ function Dangkilophoc(props) {
           {row}
         </table>
         <Button
+          onClick={handleSave}
           style={{
             width: "250px",
             margin: "30px",

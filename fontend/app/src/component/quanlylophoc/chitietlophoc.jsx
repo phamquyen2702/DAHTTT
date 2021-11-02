@@ -1,15 +1,44 @@
-import { Button } from "@material-ui/core";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Button, TextField } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 import React, { useState } from "react";
-import Customtext from "../customtext";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import "../style2.css";
 
 function Chitietlophoc(props) {
+  const { enqueueSnackbar } = useSnackbar();
   const [edit, setEdit] = useState(false);
   const handleEdit = () => {
     setEdit(true);
   };
-  const handleEditOK = () => {
+
+  const schema = yup.object().shape({});
+  const form = useForm({
+    defaultValues: {
+      malophoc: 123131,
+      mahocphan: "IT444",
+      phonghoc: "TC204",
+      khoahoc: "k60",
+      thoigian: "6h45-9h30",
+      thu: 3,
+      soluongdangki: 150,
+      toida: 200,
+    },
+    resolver: yupResolver(schema),
+  });
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+  const handleOnSubmit = (value) => {
     setEdit(false);
+    enqueueSnackbar("Success", {
+      variant: "success",
+    });
+    console.log(value);
   };
 
   const lophocs = [
@@ -44,57 +73,200 @@ function Chitietlophoc(props) {
       <div className="thongtincanhan-content">
         <div className="thongtincanhan-left">
           <div className="thongtincanhan-table">
-            <form>
+            <form onSubmit={handleSubmit(handleOnSubmit)}>
               <table>
                 <tr>
-                  <Customtext
-                    labelField="Mã học phần"
-                    valueField="CNTT2-1 K60"
-                    statusField={edit}
-                  ></Customtext>
+                  {edit && (
+                    <>
+                      <th>Mã lớp học :</th>
+                      <td>
+                        <TextField
+                          {...register("malophoc")}
+                          name="malophoc"
+                          autoFocus
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Mã lớp học :</th>
+                      <td>{getValues("malophoc")}</td>
+                    </>
+                  )}
                 </tr>
                 <tr>
-                  <Customtext
-                    focus="true"
-                    labelField="Phòng học"
-                    valueField="TC205"
-                    statusField={edit}
-                  ></Customtext>
+                  {edit && (
+                    <>
+                      <th>Mã học phần :</th>
+                      <td>
+                        <TextField
+                          {...register("mahocphan")}
+                          name="mahocphan"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Mã học phần :</th>
+                      <td>{getValues("mahocphan")}</td>
+                    </>
+                  )}
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Khóa học"
-                    valueField="60"
-                    statusField={edit}
-                  ></Customtext>
+                  {edit && (
+                    <>
+                      <th>Phòng học :</th>
+                      <td>
+                        <TextField
+                          {...register("phonghoc")}
+                          name="phonghoc"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Phòng học :</th>
+                      <td>{getValues("phonghoc")}</td>
+                    </>
+                  )}
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Thời gian"
-                    valueField="9h30-11h30"
-                    statusField={edit}
-                  ></Customtext>
+                  {edit && (
+                    <>
+                      <th>Khóa học :</th>
+                      <td>
+                        <TextField
+                          {...register("khoahoc")}
+                          name="khoahoc"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Khóa học :</th>
+                      <td>{getValues("khoahoc")}</td>
+                    </>
+                  )}
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Thứ"
-                    valueField="sáu"
-                    statusField={edit}
-                  ></Customtext>
+                  {edit && (
+                    <>
+                      <th>Thời gian :</th>
+                      <td>
+                        <TextField
+                          {...register("thoigian")}
+                          name="thoigian"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Thời gian :</th>
+                      <td>{getValues("thoigian")}</td>
+                    </>
+                  )}
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Số lượng đăng kí"
-                    valueField={200}
-                    statusField={edit}
-                  ></Customtext>
+                  {edit && (
+                    <>
+                      <th>Thứ :</th>
+                      <td>
+                        <TextField
+                          {...register("thu")}
+                          name="thu"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Thứ :</th>
+                      <td>{getValues("thu")}</td>
+                    </>
+                  )}
                 </tr>
                 <tr>
-                  <Customtext
-                    labelField="Tối đa"
-                    valueField="300"
-                    statusField={edit}
-                  ></Customtext>
+                  {edit && (
+                    <>
+                      <th>Số lượng đăng kí :</th>
+                      <td>
+                        <TextField
+                          {...register("soluongdangki")}
+                          name="soluongdangki"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Số lượng đăng kí :</th>
+                      <td>{getValues("soluongdangki")}</td>
+                    </>
+                  )}
+                </tr>
+                <tr>
+                  {edit && (
+                    <>
+                      <th>Tối đa :</th>
+                      <td>
+                        <TextField
+                          {...register("toida")}
+                          name="toida"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Tối đa :</th>
+                      <td>{getValues("toida")}</td>
+                    </>
+                  )}
                 </tr>
                 <tr>
                   {!edit && (
@@ -115,6 +287,7 @@ function Chitietlophoc(props) {
                   )}
                   {edit && (
                     <Button
+                      type="submit"
                       style={{
                         width: "250px",
                         marginTop: "40px",
@@ -124,7 +297,6 @@ function Chitietlophoc(props) {
                         color: "white",
                       }}
                       variant="contained"
-                      onClick={handleEditOK}
                     >
                       Lưu thay đổi
                     </Button>
@@ -141,7 +313,6 @@ function Chitietlophoc(props) {
                       color: "white",
                     }}
                     variant="contained"
-                    onClick={handleEditOK}
                   >
                     Khóa lớp học
                   </Button>

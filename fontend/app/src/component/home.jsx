@@ -8,6 +8,10 @@ import {
   NavLink,
 } from "react-router-dom";
 import Loading from "./Loading";
+import NotFound from "./NotFound";
+import Quanlyhocphan from "./quanlyhocphan/quanlyhocphan";
+import Quanlylophoc from "./quanlylophoc/quanlylophoc";
+import Quanlysinhvien from "./quanlytaikhoan/quanlysinhvien";
 import "./style.scss";
 const Dangkihocphan = React.lazy(() => import("./dangkihocphan"));
 const Thongtincanhan = React.lazy(() => import("./thongtincanhan"));
@@ -15,9 +19,6 @@ const Dangkilophoc = React.lazy(() => import("./dangkilophoc"));
 const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
 
 const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
-const Quanlysinhvien = React.lazy(() => import("./quanlysinhvien"));
-const Quanlylophoc = React.lazy(() => import("./quanlylophoc/quanlylophoc"));
-const Quanlyhocphan = React.lazy(() => import("./quanlyhocphan/quanlyhocphan"));
 
 function Home(props) {
   const match = useRouteMatch();
@@ -91,7 +92,7 @@ function Home(props) {
               path={`${match.path}/quanlyhocphan`}
               component={Quanlyhocphan}
             />
-            {/* <Route component={NotFound} /> */}
+            <Route component={NotFound} />
           </Switch>
         </Suspense>
       </div>

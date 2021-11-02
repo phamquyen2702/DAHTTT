@@ -3,14 +3,15 @@ import {
   NavLink,
   Redirect,
   Route,
-  useRouteMatch,
   Switch,
+  useRouteMatch,
 } from "react-router-dom";
 import Loading from "../Loading";
+import NotFound from "../NotFound";
 import "../style2.css";
 const Danhsachlophoc = React.lazy(() => import("./danhsachlophoc"));
 const Themlophoc = React.lazy(() => import("./themlophoc"));
-const Chucnangkhac = React.lazy(() => import("../chucnangkhac"));
+const Chucnangkhac = React.lazy(() => import("./chucnangkhac"));
 const Chitietlophoc = React.lazy(() => import("./chitietlophoc"));
 
 function Quanlylophoc(props) {
@@ -67,7 +68,6 @@ function Quanlylophoc(props) {
               from={`${match.path}`}
               to={`${match.path}/danhsachlophoc`}
             />
-
             <Route
               exact
               path={`${match.path}/danhsachlophoc`}
@@ -82,8 +82,7 @@ function Quanlylophoc(props) {
               path={`${match.path}/chucnangkhac`}
               component={Chucnangkhac}
             />
-
-            {/* <Route component={NotFound} /> */}
+            <Route component={NotFound} />
           </Switch>
         </Suspense>
       </div>

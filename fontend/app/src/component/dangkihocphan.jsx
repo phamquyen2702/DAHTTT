@@ -1,34 +1,30 @@
-import { Button, TextField } from "@material-ui/core";
-import React from "react";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
+import React, { useState } from "react";
+import { hocphan } from "../dummydb/dbhocphan";
 import "./style.scss";
-const hocphan = [
-  {
-    mahocphan: "IT4444",
-    tenhocphan: "Phân tích và thiết kế hệ thống thông tin",
-    sotinchi: 3,
-  },
-  {
-    mahocphan: "IT4455",
-    tenhocphan: "Đồ án 3",
-    sotinchi: 2,
-  },
-  {
-    mahocphan: "IT4455",
-    tenhocphan: "Đồ án 3",
-    sotinchi: 2,
-  },
-];
 
 function Dangkihocphan(props) {
-  const row = hocphan.map((data, index) => (
-    <tr>
-      <td>{index}</td>
-      <td>{data.mahocphan}</td>
-      <td>{data.tenhocphan}</td>
-      <td>{data.sotinchi}</td>
-      <td>Xóa</td>
-    </tr>
-  ));
+  const [status, setStatus] = useState(false);
+
+  const content = "Bạn có chắc chắn muốn xóa?";
+
+  const title = "";
+
+  const handleDelete = () => {
+    setStatus(true);
+  };
+
+  const handleClose = () => {
+    setStatus(false);
+  };
   return (
     <div>
       <div className="search-header">
@@ -55,7 +51,29 @@ function Dangkihocphan(props) {
         </div>
         <div className="search-hearder-right">Số tín chỉ tối đa: 24</div>
       </div>
-
+      <Dialog
+        open={status}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{`${title}`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {content}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button
+            onClick={handleClose}
+            autoFocus
+            style={{ background: "white", fontWeight: "600" }}
+          >
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div className="table-dangki">
         <table style={{ width: "100%", padding: "10px" }}>
           <tr>
@@ -65,7 +83,18 @@ function Dangkihocphan(props) {
             <th>Số tín chỉ</th>
             <th>Thay đổi</th>
           </tr>
-          {row}
+          {hocphan &&
+            hocphan.map((data, index) => (
+              <tr>
+                <td>{index}</td>
+                <td>{data.mahocphan}</td>
+                <td>{data.tenhocphan}</td>
+                <td>{data.sotinchi}</td>
+                <td className="delete" onClick={handleDelete}>
+                  Xóa
+                </td>
+              </tr>
+            ))}
         </table>
       </div>
       <br />

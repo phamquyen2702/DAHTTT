@@ -1,14 +1,14 @@
-import { Button, MenuItem, TextField } from "@material-ui/core";
-import React, { useState } from "react";
-import "./style2.css";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { listkhoavien } from "../dummydb/khoavien";
-import { listgioitinh } from "../dummydb/gioitinh";
+import { Button, MenuItem, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { listgioitinh } from "../../dummydb/gioitinh";
+import { listkhoavien } from "../../dummydb/khoavien";
+import "../style2.css";
 
-function Thongtinquanly(props) {
+function Chitiettaikhoan(props) {
   const { enqueueSnackbar } = useSnackbar();
   const [edit, setEdit] = useState(false);
   const handleEdit = () => {
@@ -19,13 +19,16 @@ function Thongtinquanly(props) {
   const form = useForm({
     defaultValues: {
       fullName: "Phạm Văn Quyền",
-      bommon: "Hệ thống thông tin",
-      bacdaotao: "Thạc sĩ",
+      chuongtrinh: "CT Nhóm ngành CNTT-TT 2-2015",
+      bacdaotao: "Đại học đại trà",
       khoavien: "Viện Công nghệ Thông tin và Truyền thông",
       gioitinh: "Nam",
+      lop: "CNTT2.1 K60",
+      khoa: "60",
       email: "quyen.pv153093@sis.hust.edu.vn",
       sodienthoai: "0969456215",
       cmt: "142844602",
+      tinhtranghoctap: "học",
     },
     resolver: yupResolver(schema),
   });
@@ -50,10 +53,52 @@ function Thongtinquanly(props) {
   const handleChangeGioitinh = (event) => {
     setGioitinh(event.target.value);
   };
+
+  const lophocs = [
+    {
+      malophoc: "1991231",
+      mahocphan: "IT4444",
+      tenhocphan: "Phân tích và thiết kế hệ thống thông tin",
+      phonghoc: "TC401",
+      sotinchi: 3,
+    },
+    {
+      malophoc: "1991231",
+      mahocphan: "IT4455",
+      tenhocphan: "Đồ án 3",
+      phonghoc: "TC401",
+      sotinchi: 2,
+    },
+    {
+      malophoc: "1991231",
+      mahocphan: "IT4455",
+      tenhocphan: "Đồ án 3",
+      phonghoc: "TC401",
+      sotinchi: 2,
+    },
+    {
+      malophoc: "1991231",
+      mahocphan: "IT4455",
+      tenhocphan: "Đồ án 3",
+      phonghoc: "TC401",
+      sotinchi: 2,
+    },
+  ];
+  const row = lophocs.map((data, index) => (
+    <tr key={index}>
+      <td>{index}</td>
+      <td>{data.malophoc}</td>
+      <td>{data.mahocphan}</td>
+      <td className="td-tenhocphan">{data.tenhocphan}</td>
+      <td>{data.phonghoc}</td>
+      <td>{data.sotinchi}</td>
+    </tr>
+  ));
+
   return (
     <div className="thongtincanhan">
       <p className="thongtincanhan-title">Thông tin cá nhân</p>
-      <hr style={{ opacity: "0.3", width: "100%" }} />
+
       <div className="thongtincanhan-content">
         <div className="thongtincanhan-left">
           <div className="thongtincanhan-table">
@@ -87,11 +132,12 @@ function Thongtinquanly(props) {
                 <tr>
                   {edit && (
                     <>
-                      <th>Bộ môn :</th>
+                      <th>Chương trình :</th>
                       <td>
                         <TextField
-                          {...register("bommon")}
-                          name="bommon"
+                          {...register("chuongtrinh")}
+                          name="chuongtrinh"
+                          autoFocus
                           className="outlined-basic"
                           variant="outlined"
                           required
@@ -103,8 +149,8 @@ function Thongtinquanly(props) {
                   )}
                   {!edit && (
                     <>
-                      <th style={{ padding: "12px" }}>Bộ môn :</th>
-                      <td>{getValues("bommon")}</td>
+                      <th style={{ padding: "12px" }}>Chương trình :</th>
+                      <td>{getValues("chuongtrinh")}</td>
                     </>
                   )}
                 </tr>
@@ -201,6 +247,56 @@ function Thongtinquanly(props) {
                 <tr>
                   {edit && (
                     <>
+                      <th>Lớp :</th>
+                      <td>
+                        <TextField
+                          {...register("lop")}
+                          name="lop"
+                          autoFocus
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Lớp :</th>
+                      <td>{getValues("lop")}</td>
+                    </>
+                  )}
+                </tr>
+                <tr>
+                  {edit && (
+                    <>
+                      <th>Khóa :</th>
+                      <td>
+                        <TextField
+                          {...register("khoa")}
+                          name="khoa"
+                          autoFocus
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Khóa :</th>
+                      <td>{getValues("khoa")}</td>
+                    </>
+                  )}
+                </tr>
+                <tr>
+                  {edit && (
+                    <>
                       <th>Email :</th>
                       <td>
                         <TextField
@@ -272,6 +368,31 @@ function Thongtinquanly(props) {
                   )}
                 </tr>
                 <tr>
+                  {edit && (
+                    <>
+                      <th>Tình trạng học tập :</th>
+                      <td>
+                        <TextField
+                          disabled
+                          {...register("tinhtranghoctap")}
+                          name="tinhtranghoctap"
+                          className="outlined-basic"
+                          variant="outlined"
+                          required
+                          margin="dense"
+                          fullWidth
+                        />
+                      </td>
+                    </>
+                  )}
+                  {!edit && (
+                    <>
+                      <th style={{ padding: "12px" }}>Tình trạng học tập :</th>
+                      <td>{getValues("tinhtranghoctap")}</td>
+                    </>
+                  )}
+                </tr>
+                <tr>
                   {!edit && (
                     <Button
                       style={{
@@ -309,10 +430,27 @@ function Thongtinquanly(props) {
             </form>
           </div>
         </div>
-        <div className="thongtincanhan-right"></div>
+      </div>
+      <div className="thongtindangkisv-bottom">
+        <hr style={{ width: "100%", marginTop: "5%" }} />
+        <p className="thongtincanhan-title">Thông tin đăng kí</p>
+
+        <div className="table-dangki">
+          <table style={{ width: "100%", padding: "10px" }}>
+            <tr>
+              <th>STT</th>
+              <th>Mã lớp học</th>
+              <th>Mã học phần</th>
+              <th>Tên học phần</th>
+              <th>Phòng học</th>
+              <th>Số tín chỉ</th>
+            </tr>
+            {row}
+          </table>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Thongtinquanly;
+export default Chitiettaikhoan;
