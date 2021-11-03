@@ -7,4 +7,12 @@ export const listkhoavien = [
     value: "Ngoại ngữ",
     label: "Ngoại ngữ",
   },
+  {
+    value: "Viện Vật lý kĩ thuật",
+    label: "Viện Vật lý kĩ thuật",
+  },
+  {
+    value: "Viện cơ khí",
+    label: "Viện cơ khí",
+  },
 ];

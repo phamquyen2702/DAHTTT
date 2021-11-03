@@ -6,12 +6,12 @@ export const hocphan = [
   },
   {
     mahocphan: "IT4455",
-    tenhocphan: "Đồ án 3",
+    tenhocphan: "Kĩ thuật lập trình",
     sotinchi: 2,
   },
   {
     mahocphan: "IT4455",
-    tenhocphan: "Đồ án 3",
+    tenhocphan: "Hệ phân tán và ứng dụng",
     sotinchi: 2,
   },
 ];
