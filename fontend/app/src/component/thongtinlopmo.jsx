@@ -1,32 +1,40 @@
 import { Button, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { lophocs } from "../dummydb/dblophocdk";
+import { addToCart } from "../reducers/classSlice";
 import "./style.scss";
-const hocphan = [
-  {
-    mahocphan: "IT4444",
-    malop: "112313",
-    toida: 45,
-    sotinchi: 3,
-  },
-];
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 function Thongtinlopmo(props) {
+  const datas = useSelector((state) => state.class.cartItems);
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const handleThem = () => {
-    enqueueSnackbar("Success", {
-      variant: "success",
-    });
+  const handleThem = (data) => {
+    if (!datas.includes(data)) {
+      const action = addToCart(data);
+      dispatch(action);
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } else {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
   };
-  const row = hocphan.map((data, index) => (
-    <tr>
+
+  const row = lophocs.map((data, index) => (
+    <tr key={index}>
       <td>{index}</td>
+      <td>{data.malophoc}</td>
       <td>{data.mahocphan}</td>
-      <td>{data.malop}</td>
+      <td>{data.tenhocphan}</td>
       <td>{data.sotinchi}</td>
-      <td>{data.toida}</td>
-      <td className="them" onClick={handleThem}>
-        Thêm
+      <td>{data.max}</td>
+      <td className="them" onClick={() => handleThem(data)}>
+        <PlusCircleOutlined />
       </td>
     </tr>
   ));
@@ -62,8 +70,9 @@ function Thongtinlopmo(props) {
         <table style={{ width: "100%", padding: "10px" }}>
           <tr>
             <th>STT</th>
-            <th>Mã học phần</th>
             <th>Mã Lớp</th>
+            <th>Mã học phần</th>
+            <th>Tên học phân</th>
             <th>Số tín chỉ</th>
             <th>Tối đa</th>
             <th>Thêm vào D/S đăng kí</th>

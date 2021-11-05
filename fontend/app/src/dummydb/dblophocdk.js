@@ -5,6 +5,7 @@ export const lophocs = [
     tenhocphan: "Phân tích và thiết kế hệ thống thông tin",
     phonghoc: "TC401",
     sotinchi: 3,
+    max: 200,
   },
   {
     malophoc: "222",
@@ -12,6 +13,7 @@ export const lophocs = [
     tenhocphan: "Project3",
     phonghoc: "TC401",
     sotinchi: 2,
+    max: 200,
   },
   {
     malophoc: "333",
@@ -19,6 +21,7 @@ export const lophocs = [
     tenhocphan: "Tích hợp dữ liệu",
     phonghoc: "TC402",
     sotinchi: 2,
+    max: 200,
   },
   {
     malophoc: "444",
@@ -26,5 +29,6 @@ export const lophocs = [
     tenhocphan: "Big data",
     phonghoc: "TC401",
     sotinchi: 2,
+    max: 200,
   },
 ];

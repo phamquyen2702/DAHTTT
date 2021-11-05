@@ -37,18 +37,20 @@ function Home(props) {
 
             color: "rgb(161, 11, 11)",
             fontWeight: "600",
-            marginLeft: "15px",
-            marginTop: "5px",
+            marginLeft: "18px",
+            marginTop: "0px",
             marginBottom: "5px",
           }}
         >
-          Các chức năng
+          <span style={{ marginLeft: "12px" }}>Chức năng</span>
         </p>
         <hr style={{ width: "80%" }} />
         <br />
-        {user && JSON.parse(user).role === "ROLE_SV" && <MenuSV />}
-        {user && JSON.parse(user).role === "ROLE_ADMIN" && <Menuadmin />}
-        {user && JSON.parse(user).role === "ROLE_TM" && <Menutm />}
+        <div style={{ marginLeft: "10px" }}>
+          {user && JSON.parse(user).role === "ROLE_SV" && <MenuSV />}
+          {user && JSON.parse(user).role === "ROLE_ADMIN" && <Menuadmin />}
+          {user && JSON.parse(user).role === "ROLE_TM" && <Menutm />}
+        </div>
       </div>
       <div className="dangki-content-right">
         <Suspense fallback={<Loading />}>

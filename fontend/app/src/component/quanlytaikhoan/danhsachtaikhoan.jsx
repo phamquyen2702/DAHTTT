@@ -2,56 +2,22 @@ import { Button, TextField } from "@material-ui/core";
 import { Pagination } from "antd";
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import { FormOutlined } from "@ant-design/icons";
 import "../style2.css";
+import { dbaccount } from "../../dummydb/dbaccount";
 
 function Danhsachtaikhoan(props) {
-  const datas = [
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lopsinhvien: "CNTT 2.1",
-      status: "Đã đăng kí",
-    },
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lopsinhvien: "CNTT 2.1",
-      status: "Đã đăng kí",
-    },
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lopsinhvien: "CNTT 2.1",
-      status: "Đã đăng kí",
-    },
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lopsinhvien: "CNTT 2.1",
-      status: "Đã đăng kí",
-    },
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lopsinhvien: "CNTT 2.1",
-      status: "Đã đăng kí",
-    },
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lopsinhvien: "CNTT 2.1",
-      status: "Đã đăng kí",
-    },
-  ];
   const match = useRouteMatch();
-  const row = datas.map((data, index) => (
+  const row = dbaccount.map((data, index) => (
     <tr>
       <td>{data.masinhvien}</td>
-      <td>{data.fullname}</td>
+      <td>{data.name}</td>
       <td>{data.lopsinhvien}</td>
       <td>{data.status}</td>
       <td className="chitiet">
-        <Link to={`${match.url}/chitiettaikhoan`}>Chi tiết</Link>
+        <Link to={`${match.url}/chitiettaikhoan`}>
+          <FormOutlined />
+        </Link>
       </td>
     </tr>
   ));

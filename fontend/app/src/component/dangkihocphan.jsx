@@ -1,21 +1,22 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import * as yup from "yup";
 import { hocphan } from "../dummydb/dbhocphan";
 import { addToCart, deleteFromCart } from "../reducers/subjectSlice";
+import { DeleteOutlined } from "@ant-design/icons";
 import "./style.scss";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 function Dangkihocphan(props) {
   const { enqueueSnackbar } = useSnackbar();
@@ -87,9 +88,10 @@ function Dangkihocphan(props) {
               name="search"
               autoFocus
               id="outlined-input"
-              label="Mã học phần"
+              label="Đăng kí theo mã HP"
               type="text"
               style={{ width: "200px", margin: "20px" }}
+              required
             />
             <Button
               type="submit"
@@ -156,13 +158,16 @@ function Dangkihocphan(props) {
       </Dialog>
       <div className="table-dangki">
         <table style={{ width: "100%", padding: "10px" }}>
-          <tr>
-            <th>STT</th>
-            <th>Mã học phần</th>
-            <th>Tên học phần</th>
-            <th>Số tín chỉ</th>
-            <th>Thay đổi</th>
-          </tr>
+          {datas.length > 0 && (
+            <tr>
+              <th>STT</th>
+              <th>Mã học phần</th>
+              <th>Tên học phần</th>
+              <th>Số tín chỉ</th>
+              <th>Xóa đăng kí</th>
+            </tr>
+          )}
+
           {datas &&
             datas.map((data, index) => (
               <tr key={index}>
@@ -174,29 +179,41 @@ function Dangkihocphan(props) {
                   className="delete"
                   onClick={() => handleOpenDelete(data.mahocphan)}
                 >
-                  Xóa
+                  <DeleteOutlined />
                 </td>
               </tr>
             ))}
+          {datas.length === 0 && (
+            <div
+              style={{
+                textAlign: "center",
+                width: "100%",
+                fontSize: "17px",
+                marginTop: "50px",
+              }}
+            >
+              Chưa đăng kí
+            </div>
+          )}
         </table>
       </div>
       <br />
       <br />
       <br />
-      <Button
-        onClick={handleSave}
-        style={{
-          width: "250px",
-          margin: "10px",
-          fontWeight: "400",
-          background: "rgb(235, 43, 43)",
-          color: "white",
-          float: "right",
-        }}
-        variant="contained"
-      >
-        Gửi đăng kí
-      </Button>
+      {datas.length > 0 && (
+        <Button
+          onClick={handleSave}
+          style={{
+            width: "250px",
+            margin: "10px",
+            fontWeight: "600",
+            float: "right",
+          }}
+          variant="contained"
+        >
+          Gửi đăng kí
+        </Button>
+      )}
     </div>
   );
 }

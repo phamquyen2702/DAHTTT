@@ -2,56 +2,22 @@ import { Button, TextField } from "@material-ui/core";
 import { Pagination } from "antd";
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import { FormOutlined } from "@ant-design/icons";
+import { lophocs } from "../../dummydb/dblophocdk";
 import "../style2.css";
 
 function Danhsachlophoc(props) {
-  const datas = [
-    {
-      malophoc: "12313131",
-      phonghoc: "TC1111",
-      mahocphan: "IT4440",
-      soluongsv: 200,
-    },
-    {
-      malophoc: "12313131",
-      phonghoc: "TC1111",
-      mahocphan: "IT4440",
-      soluongsv: 200,
-    },
-    {
-      malophoc: "12313131",
-      phonghoc: "TC1111",
-      mahocphan: "IT4440",
-      soluongsv: 200,
-    },
-    {
-      malophoc: "12313131",
-      phonghoc: "TC1111",
-      mahocphan: "IT4440",
-      soluongsv: 200,
-    },
-    {
-      malophoc: "12313131",
-      phonghoc: "TC1111",
-      mahocphan: "IT4440",
-      soluongsv: 200,
-    },
-    {
-      malophoc: "12313131",
-      phonghoc: "TC1111",
-      mahocphan: "IT4440",
-      soluongsv: 200,
-    },
-  ];
   const match = useRouteMatch();
-  const row = datas.map((data, index) => (
+  const row = lophocs.map((data, index) => (
     <tr>
       <td>{data.malophoc}</td>
       <td>{data.phonghoc}</td>
       <td>{data.mahocphan}</td>
-      <td>{data.soluongsv}</td>
+      <td>{data.max}</td>
       <td className="chitiet">
-        <Link to={`${match.url}/chitietlophoc`}>Chi tiết</Link>
+        <Link to={`${match.url}/chitietlophoc`}>
+          <FormOutlined />
+        </Link>
       </td>
     </tr>
   ));

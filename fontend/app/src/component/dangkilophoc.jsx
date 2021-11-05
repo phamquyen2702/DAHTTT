@@ -9,14 +9,23 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { lophocs } from "../dummydb/dblophocdk";
 import { addToCart, deleteFromCart } from "../reducers/classSlice";
+import { DeleteOutlined } from "@ant-design/icons";
 import "./style.scss";
 
+//sum tin chỉ
+function sumTinchi(datas) {
+  let sum = 0;
+  for (let i = 0; i < datas.length; i++) {
+    sum = sum + datas[i].sotinchi;
+  }
+  return sum;
+}
 function Dangkilophoc(props) {
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({});
@@ -30,6 +39,9 @@ function Dangkilophoc(props) {
   const [contentErr, setContentErr] = useState("");
   const [malophocRemove, setMalophocRemove] = useState("");
   const [listTKB, setListTKB] = useState([]);
+  const [statusRequest, setStatusRequest] = useState(false);
+  const [tongtinchi, setTongtinchi] = useState(0);
+
   const handleSave = () => {
     setListTKB(datas);
     enqueueSnackbar("Success", {
@@ -39,12 +51,18 @@ function Dangkilophoc(props) {
   const dispatch = useDispatch();
   //redux
   const datas = useSelector((state) => state.class.cartItems);
-
   const [status, setStatus] = useState(false);
   const [remove, setRemove] = useState(false);
-
   const title = "";
 
+  useEffect(() => {
+    setTongtinchi(sumTinchi(datas));
+    if (datas.length === 0) {
+      setStatusRequest(true);
+    } else {
+      setStatusRequest(false);
+    }
+  }, [datas]);
   const handleOnSubmit = () => {
     const index = lophocs.findIndex((x) => x.malophoc === getValues("search"));
 
@@ -78,19 +96,6 @@ function Dangkilophoc(props) {
     setRemove(false);
     setMalophocRemove("");
   };
-  const row = datas.map((data, index) => (
-    <tr key={index}>
-      <td>{index}</td>
-      <td>{data.malophoc}</td>
-      <td>{data.mahocphan}</td>
-      <td className="td-tenhocphan">{data.tenhocphan}</td>
-      <td>{data.phonghoc}</td>
-      <td>{data.sotinchi}</td>
-      <td className="delete" onClick={() => handleOpenDelete(data.malophoc)}>
-        Xóa
-      </td>
-    </tr>
-  ));
   return (
     <div>
       <div className="search-header">
@@ -101,9 +106,10 @@ function Dangkilophoc(props) {
               {...register("search")}
               autoFocus
               id="outlined-input"
-              label="Mã lớp học"
+              label="Đăng kí theo mã LH"
               type="text"
               style={{ width: "200px", margin: "20px" }}
+              required
             />
             <Button
               type="onSubmit"
@@ -157,65 +163,98 @@ function Dangkilophoc(props) {
             </DialogContent>
             <DialogActions>
               {/* <Button onClick={handleClose}>Disagree</Button> */}
-              <Button onClick={handleCloseDelete}>Disagree</Button>
+              <Button onClick={handleCloseDelete}>không đồng ý</Button>
               <Button
                 onClick={handleAgreeDelete}
                 autoFocus
                 style={{ background: "white", fontWeight: "600" }}
               >
-                Agree
+                đồng ý
               </Button>
             </DialogActions>
           </Dialog>
         </div>
-        <div className="search-hearder-right">Số tín chỉ tối đa: 24</div>
+        <div className="search-hearder-right">
+          Số tín chỉ đã đăng kí : {tongtinchi}
+        </div>
       </div>
 
       <div className="table-dangki">
         <table style={{ width: "100%", padding: "10px" }}>
-          <tr>
-            <th>STT</th>
-            <th>Mã lớp học</th>
-            <th>Mã học phần</th>
-            <th>Tên học phần</th>
-            <th>Phòng học</th>
-            <th>Số tín chỉ</th>
-            <th>Thay đổi</th>
-          </tr>
-          {row}
+          {datas.length > 0 && (
+            <tr>
+              <th>STT</th>
+              <th>Mã lớp học</th>
+              <th>Mã học phần</th>
+              <th>Tên học phần</th>
+              <th>Phòng học</th>
+              <th>Số tín chỉ</th>
+              <th>Xóa đăng kí</th>
+            </tr>
+          )}
+
+          {datas.map((data, index) => (
+            <tr key={index}>
+              <td>{index}</td>
+              <td>{data.malophoc}</td>
+              <td>{data.mahocphan}</td>
+              <td className="td-tenhocphan">{data.tenhocphan}</td>
+              <td>{data.phonghoc}</td>
+              <td>{data.sotinchi}</td>
+              <td
+                className="delete"
+                onClick={() => handleOpenDelete(data.malophoc)}
+              >
+                <DeleteOutlined />
+              </td>
+            </tr>
+          ))}
         </table>
+        {datas.length === 0 && (
+          <div
+            style={{
+              textAlign: "center",
+              width: "100%",
+              fontSize: "17px",
+              marginTop: "30px",
+            }}
+          >
+            Chưa đăng kí
+          </div>
+        )}
         <Button
+          disabled={statusRequest}
           onClick={handleSave}
           style={{
             width: "250px",
             margin: "30px",
-            fontWeight: "400",
-            background: "rgb(235, 43, 43)",
-            color: "white",
+            fontWeight: "600",
             float: "right",
           }}
           variant="contained"
         >
-          Gửi đăng kí
+          Gửi yêu cầu
         </Button>
       </div>
       <br />
       <br />
       <br />
-
-      <hr style={{ width: "30%", margin: "30px auto" }} className="hr-style" />
+      <hr style={{ width: "90%", margin: "30px auto" }} className="hr-style" />
       <div className="dk-footer">
         <p className="dk-footer-title">Thời khóa biểu chi tiết</p>
         <div className="table-dangki">
           <table style={{ width: "100%", padding: "10px" }}>
-            <tr>
-              <th>STT</th>
-              <th>Mã học phần</th>
-              <th>Tên học phần</th>
-              <th>Phòng học</th>
-              <th>Thời gian</th>
-              <th>Thứ</th>
-            </tr>
+            {listTKB.length > 0 && (
+              <tr>
+                <th>STT</th>
+                <th>Mã học phần</th>
+                <th>Tên học phần</th>
+                <th>Phòng học</th>
+                <th>Thời gian</th>
+                <th>Thứ</th>
+              </tr>
+            )}
+
             {listTKB.map((data, index) => (
               <tr key={index}>
                 <td>{index}</td>
@@ -227,6 +266,18 @@ function Dangkilophoc(props) {
               </tr>
             ))}
           </table>
+          {listTKB.length === 0 && (
+            <div
+              style={{
+                textAlign: "center",
+                width: "100%",
+                fontSize: "17px",
+                marginTop: "50px",
+              }}
+            >
+              Tạm trống
+            </div>
+          )}
         </div>
       </div>
     </div>

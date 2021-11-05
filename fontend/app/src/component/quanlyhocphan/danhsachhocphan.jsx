@@ -2,56 +2,22 @@ import { Button, TextField } from "@material-ui/core";
 import { Pagination } from "antd";
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import { FormOutlined } from "@ant-design/icons";
 import "../style2.css";
+import { hocphan } from "../../dummydb/dbhocphan";
 
 function Danhsachhocphan(props) {
-  const datas = [
-    {
-      mahocphan: "IT4444",
-      tenhocphan: "An toàn thông tin",
-      sotinchi: 3,
-      trangthai: "đang mở",
-    },
-    {
-      mahocphan: "IT4444",
-      tenhocphan: "An toàn thông tin",
-      sotinchi: 3,
-      trangthai: "đang mở",
-    },
-    {
-      mahocphan: "IT4444",
-      tenhocphan: "An toàn thông tin",
-      sotinchi: 3,
-      trangthai: "đang mở",
-    },
-    {
-      mahocphan: "IT4444",
-      tenhocphan: "An toàn thông tin",
-      sotinchi: 3,
-      trangthai: "đang mở",
-    },
-    {
-      mahocphan: "IT4444",
-      tenhocphan: "An toàn thông tin",
-      sotinchi: 3,
-      trangthai: "đang mở",
-    },
-    {
-      mahocphan: "IT4444",
-      tenhocphan: "An toàn thông tin",
-      sotinchi: 3,
-      trangthai: "đang mở",
-    },
-  ];
   const match = useRouteMatch();
-  const row = datas.map((data, index) => (
+  const row = hocphan.map((data, index) => (
     <tr>
       <td>{data.mahocphan}</td>
       <td>{data.tenhocphan}</td>
       <td>{data.sotinchi}</td>
       <td>{data.trangthai}</td>
       <td className="chitiet">
-        <Link to={`${match.url}/chitiethocphan`}>Chi tiết</Link>
+        <Link to={`${match.url}/chitiethocphan`}>
+          <FormOutlined />
+        </Link>
       </td>
     </tr>
   ));
