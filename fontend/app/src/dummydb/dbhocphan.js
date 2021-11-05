@@ -5,12 +5,12 @@ export const hocphan = [
     sotinchi: 3,
   },
   {
-    mahocphan: "IT4455",
+    mahocphan: "IT5555",
     tenhocphan: "Kĩ thuật lập trình",
     sotinchi: 2,
   },
   {
-    mahocphan: "IT4455",
+    mahocphan: "IT6666",
     tenhocphan: "Hệ phân tán và ứng dụng",
     sotinchi: 2,
   },

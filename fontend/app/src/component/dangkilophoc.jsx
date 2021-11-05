@@ -1,3 +1,4 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
   Dialog,
@@ -9,38 +10,75 @@ import {
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import * as yup from "yup";
 import { lophocs } from "../dummydb/dblophocdk";
+import { addToCart, deleteFromCart } from "../reducers/classSlice";
 import "./style.scss";
 
 function Dangkilophoc(props) {
   const { enqueueSnackbar } = useSnackbar();
+  const schema = yup.object().shape({});
+  const form = useForm({
+    defaultValues: {
+      search: "",
+    },
+    resolver: yupResolver(schema),
+  });
+  const { register, handleSubmit, getValues } = form;
+  const [contentErr, setContentErr] = useState("");
+  const [malophocRemove, setMalophocRemove] = useState("");
+  const [listTKB, setListTKB] = useState([]);
   const handleSave = () => {
+    setListTKB(datas);
     enqueueSnackbar("Success", {
       variant: "success",
     });
   };
-  const [status, setStatus] = useState(false);
-  const [deletes, setDelete] = useState(false);
+  const dispatch = useDispatch();
+  //redux
+  const datas = useSelector((state) => state.class.cartItems);
 
-  const content = "Vui lòng chọn mã lớp khác,hiện tại lớp học này đã đầy";
+  const [status, setStatus] = useState(false);
+  const [remove, setRemove] = useState(false);
+
   const title = "";
 
-  const handleOnclick = () => {
-    setStatus(true);
+  const handleOnSubmit = () => {
+    const index = lophocs.findIndex((x) => x.malophoc === getValues("search"));
+
+    if (index >= 0 && !datas.includes(lophocs[index])) {
+      const action = addToCart(lophocs[index]);
+      dispatch(action);
+    } else {
+      setContentErr(
+        `Mã lớp học ${getValues("search")} không tồn tại hoặc đã được đăng kí!`
+      );
+      setStatus(true);
+    }
+    form.reset();
   };
 
   const handleClose = () => {
     setStatus(false);
   };
-  const handleOpenDelete = () => {
-    setDelete(true);
-  };
 
   const handleCloseDelete = () => {
-    setDelete(false);
+    setRemove(false);
+  };
+  const handleOpenDelete = (value) => {
+    setMalophocRemove(value);
+    setRemove(true);
   };
 
-  const row = lophocs.map((data, index) => (
+  const handleAgreeDelete = () => {
+    const action = deleteFromCart(malophocRemove);
+    dispatch(action);
+    setRemove(false);
+    setMalophocRemove("");
+  };
+  const row = datas.map((data, index) => (
     <tr key={index}>
       <td>{index}</td>
       <td>{data.malophoc}</td>
@@ -48,7 +86,7 @@ function Dangkilophoc(props) {
       <td className="td-tenhocphan">{data.tenhocphan}</td>
       <td>{data.phonghoc}</td>
       <td>{data.sotinchi}</td>
-      <td className="delete" onClick={handleOpenDelete}>
+      <td className="delete" onClick={() => handleOpenDelete(data.malophoc)}>
         Xóa
       </td>
     </tr>
@@ -57,26 +95,30 @@ function Dangkilophoc(props) {
     <div>
       <div className="search-header">
         <div className="search-malop">
-          <TextField
-            autoFocus
-            id="outlined-input"
-            label="Mã lớp học"
-            type="text"
-            style={{ width: "200px", margin: "20px" }}
-          />
-          <Button
-            onClick={handleOnclick}
-            style={{
-              width: "150px",
-              margin: "32px",
-              fontWeight: "400",
-              background: "rgb(235, 43, 43)",
-              color: "white",
-            }}
-            variant="contained"
-          >
-            Đăng kí ngay
-          </Button>
+          <form onSubmit={handleSubmit(handleOnSubmit)}>
+            <TextField
+              name="search"
+              {...register("search")}
+              autoFocus
+              id="outlined-input"
+              label="Mã lớp học"
+              type="text"
+              style={{ width: "200px", margin: "20px" }}
+            />
+            <Button
+              type="onSubmit"
+              style={{
+                width: "150px",
+                margin: "32px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+            >
+              Đăng kí ngay
+            </Button>
+          </form>
 
           <Dialog
             open={status}
@@ -87,7 +129,7 @@ function Dangkilophoc(props) {
             <DialogTitle id="alert-dialog-title">{`${title}`}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                {content}
+                {contentErr}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -102,7 +144,7 @@ function Dangkilophoc(props) {
             </DialogActions>
           </Dialog>
           <Dialog
-            open={deletes}
+            open={remove}
             onClose={handleCloseDelete}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -117,7 +159,7 @@ function Dangkilophoc(props) {
               {/* <Button onClick={handleClose}>Disagree</Button> */}
               <Button onClick={handleCloseDelete}>Disagree</Button>
               <Button
-                onClick={handleCloseDelete}
+                onClick={handleAgreeDelete}
                 autoFocus
                 style={{ background: "white", fontWeight: "600" }}
               >
@@ -154,7 +196,7 @@ function Dangkilophoc(props) {
           }}
           variant="contained"
         >
-          Lưu thay đổi
+          Gửi đăng kí
         </Button>
       </div>
       <br />
@@ -174,7 +216,7 @@ function Dangkilophoc(props) {
               <th>Thời gian</th>
               <th>Thứ</th>
             </tr>
-            {lophocs.map((data, index) => (
+            {listTKB.map((data, index) => (
               <tr key={index}>
                 <td>{index}</td>
                 <td>{data.malophoc}</td>
