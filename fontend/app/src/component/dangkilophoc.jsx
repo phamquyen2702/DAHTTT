@@ -17,6 +17,7 @@ import { lophocs } from "../dummydb/dblophocdk";
 import { addToCart, deleteFromCart } from "../reducers/classSlice";
 import { DeleteOutlined } from "@ant-design/icons";
 import "./style.scss";
+import { Empty } from "antd";
 
 //sum tin chỉ
 function sumTinchi(datas) {
@@ -39,7 +40,6 @@ function Dangkilophoc(props) {
   const [contentErr, setContentErr] = useState("");
   const [malophocRemove, setMalophocRemove] = useState("");
   const [listTKB, setListTKB] = useState([]);
-  const [statusRequest, setStatusRequest] = useState(false);
   const [tongtinchi, setTongtinchi] = useState(0);
 
   const handleSave = () => {
@@ -57,11 +57,6 @@ function Dangkilophoc(props) {
 
   useEffect(() => {
     setTongtinchi(sumTinchi(datas));
-    if (datas.length === 0) {
-      setStatusRequest(true);
-    } else {
-      setStatusRequest(false);
-    }
   }, [datas]);
   const handleOnSubmit = () => {
     const index = lophocs.findIndex((x) => x.malophoc === getValues("search"));
@@ -122,7 +117,7 @@ function Dangkilophoc(props) {
               }}
               variant="contained"
             >
-              Đăng kí ngay
+              Đăng kí
             </Button>
           </form>
 
@@ -163,7 +158,7 @@ function Dangkilophoc(props) {
             </DialogContent>
             <DialogActions>
               {/* <Button onClick={handleClose}>Disagree</Button> */}
-              <Button onClick={handleCloseDelete}>không đồng ý</Button>
+              <Button onClick={handleCloseDelete}>trở lại</Button>
               <Button
                 onClick={handleAgreeDelete}
                 autoFocus
@@ -211,25 +206,26 @@ function Dangkilophoc(props) {
           ))}
         </table>
         {datas.length === 0 && (
-          <div
+          <Empty
             style={{
-              textAlign: "center",
-              width: "100%",
-              fontSize: "17px",
-              marginTop: "30px",
+              color: "red",
+              fontWeight: "600",
+              fontStyle: "italic",
+              fontSize: "13px",
             }}
-          >
-            Chưa đăng kí
-          </div>
+            description="Đăng kí ngay( Empty)"
+            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+          />
         )}
         <Button
-          disabled={statusRequest}
           onClick={handleSave}
           style={{
             width: "250px",
             margin: "30px",
             fontWeight: "600",
             float: "right",
+            background: "rgb(235, 43, 43)",
+            color: "white",
           }}
           variant="contained"
         >
@@ -239,7 +235,7 @@ function Dangkilophoc(props) {
       <br />
       <br />
       <br />
-      <hr style={{ width: "90%", margin: "30px auto" }} className="hr-style" />
+      <hr style={{ width: "95%", margin: "30px auto" }} className="hr-style" />
       <div className="dk-footer">
         <p className="dk-footer-title">Thời khóa biểu chi tiết</p>
         <div className="table-dangki">
@@ -267,16 +263,16 @@ function Dangkilophoc(props) {
             ))}
           </table>
           {listTKB.length === 0 && (
-            <div
+            <Empty
               style={{
-                textAlign: "center",
-                width: "100%",
-                fontSize: "17px",
-                marginTop: "50px",
+                color: "red",
+                fontWeight: "600",
+                fontStyle: "italic",
+                fontSize: "13px",
               }}
-            >
-              Tạm trống
-            </div>
+              description="Tạm trống( Empty)"
+              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            />
           )}
         </div>
       </div>

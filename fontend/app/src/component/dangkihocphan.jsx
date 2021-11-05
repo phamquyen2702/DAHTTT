@@ -17,6 +17,7 @@ import { hocphan } from "../dummydb/dbhocphan";
 import { addToCart, deleteFromCart } from "../reducers/subjectSlice";
 import { DeleteOutlined } from "@ant-design/icons";
 import "./style.scss";
+import { Empty } from "antd";
 
 function Dangkihocphan(props) {
   const { enqueueSnackbar } = useSnackbar();
@@ -104,7 +105,7 @@ function Dangkihocphan(props) {
               }}
               variant="contained"
             >
-              Đăng kí ngay
+              Đăng kí
             </Button>
           </form>
         </div>
@@ -146,13 +147,13 @@ function Dangkihocphan(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDelete}>Disagree</Button>
+          <Button onClick={handleCloseDelete}>Trở lại</Button>
           <Button
             onClick={handleAgreeDelete}
             autoFocus
             style={{ background: "white", fontWeight: "600" }}
           >
-            Agree
+            Đồng ý
           </Button>
         </DialogActions>
       </Dialog>
@@ -184,16 +185,16 @@ function Dangkihocphan(props) {
               </tr>
             ))}
           {datas.length === 0 && (
-            <div
+            <Empty
               style={{
-                textAlign: "center",
-                width: "100%",
-                fontSize: "17px",
-                marginTop: "50px",
+                color: "red",
+                fontWeight: "600",
+                fontStyle: "italic",
+                fontSize: "13px",
               }}
-            >
-              Chưa đăng kí
-            </div>
+              description="Đăng kí ngay( Empty)"
+              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            />
           )}
         </table>
       </div>
@@ -208,6 +209,8 @@ function Dangkihocphan(props) {
             margin: "10px",
             fontWeight: "600",
             float: "right",
+            background: "rgb(235, 43, 43)",
+            color: "white",
           }}
           variant="contained"
         >
