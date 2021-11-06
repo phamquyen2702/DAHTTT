@@ -14,6 +14,8 @@ import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { dbaccount } from "../dummydb/dbaccount";
+import getCookie from "./getcookie";
+import setcookie from "./setcookie";
 import "./style.scss";
 
 function checkAccount(role, email, password) {
@@ -32,7 +34,7 @@ function checkAccount(role, email, password) {
 
 function Formlogin(props) {
   const { enqueueSnackbar } = useSnackbar();
-  localStorage.setItem("dbaccount", JSON.stringify(dbaccount));
+  setcookie("dbaccount", JSON.stringify(dbaccount), 16);
   const [valueRole, setValueRole] = useState("ROLE_SV");
   const history = useHistory();
 
@@ -63,7 +65,7 @@ function Formlogin(props) {
     setValueRole(event.target.value);
   };
 
-  if (localStorage.getItem("account")) {
+  if (getCookie("account")) {
     history.push("/home");
   }
   const [isVeryFied, setIsVeryFied] = useState(false);
@@ -73,7 +75,7 @@ function Formlogin(props) {
   };
   const handleOnSubmit = (value) => {
     if (checkAccount(value.role, value.email, value.password)) {
-      localStorage.setItem("account", JSON.stringify(value));
+      setcookie("account", JSON.stringify(value), 15);
       window.location.href = "/home";
       form.reset();
     } else {

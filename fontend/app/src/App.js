@@ -17,8 +17,10 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import * as yup from "yup";
 import Footer from "./component/footer";
 import Formlogin from "./component/formlogin";
+import getCookie from "./component/getcookie";
 import Home from "./component/home";
 import NotFound from "./component/NotFound";
+import setcookie from "./component/setcookie";
 import "./component/style.scss";
 function getUserByEmail(dbaccount, account) {
   for (let i = 0; i < dbaccount.length; i++) {
@@ -31,16 +33,16 @@ function getUserByEmail(dbaccount, account) {
 }
 const App = () => {
   const handleLogout = () => {
-    localStorage.removeItem("account");
-    if (!localStorage.getItem("account")) {
+    setcookie("account", "", 0);
+    if (!getCookie("account")) {
       window.location.reload();
     }
   };
 
   let user = "";
-  if (localStorage.getItem("account")) {
-    const dbaccount = JSON.parse(localStorage.getItem("dbaccount"));
-    const account = JSON.parse(localStorage.getItem("account"));
+  if (getCookie("account")) {
+    const dbaccount = JSON.parse(getCookie("dbaccount"));
+    const account = JSON.parse(getCookie("account"));
     user = getUserByEmail(dbaccount, account);
   }
 
@@ -88,7 +90,7 @@ export const Logout = ({ user, handleLogout }) => {
   };
   const handleOnSubmit = () => {
     setOpen(false);
-    localStorage.removeItem("account");
+    setcookie("account", "", 0);
     enqueueSnackbar("Success and Login", {
       variant: "success",
     });

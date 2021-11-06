@@ -20,6 +20,7 @@ import "./style.scss";
 import { Empty } from "antd";
 
 function Dangkihocphan(props) {
+  const [listTKB, setListTKB] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({});
   const form = useForm({
@@ -30,6 +31,7 @@ function Dangkihocphan(props) {
   });
   const { register, handleSubmit, getValues } = form;
   const handleSave = () => {
+    setListTKB(datas);
     enqueueSnackbar("Success", {
       variant: "success",
     });
@@ -214,9 +216,49 @@ function Dangkihocphan(props) {
           }}
           variant="contained"
         >
-          Gửi đăng kí
+          Gửi yêu cầu
         </Button>
       )}
+      <br />
+      <br />
+      <br />
+      <hr style={{ width: "97%", margin: "30px auto" }} className="hr-style" />
+      <div className="dk-footer">
+        <p className="dk-footer-title">Danh sách học phần đã đăng kí</p>
+        <div className="table-dangki">
+          <table style={{ width: "100%", padding: "10px" }}>
+            {listTKB.length > 0 && (
+              <tr>
+                <th>STT</th>
+                <th>Mã học phần</th>
+                <th>Tên học phần</th>
+                <th>Số tín chỉ</th>
+              </tr>
+            )}
+
+            {listTKB.map((data, index) => (
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{data.mahocphan}</td>
+                <td>{data.tenhocphan}</td>
+                <td>{data.sotinchi}</td>
+              </tr>
+            ))}
+          </table>
+          {listTKB.length === 0 && (
+            <Empty
+              style={{
+                color: "red",
+                fontWeight: "600",
+                fontStyle: "italic",
+                fontSize: "13px",
+              }}
+              description="Tạm trống( Empty)"
+              image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

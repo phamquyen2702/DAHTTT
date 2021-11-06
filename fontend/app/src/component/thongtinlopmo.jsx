@@ -12,7 +12,8 @@ function Thongtinlopmo(props) {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const handleThem = (data) => {
-    if (!datas.includes(data)) {
+    const index = lophocs.findIndex((x) => x.malophoc === data);
+    if (index >= 0 && !datas.includes(data)) {
       const action = addToCart(data);
       dispatch(action);
       enqueueSnackbar("Success", {

@@ -1,8 +1,10 @@
+import getCookie from "../component/getcookie";
+import setcookie from "../component/setcookie";
 const { createSlice } = require("@reduxjs/toolkit");
 const subjectSlice = createSlice({
   name: "subject",
   initialState: {
-    cartItems: [],
+    cartItems: getCookie("cartDKHP") ? JSON.parse(getCookie("cartDKHP")) : [],
   },
   reducers: {
     addToCart(state, action) {
@@ -14,6 +16,7 @@ const subjectSlice = createSlice({
         return;
       } else {
         state.cartItems.push(newItem);
+        setcookie("cartDKHP", JSON.stringify(state.cartItems), 5);
       }
     },
     deleteFromCart(state, action) {
@@ -21,6 +24,7 @@ const subjectSlice = createSlice({
       state.cartItems = state.cartItems.filter(
         (x) => x.mahocphan !== mahocphanToDelete
       );
+      setcookie("cartDKHP", JSON.stringify(state.cartItems), 5);
     },
   },
 });

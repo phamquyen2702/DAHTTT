@@ -7,6 +7,7 @@ import {
   useHistory,
   NavLink,
 } from "react-router-dom";
+import getCookie from "./getcookie";
 import Loading from "./Loading";
 import NotFound from "./NotFound";
 import Quanlyhocphan from "./quanlyhocphan/quanlyhocphan";
@@ -23,7 +24,7 @@ const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
 function Home(props) {
   const match = useRouteMatch();
   const history = useHistory();
-  const user = localStorage.getItem("account");
+  const user = getCookie("account");
   if (!user) {
     history.push("/Account");
   }

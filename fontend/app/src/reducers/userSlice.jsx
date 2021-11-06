@@ -1,5 +1,6 @@
 import jwtDecode from "jwt-decode";
 import userApi from "../api/userApi";
+import setcookie from "../component/setcookie";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
@@ -12,8 +13,9 @@ export const register = createAsyncThunk("auth/register", async (payload) => {
 export const login = createAsyncThunk("auth/login", async (payload) => {
   //call api to login
   const data = await userApi.login(payload);
-  localStorage.setItem("user", JSON.stringify(jwtDecode(data)));
-  localStorage.setItem("accessToken", data);
+  //set lại exprie từ chuỗi json trả về
+  setcookie("user", JSON.stringify(jwtDecode(data)), 15);
+  setcookie("accessToken", data);
   return data;
 });
 const userSlice = createSlice({
