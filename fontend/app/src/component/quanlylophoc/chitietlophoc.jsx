@@ -4,6 +4,7 @@ import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { dbaccount } from "../../dummydb/dbaccount";
 import "../style2.css";
 
 function Chitietlophoc(props) {
@@ -27,43 +28,20 @@ function Chitietlophoc(props) {
     },
     resolver: yupResolver(schema),
   });
-  const {
-    register,
-    getValues,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const { register, getValues, handleSubmit } = form;
   const handleOnSubmit = (value) => {
     setEdit(false);
     enqueueSnackbar("Success", {
       variant: "success",
     });
-    console.log(value);
   };
 
-  const lophocs = [
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lop: "CNTT2.1",
-    },
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lop: "CNTT2.1",
-    },
-    {
-      masinhvien: "20153093",
-      fullname: "Phạm Văn Quyền",
-      lop: "CNTT2.1",
-    },
-  ];
-  const row = lophocs.map((data, index) => (
+  const row = dbaccount.map((data, index) => (
     <tr key={index}>
       <td>{index}</td>
       <td>{data.masinhvien}</td>
-      <td>{data.fullname}</td>
-      <td>{data.lop}</td>
+      <td>{data.name}</td>
+      <td>{data.lopsinhvien}</td>
     </tr>
   ));
   return (
@@ -302,23 +280,37 @@ function Chitietlophoc(props) {
                     </Button>
                   )}
                 </tr>
-                <tr>
-                  <Button
-                    style={{
-                      width: "250px",
-                      marginTop: "40px",
-                      marginLeft: "9px",
-                      fontWeight: "400",
-                      background: "rgb(235, 43, 43)",
-                      color: "white",
-                    }}
-                    variant="contained"
-                  >
-                    Khóa lớp học
-                  </Button>
-                </tr>
               </table>
             </form>
+            <div>
+              <Button
+                style={{
+                  width: "250px",
+                  marginTop: "40px",
+                  marginLeft: "9px",
+                  fontWeight: "400",
+                  background: "rgb(235, 43, 43)",
+                  color: "white",
+                }}
+                variant="contained"
+              >
+                Khóa lớp học
+              </Button>
+
+              <Button
+                style={{
+                  width: "250px",
+                  marginTop: "40px",
+                  marginLeft: "9px",
+                  fontWeight: "400",
+                  background: "rgb(235, 43, 43)",
+                  color: "white",
+                }}
+                variant="contained"
+              >
+                Đăng kí theo yêu cầu
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -7,7 +7,6 @@ function Footer(props) {
       <div className="footer">
         <p>Mọi thắc mắc liên hệ đến phòng giáo dục và đào tạo</p>
         <p>TRƯỜNG ĐẠI HỌC BÁCH KHOA HÀ NỘI</p>
-        <p>Liên hệ: 012313131321</p>
       </div>
     </div>
   );

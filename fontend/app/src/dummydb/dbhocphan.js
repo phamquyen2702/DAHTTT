@@ -17,4 +17,10 @@ export const hocphan = [
     sotinchi: 2,
     trangthai: "đang mở",
   },
+  {
+    mahocphan: "IT7777",
+    tenhocphan: "Hệ phân tán",
+    sotinchi: 3,
+    trangthai: "đang mở",
+  },
 ];
