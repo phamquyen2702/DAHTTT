@@ -34,6 +34,8 @@ function getUserByEmail(dbaccount, account) {
 const App = () => {
   const handleLogout = () => {
     setcookie("account", "", 0);
+    setcookie("cartDKHP", "", 0);
+    setcookie("cartDKLH", "", 0);
     if (!getCookie("account")) {
       window.location.reload();
     }
