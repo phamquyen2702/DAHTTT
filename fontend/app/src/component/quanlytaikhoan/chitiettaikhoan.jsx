@@ -428,6 +428,20 @@ function Chitiettaikhoan(props) {
                 </tr>
               </table>
             </form>
+            <Button
+              style={{
+                width: "250px",
+                float: "right",
+                marginTop: "-35px",
+                marginRight: "12px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+            >
+              Khóa tài khoản sinh viên
+            </Button>
           </div>
         </div>
       </div>

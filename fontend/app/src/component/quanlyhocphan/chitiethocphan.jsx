@@ -1,8 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, MenuItem, TextField } from "@material-ui/core";
+import { Pagination } from "antd";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { listkhoavien } from "../../dummydb/khoavien";
 import "../style2.css";
@@ -72,7 +74,7 @@ function Chitiethocphan(props) {
   ));
   return (
     <div className="thongtincanhan">
-      <p className="thongtincanhan-title">Thông tin học phần</p>
+      <p className="thongtincanhan-title">1. Thông tin học phần</p>
 
       <div className="thongtincanhan-content">
         <div className="thongtincanhan-left">
@@ -300,7 +302,7 @@ function Chitiethocphan(props) {
       </div>
       <div className="thongtindangkisv-bottom">
         <hr style={{ width: "100%", marginTop: "5%" }} />
-        <p className="thongtincanhan-title">Thông tin đăng kí</p>
+        <p className="thongtincanhan-title">2. Danh sách lớp giảng dạy</p>
 
         <div className="table-dangki">
           <table style={{ width: "100%", padding: "10px" }}>
@@ -312,10 +314,68 @@ function Chitiethocphan(props) {
             </tr>
             {row}
           </table>
+          <Button
+            style={{
+              width: "200px",
+              marginTop: "35px",
+              fontWeight: "400",
+              background: "rgb(235, 43, 43)",
+              color: "white",
+            }}
+            variant="contained"
+          >
+            Export file excel
+          </Button>
+          <Pagination
+            total={500}
+            itemRender={itemRender}
+            style={{ float: "right", marginTop: "40px" }}
+          />
         </div>
+      </div>
+      <br />
+      <br />
+      <div className="table-dangki">
+        <hr style={{ width: "100%", marginTop: "5%" }} />
+        <p className="thongtincanhan-title">3. Danh sách sinh viên đăng kí</p>
+        <table style={{ width: "100%", padding: "10px" }}>
+          <tr>
+            <th>STT</th>
+            <th>Mã sinh viên</th>
+            <th>Họ và tên</th>
+            <th>Lớp</th>
+          </tr>
+          {row}
+        </table>
+        <Button
+          style={{
+            width: "200px",
+            marginTop: "35px",
+            fontWeight: "400",
+            background: "rgb(235, 43, 43)",
+            color: "white",
+          }}
+          variant="contained"
+        >
+          Export file excel
+        </Button>
+        <Pagination
+          total={500}
+          itemRender={itemRender}
+          style={{ float: "right", marginTop: "40px" }}
+        />
       </div>
     </div>
   );
 }
 
 export default Chitiethocphan;
+function itemRender(current, type, originalElement) {
+  if (type === "prev") {
+    return <Link>Previous</Link>;
+  }
+  if (type === "next") {
+    return <Link>Next</Link>;
+  }
+  return originalElement;
+}

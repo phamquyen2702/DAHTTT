@@ -1,8 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, TextField } from "@material-ui/core";
+import { Pagination } from "antd";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { dbaccount } from "../../dummydb/dbaccount";
 import "../style2.css";
@@ -46,7 +48,7 @@ function Chitietlophoc(props) {
   ));
   return (
     <div className="thongtincanhan">
-      <p className="thongtincanhan-title">Thông tin lớp học</p>
+      <p className="thongtincanhan-title">1. Thông tin lớp học</p>
 
       <div className="thongtincanhan-content">
         <div className="thongtincanhan-left">
@@ -282,25 +284,36 @@ function Chitietlophoc(props) {
                 </tr>
               </table>
             </form>
-            <div>
+            <Button
+              style={{
+                width: "250px",
+                float: "right",
+                marginTop: "-35px",
+                marginRight: "12px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+            >
+              Khóa lớp học
+            </Button>
+            <hr style={{ width: "99%", marginTop: "5% " }} />
+            <p className="thongtincanhan-title" style={{ marginLeft: "5px" }}>
+              2. Danh sách sinh viên đăng kí
+            </p>
+            <div style={{ marginTop: "25px" }}>
+              <TextField
+                autoFocus
+                id="outlined-input"
+                label="Mã sinh viên"
+                type="text"
+                style={{ width: "200px", margin: "8px" }}
+              />
               <Button
                 style={{
                   width: "250px",
-                  marginTop: "40px",
-                  marginLeft: "9px",
-                  fontWeight: "400",
-                  background: "rgb(235, 43, 43)",
-                  color: "white",
-                }}
-                variant="contained"
-              >
-                Khóa lớp học
-              </Button>
-
-              <Button
-                style={{
-                  width: "250px",
-                  marginTop: "40px",
+                  marginTop: "20px",
                   marginLeft: "9px",
                   fontWeight: "400",
                   background: "rgb(235, 43, 43)",
@@ -315,9 +328,6 @@ function Chitietlophoc(props) {
         </div>
       </div>
       <div className="thongtindangkisv-bottom">
-        <hr style={{ width: "100%", marginTop: "5%" }} />
-        <p className="thongtincanhan-title">Danh sách sinh viên đăng kí</p>
-
         <div className="table-dangki">
           <table style={{ width: "100%", padding: "10px" }}>
             <tr>
@@ -328,6 +338,23 @@ function Chitietlophoc(props) {
             </tr>
             {row}
           </table>
+          <Button
+            style={{
+              width: "200px",
+              marginTop: "35px",
+              fontWeight: "400",
+              background: "rgb(235, 43, 43)",
+              color: "white",
+            }}
+            variant="contained"
+          >
+            Export file excel
+          </Button>
+          <Pagination
+            total={500}
+            itemRender={itemRender}
+            style={{ float: "right", marginTop: "40px" }}
+          />
         </div>
       </div>
     </div>
@@ -335,3 +362,13 @@ function Chitietlophoc(props) {
 }
 
 export default Chitietlophoc;
+
+function itemRender(current, type, originalElement) {
+  if (type === "prev") {
+    return <Link>Previous</Link>;
+  }
+  if (type === "next") {
+    return <Link>Next</Link>;
+  }
+  return originalElement;
+}

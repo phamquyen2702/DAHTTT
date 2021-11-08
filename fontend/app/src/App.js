@@ -137,7 +137,10 @@ export const Logout = ({ user, handleLogout }) => {
         </button>
         <Dialog open={open} onClose={handleClose}>
           <form onSubmit={handleSubmit(handleOnSubmit)}>
-            <DialogContent className="dialogpass" style={{ minWidth: "500px" }}>
+            <DialogContent
+              className="dialogpass"
+              style={{ minWidth: "550px", minHeight: "300px" }}
+            >
               <DialogContentText
                 style={{
                   color: "red",
