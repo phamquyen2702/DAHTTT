@@ -18,6 +18,7 @@ import { addToCart, deleteFromCart } from "../reducers/classSlice";
 import { DeleteOutlined } from "@ant-design/icons";
 import "./style.scss";
 import { Empty } from "antd";
+import getCookie from "./getcookie";
 
 //sum tin chỉ
 function sumTinchi(datas) {
@@ -59,16 +60,20 @@ function Dangkilophoc(props) {
   useEffect(() => {
     setTongtinchi(sumTinchi(datas));
   }, [datas]);
+
   const handleOnSubmit = () => {
     const index = lophocs.findIndex((x) => x.malophoc === getValues("search"));
 
-    if (index >= 0 && !datas.includes(lophocs[index])) {
-      const action = addToCart(lophocs[index]);
-      dispatch(action);
+    if (index >= 0) {
+      try {
+        const action = addToCart(lophocs[index]);
+        dispatch(action);
+      } catch (error) {
+        setContentErr(error.message);
+        setStatus(true);
+      }
     } else {
-      setContentErr(
-        `Mã lớp học ${getValues("search")} không tồn tại hoặc đã được đăng kí!`
-      );
+      setContentErr(`Mã lớp học ${getValues("search")} không tồn tại !`);
       setStatus(true);
     }
     form.reset();

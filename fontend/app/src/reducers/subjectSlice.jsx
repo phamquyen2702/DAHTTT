@@ -12,8 +12,8 @@ const subjectSlice = createSlice({
       const index = state.cartItems.findIndex(
         (x) => x.mahocphan === newItem.mahocphan
       );
-      if (index > 0) {
-        return;
+      if (index >= 0) {
+        throw new Error(`Mã học phần ${newItem.mahocphan} đã được đăng kí`);
       } else {
         state.cartItems.push(newItem);
         setcookie("cartDKHP", JSON.stringify(state.cartItems), 5);

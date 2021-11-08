@@ -1,26 +1,24 @@
 import { Button, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { lophocs } from "../dummydb/dblophocdk";
 import { addToCart } from "../reducers/classSlice";
 import "./style.scss";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
 function Thongtinlopmo(props) {
-  const datas = useSelector((state) => state.class.cartItems);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const handleThem = (data) => {
-    const index = lophocs.findIndex((x) => x.malophoc === data);
-    if (index >= 0 && !datas.includes(data)) {
+    try {
       const action = addToCart(data);
       dispatch(action);
       enqueueSnackbar("Success", {
         variant: "success",
       });
-    } else {
-      enqueueSnackbar("Error", {
+    } catch (error) {
+      enqueueSnackbar(error.message, {
         variant: "error",
       });
     }

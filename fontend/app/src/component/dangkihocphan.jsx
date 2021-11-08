@@ -68,14 +68,16 @@ function Dangkihocphan(props) {
 
   const handleOnSubmit = () => {
     const index = hocphan.findIndex((x) => x.mahocphan === getValues("search"));
-
-    if (index >= 0 && !datas.includes(hocphan[index])) {
-      const action = addToCart(hocphan[index]);
-      dispatch(action);
+    if (index >= 0) {
+      try {
+        const action = addToCart(hocphan[index]);
+        dispatch(action);
+      } catch (error) {
+        setContentErr(error.message);
+        setStatus(true);
+      }
     } else {
-      setContentErr(
-        `Mã học phần ${getValues("search")} không tồn tại hoặc đã được đăng kí!`
-      );
+      setContentErr(`Mã học phần ${getValues("search")} không tồn tại !`);
       setStatus(true);
     }
     form.reset();
