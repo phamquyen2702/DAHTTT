@@ -11,7 +11,7 @@ import NotFound from "../NotFound";
 import "../style2.css";
 const Danhsachhocphan = React.lazy(() => import("./danhsachhocphan"));
 const Themhocphan = React.lazy(() => import("./themhocphan"));
-const Chucnangkhac = React.lazy(() => import("./chucnangkhac"));
+const Thietlapdangki = React.lazy(() => import("./thietlapdangki"));
 const Chitiethocphan = React.lazy(() => import("./chitiethocphan"));
 
 function Quanlyhocphan(props) {
@@ -49,14 +49,14 @@ function Quanlyhocphan(props) {
         <div className="quanlysinhvien-bt">
           <NavLink
             style={{ textDecoration: "none", width: "100%" }}
-            to={`${match.url}/chucnangkhac`}
+            to={`${match.url}/thietlapdangki`}
             activeStyle={{
               fontWeight: "bold",
               color: "rgb(161, 11, 11)",
               transition: "0.1s",
             }}
           >
-            Chức năng khác
+            Thiết lập đăng kí
           </NavLink>
         </div>
       </div>
@@ -80,8 +80,8 @@ function Quanlyhocphan(props) {
             />
             <Route path={`${match.path}/themhocphan`} component={Themhocphan} />
             <Route
-              path={`${match.path}/chucnangkhac`}
-              component={Chucnangkhac}
+              path={`${match.path}/thietlapdangki`}
+              component={Thietlapdangki}
             />
             <Route component={NotFound} />
           </Switch>

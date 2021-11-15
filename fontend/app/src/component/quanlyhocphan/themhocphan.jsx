@@ -174,24 +174,23 @@ function Themhocphan(props) {
                     Thêm học phần
                   </Button>
                 </tr>
-                <tr>
-                  <Button
-                    style={{
-                      width: "250px",
-                      marginTop: "40px",
-                      marginLeft: "4px",
-                      fontWeight: "400",
-                      background: "rgb(235, 43, 43)",
-                      color: "white",
-                    }}
-                    variant="contained"
-                  >
-                    Import file excel
-                  </Button>
-                </tr>
               </table>
             </form>
           </div>
+          <Button
+            style={{
+              width: "250px",
+              marginTop: "-35px",
+              marginRight: "20px",
+              fontWeight: "400",
+              float: "right",
+              background: "rgb(235, 43, 43)",
+              color: "white",
+            }}
+            variant="contained"
+          >
+            Import file excel
+          </Button>
         </div>
       </div>
     </div>

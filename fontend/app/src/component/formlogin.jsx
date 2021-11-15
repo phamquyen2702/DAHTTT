@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { dbaccount } from "../dummydb/dbaccount";
+import Dangki from "./dangki";
 import getCookie from "./getcookie";
 import setcookie from "./setcookie";
 import "./style.scss";
@@ -87,7 +88,13 @@ function Formlogin(props) {
       );
     }
   };
-
+  const [open, setOpen] = useState(false);
+  const handleClickDK = () => {
+    setOpen(true);
+  };
+  const handleCloseDK = () => {
+    setOpen(false);
+  };
   return (
     <div className="content-login">
       <div className="content-login-left">
@@ -176,7 +183,7 @@ function Formlogin(props) {
             }}
             variant="contained"
           >
-            Download thời khóa biểu dự kiến
+            Thời khóa biểu dự kiến
           </Button>
         </div>
         <div className="content-login-right-bot">
@@ -189,9 +196,24 @@ function Formlogin(props) {
             }}
             variant="contained"
           >
-            Download danh sách lớp mở
+            Danh sách lớp mở
           </Button>
         </div>
+        <div className="content-login-right-bot">
+          <Button
+            style={{
+              width: "300px",
+              marginTop: "20px",
+              background: "rgb(161, 11, 11)",
+              color: "white",
+            }}
+            variant="contained"
+            onClick={handleClickDK}
+          >
+            Đăng kí tài khoản
+          </Button>
+        </div>
+        <Dangki open={open} handleCloseDK={handleCloseDK}></Dangki>
       </div>
     </div>
   );
