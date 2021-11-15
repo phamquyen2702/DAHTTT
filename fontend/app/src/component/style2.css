@@ -87,6 +87,19 @@ table {
     padding: 3px;
 }
 
+.table-thietlap table {
+    width: 550px;
+    margin: 25px;
+    box-shadow: 1px 1px 5px rgb(179, 174, 174);
+}
+
+.table-thietlap th,
+.table-thietlap td {
+    text-align: left;
+    font-size: 16px;
+    padding: 10px;
+}
+
 .chitiet {
     cursor: pointer;
 }

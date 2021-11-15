@@ -14,10 +14,12 @@ import Quanlyhocphan from "./quanlyhocphan/quanlyhocphan";
 import Quanlylophoc from "./quanlylophoc/quanlylophoc";
 import Quanlysinhvien from "./quanlytaikhoan/quanlysinhvien";
 import "./style.scss";
+import Thongkedangki from "./thongkedangki/thongkedangki";
 const Dangkihocphan = React.lazy(() => import("./dangkihocphan"));
 const Thongtincanhan = React.lazy(() => import("./thongtincanhan"));
 const Dangkilophoc = React.lazy(() => import("./dangkilophoc"));
 const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
+const Thietlapdangki = React.lazy(() => import("./thietlapdangki"));
 
 const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
 
@@ -94,6 +96,14 @@ function Home(props) {
             <Route
               path={`${match.path}/quanlyhocphan`}
               component={Quanlyhocphan}
+            />
+            <Route
+              path={`${match.path}/thongkedangki`}
+              component={Thongkedangki}
+            />
+            <Route
+              path={`${match.path}/thietlapdangki`}
+              component={Thietlapdangki}
             />
             <Route component={NotFound} />
           </Switch>
@@ -219,6 +229,30 @@ export const Menutm = () => {
           }}
         >
           Quản lý lớp học
+        </NavLink>
+      </li>
+      <li style={{ paddingTop: "5px" }}>
+        <NavLink
+          style={{ textDecoration: "none" }}
+          to={`${match.url}/thongkedangki`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
+        >
+          Thống kê đăng kí
+        </NavLink>
+      </li>
+      <li style={{ paddingTop: "5px" }}>
+        <NavLink
+          style={{ textDecoration: "none" }}
+          to={`${match.url}/thietlapdangki`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
+        >
+          Thiết lập đăng kí
         </NavLink>
       </li>
       <li style={{ paddingTop: "5px" }}>

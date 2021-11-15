@@ -1,4 +1,4 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, MenuItem, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -6,6 +6,7 @@ import { lophocs } from "../dummydb/dblophocdk";
 import { addToCart } from "../reducers/classSlice";
 import "./style.scss";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { listkhoavien } from "../dummydb/khoavien";
 
 function Thongtinlopmo(props) {
   const dispatch = useDispatch();
@@ -23,7 +24,11 @@ function Thongtinlopmo(props) {
       });
     }
   };
+  const [currency, setCurrency] = React.useState("");
 
+  const handleChange = (event) => {
+    setCurrency(event.target.value);
+  };
   const row = lophocs.map((data, index) => (
     <tr key={index}>
       <td>{index}</td>
@@ -44,25 +49,42 @@ function Thongtinlopmo(props) {
         <div className="search-malop">
           <TextField
             id="outlined-input"
-            label="Mã học phần"
+            label="Tìm kiếm theo mã học phần"
             type="text"
-            style={{ width: "200px", margin: "20px" }}
+            style={{ width: "230px", margin: "20px" }}
             autoFocus
+            variant="outlined"
+            size="small"
           />
+          <TextField
+            select
+            id="outlined-input"
+            label="Tìm kiếm theo Khoa/viện"
+            style={{ width: "250px", margin: "20px" }}
+            variant="outlined"
+            size="small"
+            value={currency}
+            onChange={handleChange}
+          >
+            {listkhoavien.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
           <Button
             style={{
-              width: "250px",
-              margin: "32px",
+              width: "200px",
+              margin: "20px",
               fontWeight: "400",
               background: "rgb(235, 43, 43)",
               color: "white",
             }}
             variant="contained"
           >
-            Tìm kiếm theo Mã HP
+            Tìm kiếm
           </Button>
         </div>
-        <div className="search-hearder-right">Tìm thấy n kết quả</div>
       </div>
 
       <div className="table-dangki">
