@@ -33,4 +33,7 @@ class AccountConnector:
         mycursor.close()
         return results
 
+    def close_connection(self):
+        self.db.close()
+
 
