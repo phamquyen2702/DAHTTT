@@ -2,9 +2,37 @@ from fastapi import APIRouter, Header, Depends, HTTPException
 from model.model import Account
 from service.AccountService import AccountService
 from typing import Optional, List 
-router = APIRouter(prefix="/account")
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from pydantic import BaseModel
+from pprint import pprint
 
+class Login(BaseModel):
+    email : str
+    password : str
+    role : int
+
+
+router = APIRouter(prefix="/account")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 accountService = AccountService()
+
+
+async def get_current_active_user(current_user: Account = Depends(accountService.get_current_user)):
+	if Account(**current_user).status == 0:
+		raise HTTPException(status_code=400, detail="Inactive user")
+	return current_user
+
+@router.get("/me", response_model=Account)
+async def read_users_me(current_user: Account = Depends(get_current_active_user)):
+	return current_user
+
+@router.post("/login")
+async def login(form_data: Login):
+    return await accountService.authenticate(form_data)
+
+@router.post("/register")
+async def register(account:Account):
+    return await accountService.register([account])
 
 @router.get("/get-by-id")
 async def get_by_id(Id:Optional[str]=None,email:Optional[str]=None):
@@ -27,3 +55,4 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
 async def update(account:Account):
     res = await accountService.update_one(account)
     return res
+

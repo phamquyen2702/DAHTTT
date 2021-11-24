@@ -51,7 +51,7 @@ class AccountConnector:
     async def insert(self,accounts : List[Account]):
         others = []
         students = []
-        for acc in account:
+        for acc in accounts:
             try:
                 if self.validate(acc):
                     if acc.role == 1:
@@ -97,8 +97,13 @@ class AccountConnector:
         return True
 
     def do_search(self,sql:str):
-  
-        mycursor = self.db.cursor()
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
         
         mycursor.execute(sql)
         records = mycursor.fetchall()
@@ -125,6 +130,7 @@ class AccountConnector:
             ))    
         
         mycursor.close()
+        db.close()
         return results
 
     async def search( self, limit = 20, offset=0, **kwargs) : 
@@ -167,7 +173,13 @@ class AccountConnector:
 
 
     async def get_account_by_id(self,Id=None,email=None):
-        mycursor = self.db.cursor()
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
         if Id is not None:
             mycursor.execute("select * from Account where Id=%s",(Id,))
         elif email is not None:
@@ -195,9 +207,8 @@ class AccountConnector:
                 maxcredit = int(row[14])  if row[9] is not None else None, 
             ))
         mycursor.close()
+        db.close()
         return results
 
-    def close_connection(self):
-        self.db.close()
 
 
