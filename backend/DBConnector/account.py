@@ -6,12 +6,14 @@ from typing import List, Optional
 class AccountConnector:
     def __init__(self, ):
         self.config = Settings()
+        """
         self.db = mysql.connector.connect(
                                             host="localhost",
                                             user=self.config.db_username,
                                             password=self.config.db_password,
                                             database=self.config.db_name
                                             )
+        """
         self.sql_insert_other = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
         self.sql_insert_student =  "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role, schoolyear, cmnd,gender,program, schoolId,maxcredit) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         self.sql_update_other = "UPDATE Account SET  email=%s,  fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s WHERE Id = %s"

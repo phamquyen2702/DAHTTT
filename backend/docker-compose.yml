@@ -1,7 +1,7 @@
 version: "3.5"
 
 services:
-  backend:
+  database:
     image: mysql:latest
     restart: always
 
@@ -19,3 +19,23 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     command:
       "--max_connections=10000"
+
+  backend:
+    image: da-httt:latest
+    restart: always
+    build:
+      context: .
+    network_mode: host
+    volumes:
+      - ./:/app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "2"
+    depends_on:
+      - database
+
+    command:
+      uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+    
