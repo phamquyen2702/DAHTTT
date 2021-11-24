@@ -17,3 +17,5 @@ services:
       - SYS_NICE
     environment:
       - MYSQL_ROOT_PASSWORD=root
+    command:
+      "--max_connections=10000"
