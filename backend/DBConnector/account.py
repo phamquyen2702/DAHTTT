@@ -65,6 +65,7 @@ class AccountConnector:
 
         students = [self.object2data(x) for x in students]
         others = [self.object2data(x) for x in others]
+        others = [(*x[:9],) for x in others ]
         if len(others):
             print(others)
             self.do_query(others,self.sql_insert_other)
@@ -97,6 +98,27 @@ class AccountConnector:
             print(students)
             self.do_query(students,self.sql_update_student)
         return True
+    async def update_password(self,Id,hashed_password):
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        sql = "UPDATE Account SET  password=%s WHERE Id = %s"
+        try:
+            mycursor.execute(sql,(hashed_password,Id))
+            db.commit()
+        except mysql.connector.Error as error:
+            print("Failed to update record to database rollback: {}".format(error))
+    # reverting changes because of exception
+            db.rollback()
+            return False
+        mycursor.close()
+        db.close()
+        return True
+        
 
     def do_search(self,sql:str):
         db = mysql.connector.connect(

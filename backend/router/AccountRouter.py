@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Header, Depends, HTTPException
+from fastapi import APIRouter, Header, Depends, HTTPException,File,UploadFile
 from model.model import Account
 from service.AccountService import AccountService
 from typing import Optional, List 
@@ -18,7 +18,7 @@ accountService = AccountService()
 
 
 async def get_current_active_user(current_user: Account = Depends(accountService.get_current_user)):
-	if Account(**current_user).status == 0:
+	if current_user.status == 0:
 		raise HTTPException(status_code=400, detail="Inactive user")
 	return current_user
 
@@ -27,7 +27,7 @@ async def read_users_me(current_user: Account = Depends(get_current_active_user)
 	return current_user
 
 @router.post("/login")
-async def login(form_data: Login):
+async def login(form_data: Login=Depends()):
     return await accountService.authenticate(form_data)
 
 @router.post("/register")
@@ -56,3 +56,13 @@ async def update(account:Account):
     res = await accountService.update_one(account)
     return res
 
+@router.get("/change-password")
+async def change_password(old_password, new_password, current_user: Account = Depends(get_current_active_user) ):
+    res = await accountService.change_password(old_password,new_password,current_user)
+    return res
+
+@router.post("/import")
+async def import_file(file: UploadFile = File(...)):
+    content = await file.read()
+    res = await accountService.import_file(content)
+    return res

@@ -5,6 +5,40 @@ from datetime import datetime, timedelta
 import config
 from typing import Optional
 from fastapi import HTTPException
+import pandas as pd
+from model.model import *
+class CSVUtils:
+    @staticmethod
+    def read_content(content):
+        with open("test.csv", 'wb') as f:  
+            f.write(content)
+        df = pd.read_csv('test.csv')
+        return df
+
+    @staticmethod
+    def validate_account(df):
+        list_col = ["Id", "email","password" , "fullname" , "address" ,"birthday" ,"phone", "status", 
+                    "role" , "schoolyear" ,"cmnd" , "gender" ,"program" , "schoolId" ,"maxcredit" , ]
+        cols = list(df.columns)
+        if not (cols==list_col) :
+            raise HTTPException(status_code=422, detail="Invalid format")
+        try:
+            for col in list_col:
+                if col in ["Id","status","role","schoolyear","maxcredit"]:
+                    pd.to_numeric(df[col], downcast='integer')
+        except:
+            raise HTTPException(status_code=422, detail="Invalid datatype")
+        return_accounts =[]
+        for index, row in df.iterrows():
+            try:
+                return_accounts.append(Account(**row))
+            except:
+                raise HTTPException(status_code=422, detail="Invalid datatype")
+        #print(return_accounts)
+        return return_accounts
+
+
+        
 
 
 class JWTUtils:
@@ -55,3 +89,6 @@ class JWTUtils:
         return email
 
 
+if __name__ == "__main__":
+    a = open("AccountService.py","r").read()
+    df = CSVUtils.read_content(a)

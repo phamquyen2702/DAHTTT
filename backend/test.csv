@@ -1,0 +1,2 @@
+Id,email,password,fullname,address,birthday,phone,status,role,schoolyear,cmnd,gender,program,schoolId,maxcredit
+1,test@gmail.com,test,test,test,2021-11-25,test,0,0,1234,test,test,test,test,0
