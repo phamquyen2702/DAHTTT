@@ -9,6 +9,8 @@ from config import Settings
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException, Depends, Request
 import pandas as pd
+import io
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 class AccountService:
     def __init__(self, ):
@@ -56,7 +58,7 @@ class AccountService:
             return res
         else:
             raise HTTPException(status_code=402, detail="wrong old password")
-            
+
     async def import_file(self,content):
         df = CSVUtils.read_content(content)
         accounts = CSVUtils.validate_account(df)
@@ -65,6 +67,33 @@ class AccountService:
             acc.password = JWTUtils.get_password_hash(acc.password)
             processed.append(acc)
         res = await self.connector.insert(processed)
+
+    async def export_file(self,accounts:List[Account]):
+        return_df= {    "Id":[],
+                        "email":[],
+                        "password":[] , 
+                        "fullname" :[], 
+                        "address":[] ,
+                        "birthday":[] ,
+                        "phone":[], 
+                        "status":[], 
+                        "role" :[], 
+                        "schoolyear" :[],
+                        "cmnd":[] , 
+                        "gender":[] ,
+                        "program":[] , 
+                        "schoolId" :[],
+                        "maxcredit" :[], }
+        for acc in accounts:
+            acc = acc.dict()
+            for key in return_df.keys():
+                return_df[key].append(acc[key])
+        return_df=pd.DataFrame(return_df)
+        stream = io.BytesIO()
+        #return_df.to_csv("test.csv", index = False, encoding='utf-8')
+        return_df.to_csv(stream, index = False, encoding='utf-8')
+
+        return stream
 
     async def get_current_user(self, token: str = Depends(oauth2_scheme)):
         email = JWTUtils.get_current_username(token)

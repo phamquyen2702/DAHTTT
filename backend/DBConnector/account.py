@@ -189,8 +189,10 @@ class AccountConnector:
         if sql[-4:] == "AND " :
 
             sql = sql[:-4]+" "
-            
-        sql += "LIMIT "+str(limit)+" OFFSET "+str(offset)
+        if (limit is not None) and (offset is not None):    
+            sql += "LIMIT "+str(limit)+" OFFSET "+str(offset)
+        else:
+            sql = sql[:-1]
         print(sql)
         results = self.do_search(sql)
         return results

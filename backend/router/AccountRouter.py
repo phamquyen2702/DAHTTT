@@ -5,7 +5,7 @@ from typing import Optional, List
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from pprint import pprint
-
+from fastapi.responses import StreamingResponse, FileResponse
 class Login(BaseModel):
     email : str
     password : str
@@ -44,12 +44,21 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
                 address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
                 status: Optional[int]=None, role: Optional[int]=None, schoolyear: Optional[int]=None,\
                 cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
-                schoolId : Optional[str]=None, maxcredit: Optional[int]=None,limit=20,offset=0):
+                schoolId : Optional[str]=None, maxcredit: Optional[int]=None,limit=20,offset=0,export:int=0):
+    if export == 1:
+        limit = None
+        offset = None  
     accounts = await accountService.search( Id = Id, email=email, fullname = fullname,address =fullname,\
                                             birthday=birthday, phone=phone,status=status, role=role,\
                                             schoolyear=schoolyear,cmnd=cmnd, gender=gender,program=program, \
                                             schoolId =schoolId, maxcredit=maxcredit,limit=limit,offset=offset)
-    return accounts
+    if export == 0:    
+        return accounts
+    else:
+        stream = await accountService.export_file(accounts)
+        response = StreamingResponse(iter([stream.getvalue()]),media_type="text/csv" )#"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")#
+        response.headers["Content-Disposition"] = "attachment; filename=export.csv"
+        return response
 
 @router.post("/update")
 async def update(account:Account):
