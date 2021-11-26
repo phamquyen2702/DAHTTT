@@ -15,3 +15,13 @@ $ docker-compose up
 ## Test
 
 vào trình duyệt truy cập localhost:8000/docs để đến trang swagger của api
+
+# Window
+
+* Cài đặt mysql trên máy
+
+* Cài đặt python, add environment variable trong lúc cài python
+
+* Mở terminal, cd đến thư mục backend, chạy lệnh pip install -r requirements.txt
+
+* python app.py
