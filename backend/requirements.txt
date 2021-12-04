@@ -13,3 +13,4 @@ python-jose[cryptography]
 numpy
 Pillow
 pandas
+python-multipart
