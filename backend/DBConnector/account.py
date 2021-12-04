@@ -3,6 +3,7 @@ from config import Settings
 from model.model import *
 from fastapi import HTTPException
 from typing import List, Optional
+
 class AccountConnector:
     def __init__(self, ):
         self.config = Settings()
@@ -18,6 +19,7 @@ class AccountConnector:
         self.sql_insert_student =  "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role, schoolyear, cmnd,gender,program, schoolId,maxcredit) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         self.sql_update_other = "UPDATE Account SET  email=%s,  fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s WHERE Id = %s"
         self.sql_update_student = "UPDATE Account SET  email=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s,schoolyear=%s, cmnd=%s,gender=%s,program=%s, schoolId=%s,maxcredit=%s WHERE Id = %s"
+    
     def validate(self,account:Account):
         if account.role == 1:
             if (account.schoolyear is None) or ( account.cmnd  is None) or\
@@ -26,6 +28,7 @@ class AccountConnector:
                 raise HTTPException(status_code=422, detail="Invalid Schema")
         
         return True
+
     def object2data(self,account:Account):
         account = account.dict()
         account = tuple(list(account.values()))
