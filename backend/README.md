@@ -24,4 +24,6 @@ vào trình duyệt truy cập localhost:8000/docs để đến trang swagger c�
 
 * Mở terminal, cd đến thư mục backend, chạy lệnh pip install -r requirements.txt
 
-* python app.py
+* Sửa username và password database trong file data_initalization.py sau đó chạy file này bằng lệnh: python data_initalization.py (bước này để tạo database và init account admin)
+
+* Sửa username và password database trong file config.py sau đó chạy lệnh $python app.py
