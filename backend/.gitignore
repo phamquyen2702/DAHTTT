@@ -1,4 +1,5 @@
 data/*
 .idea/*
 venv/*
+config.py
 __pycache__/*
