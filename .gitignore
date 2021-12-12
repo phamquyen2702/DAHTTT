@@ -138,3 +138,4 @@ backend/.idea
 backend/__pycache__/*
 backend/service/__pycache__/*
 backend/data
+.idea/
