@@ -1,6 +1,14 @@
 from fastapi import APIRouter, Header, Depends, HTTPException,File,UploadFile
 from model.model import Account
 from service.AccountService import AccountService
+
+#------------REGISTER--------------#
+from model.subject_regModel import Sub_Reg
+from model.class_regModel import Class_Reg
+from service.Subject_regService import Subject_regService
+from service.Class_regService import Class_regService
+#------------REGISTER--------------#
+
 from typing import Optional, List 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
@@ -25,6 +33,26 @@ async def get_current_active_user(current_user: Account = Depends(accountService
 @router.get("/me", response_model=Account)
 async def read_users_me(current_user: Account = Depends(get_current_active_user)):
 	return current_user
+
+#------------REGISTER--------------#
+subject_regService = Subject_regService()
+class_regService = Class_regService()
+@router.post("/subReg")
+async def subReg(sub_reg: Sub_Reg, current_user: Account = Depends(get_current_active_user)):
+    return await subject_regService.subject_reg([sub_reg], current_user)
+
+@router.post("/subDel")
+async def subDel(subjectId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
+    return await subject_regService.subject_del([subjectId], current_user)
+
+@router.post("/classReg")
+async def classReg(class_reg: Class_Reg, current_user: Account = Depends(get_current_active_user)):
+    return await class_regService.class_reg([class_reg], current_user)
+
+@router.post("/classDel")
+async def classDel(classId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
+    return await class_regService.class_del([classId], current_user)
+#------------REGISTER--------------#
 
 @router.post("/login")
 async def login(form_data: Login=Depends()):
