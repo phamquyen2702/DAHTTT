@@ -3,8 +3,7 @@ import mysql.connector
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="root",
-  #database="DAHTTT"
+  password="root"
 )
 mycursor = mydb.cursor()
 mycursor.execute("CREATE DATABASE DAHTTT")
@@ -59,3 +58,20 @@ print("\nPrinting each row")
 for row in records:
     print(row)
 
+mycursor.execute("CREATE TABLE Class (classId INT(32) PRIMARY KEY AUTO_INCREMENT,\
+subjectId	VARCHAR(10),\
+semester	INT(32),\
+location	VARCHAR(20),\
+day	INT(8),\
+timeStart	INT(32),\
+timeEnd	INT(32),\
+registered	INT(32),\
+`limit`	INT(32),\
+status	INT(8))")
+
+sql = "INSERT INTO Class (subjectId, semester, location, day, timeStart, timeEnd, registered, `limit`, status) VALUES (" \
+      "%s,%s, %s, %s, %s, %s,%s,%s,%s) "
+
+val = (0, 20211, "TC-403", 2, 1, 4, 0, 120, 1)
+mycursor.execute(sql, val)
+mydb.commit()
