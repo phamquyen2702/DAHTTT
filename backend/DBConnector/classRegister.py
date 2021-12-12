@@ -74,7 +74,7 @@ class classRegisterConnector:
         mycursor = db.cursor()
         if True:
             try:
-                mycursor.executemany("DELETE FROM classregister WHERE (Id = %s) and (classID = %s);", aaa)
+                mycursor.executemany("DELETE FROM classregister WHERE (Id = %s) and (classId = %s);", aaa)
                 db.commit()
             except mysql.connector.Error as error:
                 print("Failed to insert record to database rollback: {}".format(error))
