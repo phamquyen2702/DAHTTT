@@ -115,5 +115,4 @@ class JWTUtils:
 
 
 if __name__ == "__main__":
-    a = open("AccountService.py","r").read()
-    df = CSVUtils.read_content(a)
+    print(JWTUtils.get_password_hash("admin123"))

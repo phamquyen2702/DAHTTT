@@ -9,8 +9,8 @@ from fastapi.responses import StreamingResponse, FileResponse
 class Login(BaseModel):
     email : str
     password : str
-    role : int
-
+    role : str
+parse_role = {"ROLE_ADMIN":3,"ROLE_STUDENT":1,"ROLE_TM":2}
 
 router = APIRouter(prefix="/account")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
@@ -28,10 +28,11 @@ async def read_users_me(current_user: Account = Depends(get_current_active_user)
 
 @router.post("/login")
 async def login(form_data: Login=Depends()):
+    form_data.role = parse_role[form_data.role]
     return await accountService.authenticate(form_data)
 
 @router.post("/register")
-async def register(account:Account):
+async def register(account:Account=Depends()):
     return await accountService.register([account])
 
 @router.get("/get-by-id")
@@ -61,7 +62,7 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
         return response
 
 @router.post("/update")
-async def update(account:Account):
+async def update(account:Account=Depends()):
     res = await accountService.update_one(account)
     return res
 
