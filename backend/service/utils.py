@@ -6,7 +6,10 @@ import config
 from typing import Optional
 from fastapi import HTTPException
 import pandas as pd
-from model.model import Account, Class
+from model.model import Account, Class, Subject
+import yaml
+
+
 class CSVUtils:
     @staticmethod
     def read_content(content):
@@ -64,6 +67,26 @@ class CSVUtils:
                 raise HTTPException(status_code=422, detail="Invalid datatype")
         return return_classes
 
+    @staticmethod
+    def validate_subject(df):
+        list_col = ["subjectId", "subjectName", "credit", "programsemester", "school", "status", "note"]
+        cols = list(df.columns)
+        if not (cols == list_col):
+            raise HTTPException(status_code=422, detail="Invalid format")
+        try:
+            for col in list_col:
+                if col in ["credit", "programsemester"]:
+                    pd.to_numeric(df[col], downcast='integer')
+        except:
+            raise HTTPException(status_code=422, detail="Invalid datatype")
+        return_subjects = []
+        for index, row in df.iterrows():
+            try:
+                return_subjects.append(Subject(**row))
+            except:
+                raise HTTPException(status_code=422, detail="Invalid datatype")
+
+        return return_subjects
 
 
 class JWTUtils:
@@ -112,6 +135,24 @@ class JWTUtils:
         except:
             raise HTTPException(status_code=402, detail="Unautorized")
         return email
+
+
+def write_yaml(data, file_path, **kwargs):
+    if "encoding" in kwargs:
+        encoding = kwargs['encoding']
+    else:
+        encoding = 'utf-8'
+    with open(file_path, 'w', encoding=encoding) as pf:
+        yaml.dump(data, pf, allow_unicode=True, default_flow_style=False, sort_keys=False)
+
+
+def load_yaml(file_path, **kwargs):
+    if "encoding" in kwargs:
+        encoding = kwargs['encoding']
+    else:
+        encoding = 'utf-8'
+    with open(file_path, 'r', encoding=encoding) as pf:
+        return yaml.load(pf)
 
 
 if __name__ == "__main__":

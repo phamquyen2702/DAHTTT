@@ -1,6 +1,7 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Text
 from pydantic import BaseModel
 from datetime import datetime
+
 
 class Account(BaseModel):
     Id : int 
@@ -32,5 +33,25 @@ class Class(BaseModel):
     limit: int
     status: int
 
-if __name__ =="__main__":
-    account = Account()
+
+class Subject(BaseModel):
+    subjectId: Text
+    subjectName: Text
+    credit: int
+    programsemester: int
+    school: Text
+    status: Optional[int] = 1  # 1 active, 0 inactive
+    note: Optional[int] = None
+
+    @classmethod
+    def from_list(cls, data):
+        assert len(data) == 7
+        return cls(
+            subjectId=data[0],
+            subjectName=data[1],
+            credit=data[2],
+            programsemester=data[3],
+            school=data[4],
+            status=data[5],
+            note=data[6]
+        )
