@@ -1,0 +1,16 @@
+pydantic~=1.8.2
+websockets~=9.1
+websocket-client
+mysql-connector-python
+uvicorn
+fastapi
+starlette
+requests~=2.25.1
+aiofiles
+Jinja2
+passlib[bcrypt]
+python-jose[cryptography]
+numpy
+Pillow
+pandas
+python-multipart

@@ -1,0 +1,388 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+// Trang loading
+.loading {
+    display: flex;
+    width: 100%;
+    height: 500px;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text-loading {
+    padding: 20px;
+    font-size: 25px;
+    color: red;
+}
+
+.Radar {
+    width: 75px;
+    height: 75px;
+    position: relative;
+    background: #FFF;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 50%;
+    background: -webkit-gradient(linear, left top, right top, color-stop(10%, #2BA0C7), color-stop(40%, rgba(255, 255, 255, 0)));
+    background: -webkit-linear-gradient(left, #2BA0C7 10%, rgba(255, 255, 255, 0) 40%);
+    background: linear-gradient(to right, #2BA0C7 10%, rgba(255, 255, 255, 0) 40%);
+    -webkit-animation: spinit 1.4s infinite linear;
+    animation: spinit 1.4s infinite linear;
+}
+
+.Radar:before {
+    width: 50%;
+    height: 50%;
+    background: #FFF;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+}
+
+.Radar:after {
+    background: #fff;
+    width: 75%;
+    height: 75%;
+    border-radius: 999px;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0.6;
+}
+
+@-webkit-keyframes spinit {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinit {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+// Header
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0;
+    padding: 0 100px;
+    min-height: 110px;
+    background-color: whitesmoke;
+    border-top: 10px solid rgb(161, 11, 11);
+    border-bottom: 5px;
+    box-shadow: 1px 6px 6px rgb(235, 43, 43);
+}
+
+.header-logo {
+    padding: 7px;
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+}
+
+.logo {
+    height: 100%;
+    background-image: url(logo.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.header-title {
+    flex-basis: 60%;
+    margin: 20px;
+    flex: 1;
+}
+
+.header-title h2 {
+    font-weight: 400;
+    opacity: 0.5;
+}
+
+.header-title h3 {
+    font-weight: 600;
+}
+
+.header-account {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 20%;
+}
+
+.header-account-top {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 25px;
+    padding: 5px;
+    gap: 10px
+}
+
+.header-account-bot {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin-left: 48px;
+    font-size: 13px;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.header-account-icon {
+    width: 8%;
+    cursor: pointer;
+}
+
+.header-account-icon:hover {
+    color: rgb(161, 11, 11);
+    text-shadow: 5px 5px 5px;
+}
+
+.header-account-name {
+    width: 60%;
+    flex: 1;
+    font-weight: 600;
+    color: rgb(161, 11, 11);
+}
+
+.dangxuat {
+    cursor: pointer;
+    color: rgb(176, 188, 143)
+}
+
+.doipass {
+    text-decoration: none;
+    color: rgb(176, 188, 143);
+    border: none;
+}
+
+.doipass:focus {
+    border: none;
+}
+
+.doipass:hover {
+    text-decoration: underline;
+    color: aqua;
+}
+
+.dangxuat:hover {
+    text-decoration: underline;
+    color: aqua;
+}
+
+// Trang login
+.content-login {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 600px;
+}
+
+.content-login-left {
+    width: 60%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgb(179, 174, 174);
+}
+
+.content-login-right {
+    width: 30%;
+    text-align: center;
+    margin-top: 150px;
+}
+
+.content-login-right-top {
+    margin: 10px;
+}
+
+.content-login-right-bot {
+    margin: 10px;
+}
+
+.content-login-right-top button {
+    padding: 3px;
+}
+
+.content-login-right-bot button {
+    padding: 3px;
+}
+
+.button1 {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.title-login {
+    padding: 10px;
+}
+
+.title-login h3 {
+    margin: 20px;
+    opacity: 0.8;
+}
+
+.title-login p {
+    margin: 20px;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.form-login {
+    margin-left: 40px;
+}
+
+.radio {
+    font-size: 10px;
+    color: indigo
+}
+
+// dangkilop
+.dangki-content {
+    width: 100%;
+    display: flex;
+    min-height: 500px;
+}
+
+.dangki-content-left {
+    width: 20%;
+    margin-top: 40px;
+    font-size: 14px;
+}
+
+.dangki-content-right {
+    width: 70%;
+    margin: 10px;
+    flex: 1;
+}
+
+.chucnang {
+    margin-left: 10px;
+    padding: 10px;
+    font-weight: 500;
+}
+
+.footer {
+    text-align: center;
+    min-height: 80px;
+    background-color: rgb(161, 11, 11);
+    padding-top: 20px;
+    color: white;
+    font-size: 13px;
+}
+
+.table-dangki {
+    margin: 15px;
+}
+
+.table-dangki th,
+.table-dangki td {
+    box-shadow: 1px 1px 5px rgb(179, 174, 174);
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    // background-color: rgb(248, 238, 238);
+}
+
+table {
+    border-collapse: collapse;
+}
+
+li {
+    list-style: none;
+}
+
+.search-header {
+    flex-wrap: wrap;
+    display: flex;
+    width: 100%;
+}
+
+.search-hearder-right {
+    width: 30%;
+    margin-left: 300px;
+    margin-top: 34px;
+    text-align: center;
+    flex: 1;
+}
+
+// .td-tenhocphan {
+//     display: -webkit-box;
+//     -webkit-line-clamp: 2;
+//     -webkit-box-orient: vertical;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     word-break: break-all;
+// }
+.dk-footer {
+    width: 100%;
+    min-height: 200px;
+}
+
+.dk-footer-title {
+    text-align: center;
+    width: 100%;
+    margin: 20px auto;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgb(161, 11, 11);
+}
+
+.hr-style {
+    box-shadow: 10px 10px 100px burlywood;
+    font-weight: 700;
+    color: rgb(235, 43, 43);
+}
+
+#alert-dialog-description {
+    font-weight: 300;
+    opacity: 1;
+}
+
+.dialogpass {
+    margin: 20px;
+    text-align: center;
+}
+
+.delete {
+    cursor: pointer;
+}
+
+.delete:hover {
+    color: red;
+    padding: 2px;
+}
+
+.them {
+    cursor: pointer;
+    font-size: large;
+}
+
+.them:hover {
+    color: red;
+}

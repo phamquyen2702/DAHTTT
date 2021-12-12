@@ -1,0 +1,41 @@
+version: "3.5"
+
+services:
+  database:
+    image: mysql:latest
+    restart: always
+
+    network_mode: host
+    volumes:
+      - ./data:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "2"
+    cap_add:
+      - SYS_NICE
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    command:
+      "--max_connections=10000"
+
+  backend:
+    image: da-httt:latest
+    restart: always
+    build:
+      context: .
+    network_mode: host
+    volumes:
+      - ./:/app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "3m"
+        max-file: "2"
+    depends_on:
+      - database
+
+    command:
+      uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+    
