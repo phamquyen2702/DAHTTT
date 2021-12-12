@@ -6,18 +6,18 @@ import config
 from typing import Optional
 from fastapi import HTTPException
 import pandas as pd
-from model.model import *
+from model.model import Account, Class
 class CSVUtils:
     @staticmethod
     def read_content(content):
-        with open("test.csv", 'wb') as f:  
+        with open("test.csv", 'wb') as f:
             f.write(content)
         df = pd.read_csv('test.csv')
         return df
 
     @staticmethod
     def validate_account(df):
-        list_col = ["Id", "email","password" , "fullname" , "address" ,"birthday" ,"phone", "status", 
+        list_col = ["Id", "email","password" , "fullname" , "address" ,"birthday" ,"phone", "status",
                     "role" , "schoolyear" ,"cmnd" , "gender" ,"program" , "schoolId" ,"maxcredit" , ]
         cols = list(df.columns)
         if not (cols==list_col) :
@@ -37,8 +37,33 @@ class CSVUtils:
         #print(return_accounts)
         return return_accounts
 
+    @staticmethod
+    def validate_class(df):
+        list_col = ['classId', 'subjectId', 'semester', 'location', 'day', 'timeStart', 'timeEnd', 'registered', 'limit', 'status']
+        cols = list(df.columns)
+        if not (cols == list_col):
+            raise HTTPException(status_code=422, detail="Invalid format")
+        try:
+            for col in list_col:
+                if col in ['classId', 'semester', 'day', 'timeStart', 'timeEnd', 'registered', 'limit', 'status']:
+                    pd.to_numeric(df[col], downcast='integer')
+        except:
+            raise HTTPException(status_code=422, detail="Invalid datatype")
+        return_classes = []
+        for index, row in df.iterrows():
+            day = row.day
+            timeStart = row.timeStart
+            timeEnd = row.timeEnd
+            limit = row.limit
+            if (day < 2) or (day > 7) or (timeStart < 1) or (timeStart > 12) or (timeEnd < 1) or (timeEnd > 12) or (
+                    limit < 0) or (timeEnd < timeStart):
+                raise HTTPException(status_code=422, detail="Invalid data")
+            try:
+                return_classes.append(Class(**row))
+            except:
+                raise HTTPException(status_code=422, detail="Invalid datatype")
+        return return_classes
 
-        
 
 
 class JWTUtils:

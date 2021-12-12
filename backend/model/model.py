@@ -17,7 +17,20 @@ class Account(BaseModel):
     gender : Optional[str] = None 
     program : Optional[str] = None 
     schoolId : Optional[str] = None 
-    maxcredit : Optional[int] = None 
+    maxcredit : Optional[int] = None
+
+
+class Class(BaseModel):
+    classId: int
+    subjectId: str
+    semester: int
+    location: str
+    day: int
+    timeStart: int
+    timeEnd: int
+    registered: int
+    limit: int
+    status: int
 
 if __name__ =="__main__":
     account = Account()
