@@ -4,8 +4,15 @@ from router import AccountRouter, ClassRouter
 from router import SubjectRouter
 from router import OTERouter
 import uvicorn, time
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=["*"],
+	allow_credentials=True,
+	allow_methods=["*"],
+	allow_headers=["*"],
+)
 
 app.include_router(AccountRouter.router)
 app.include_router(ClassRouter.router)
