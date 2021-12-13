@@ -16,6 +16,20 @@ class AccountService:
     def __init__(self, ):
         self.connector = AccountConnector()
         self.settings = Settings()
+        self.parse_role = {"ROLE_ADMIN":3,"ROLE_STUDENT":1,"ROLE_TM":2,"ROLE_GUEST":0}
+        self.revert_role = {3:"ROLE_ADMIN",2:"ROLE_TM",1:"ROLE_STUDENT",0:"ROLE_GUEST"}
+    def map_role(self,accounts:List[Account]):
+        res = []
+        for acc in accounts:
+            acc.role = self.parse_role[acc.role]
+            res.append(acc)
+        return res
+    def map_revert_role(self,accounts:List[Account]):
+        res = []
+        for acc in accounts:
+            acc.role = self.revert_role[acc.role]
+            res.append(acc)
+        return res
 
     async def get_account_by_id(self,Id:Optional[str]= None, email:Optional[str]= None):
         return await self.connector.get_account_by_id(Id,email)

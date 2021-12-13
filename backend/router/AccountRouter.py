@@ -66,12 +66,12 @@ async def login(form_data: Login):
 
 @router.post("/register")
 async def register(account:Account):
-    return await accountService.register([account])
+    return await accountService.register(accountService.map_role([account]))
 
 @router.get("/get-by-id")
 async def get_by_id(Id:Optional[str]=None,email:Optional[str]=None):
     accounts = await accountService.get_account_by_id(Id,email)
-    return {"accounts":accounts}
+    return {"accounts":accountService.map_revert_role(accounts) }
 
 @router.get("/search")
 async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
@@ -86,6 +86,7 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
                                             birthday=birthday, phone=phone,status=status, role=role,\
                                             schoolyear=schoolyear,cmnd=cmnd, gender=gender,program=program, \
                                             schoolId =schoolId, maxcredit=maxcredit,limit=limit,offset=offset)
+    accounts = accountService.map_revert_role(accounts)
     if export == 0:    
         return accounts
     else:
@@ -96,6 +97,7 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
 
 @router.post("/update")
 async def update(account:Account):
+    account = accountService.map_role([account])[0]
     res = await accountService.update_one(account)
     return res
 
