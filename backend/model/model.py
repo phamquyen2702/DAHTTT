@@ -39,7 +39,7 @@ class Subject(BaseModel):
     subjectName: Text
     credit: int
     programsemester: int
-    school: Text
+    schoolId: Text
     status: Optional[int] = 1  # 1 active, 0 inactive
     note: Optional[int] = None
 
@@ -51,7 +51,7 @@ class Subject(BaseModel):
             subjectName=data[1],
             credit=data[2],
             programsemester=data[3],
-            school=data[4],
+            schoolId=data[4],
             status=data[5],
             note=data[6]
         )

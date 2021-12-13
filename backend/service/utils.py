@@ -69,22 +69,29 @@ class CSVUtils:
 
     @staticmethod
     def validate_subject(df):
-        list_col = ["subjectId", "subjectName", "credit", "programsemester", "school", "status", "note"]
+        # convert NAN to None
+        df["note"] = df["note"].fillna("", inplace=True)
+
+        list_col = ["subjectId", "subjectName", "credit", "programsemester", "schoolId", "status", "note"]
         cols = list(df.columns)
         if not (cols == list_col):
             raise HTTPException(status_code=422, detail="Invalid format")
-        try:
-            for col in list_col:
-                if col in ["credit", "programsemester"]:
+
+        for col in list_col:
+            if col in ["credit", "programsemester"]:
+                try:
                     pd.to_numeric(df[col], downcast='integer')
-        except:
-            raise HTTPException(status_code=422, detail="Invalid datatype")
+                except:
+                    raise HTTPException(status_code=422, detail=f"Field {col} must is integer not {df[col].dtype}")
+
         return_subjects = []
         for index, row in df.iterrows():
+
             try:
                 return_subjects.append(Subject(**row))
             except:
-                raise HTTPException(status_code=422, detail="Invalid datatype")
+                print(row)
+                raise HTTPException(status_code=422, detail=f"Invalid datatype in subject: {row.subjectId}")
 
         return return_subjects
 
