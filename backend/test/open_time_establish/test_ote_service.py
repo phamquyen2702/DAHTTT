@@ -15,13 +15,17 @@ student = Account(
     phone="0868870166",
     status=1,
     role=1,
-    schoolyear=2019,
+    schoolyear=62,
     cmnd='123456789',
     gender="Nam",
     program="Khao học máy tính",
     schoolId="TCNTT",
     maxcredit=150
 )
+
+
+def test_get_study_year(schoolyear=62):
+    print(ote_service._get_course_of_school_year(schoolyear))
 
 
 def test_save_config():
@@ -119,12 +123,13 @@ def test_validate_regis_class_time():
 
 
 if __name__ == '__main__':
-    test_save_config()
-    test_load_config()
-    test_update_subject_ote_around_now()
-    test_validate_regis_subject_time()
-    # test_update_subject_ote_previous_now()
+    # test_save_config()
+    # test_load_config()
+    # test_update_subject_ote_around_now()
     # test_validate_regis_subject_time()
-
-    test_update_class_ote_around_now()
-    test_validate_regis_class_time()
+    # # test_update_subject_ote_previous_now()
+    # # test_validate_regis_subject_time()
+    #
+    # test_update_class_ote_around_now()
+    # test_validate_regis_class_time()
+    test_get_study_year(63)

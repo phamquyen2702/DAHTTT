@@ -26,7 +26,7 @@ async def search_subject(
         subjectName: str = None,
         credit: int = None,
         programsemester:int = None,
-        school: str = None,
+        schoolId: str = None,
         status: int = None,
         note: str = None,
         limit: int = 20,
@@ -38,7 +38,7 @@ async def search_subject(
         "subjectName": subjectName,
         "credit": credit,
         "programsemester": programsemester,
-        "school": school,
+        "schoolId": schoolId,
         "status": status,
         "note": note
     }
@@ -59,7 +59,7 @@ async def search_subject(
 @router.post("/update")
 async def update_subject(subject: Subject, current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
-        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.get_role_name()}"
+        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
                                                     f" không có quyền sửa đổi thông tin học phần.")
     res = await subject_service.update(subject)
     return res
@@ -68,7 +68,7 @@ async def update_subject(subject: Subject, current_user: Account = Depends(get_c
 @router.post("/lock")
 async def lock_subject(subjectId, current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
-        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.get_role_name()}"
+        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
                                                     f" không có quyền khóa học phần")
     res = await subject_service.update_satus(subjectId, 0)
     return res
@@ -77,7 +77,7 @@ async def lock_subject(subjectId, current_user: Account = Depends(get_current_ac
 @router.post("/unlock")
 async def unlock_subject(subjectId, current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
-        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.get_role_name()}"
+        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
                                                     f" không có quyền mở khóa học phần")
     res = await subject_service.update_satus(subjectId, 1)
     return res
@@ -86,12 +86,18 @@ async def unlock_subject(subjectId, current_user: Account = Depends(get_current_
 @router.post("/import")
 async def import_subject(file: UploadFile = File(...), current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
-        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.get_role_name()}"
+        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
                                                     f" không có quyền import học phần")
 
     content = await file.read()
     res = await subject_service.import_file(content)
     return res
+
+# @router.post("/import")
+# async def import_subject(file: UploadFile = File(...)):
+#     content = await file.read()
+#     res = await subject_service.import_file(content)
+#     return res
 
 
 @router.post("/export")

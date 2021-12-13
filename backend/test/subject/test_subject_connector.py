@@ -9,7 +9,7 @@ def test_validate_subject():
         subjectName="Đồ án hệ thống thông tin",
         credit=3,
         programsemester=5,
-        school="Trường công nghệ thông tin và truyền thông"
+        schoolId="KCNTT"
     )
     check = SubjectConnector.validate(subject)
     print(check)
@@ -21,7 +21,7 @@ def test_insert_subject():
         subjectName="Nhập môn công nghệ thông tin",
         credit=3,
         programsemester=1,
-        school="Trường công nghệ thông tin và truyền thông"
+        schoolId="KCNTT"
     )
     subject_connector = SubjectConnector()
     loop = asyncio.get_event_loop()
@@ -39,7 +39,7 @@ def test_insert_invalid_subject(subjects=None):
             subjectName="Nhập môn công nghệ thông tin",
             credit="3",
             programsemester=1,
-            school="Trường công nghệ thông tin và truyền thông"
+            schoolId="KCNTT"
         )
 
     subject_connector = SubjectConnector()
@@ -58,7 +58,7 @@ def test_update_subject(subjects=None):
             subjectName="Lập trình C",
             credit=3,
             programsemester=1,
-            school="Trường công nghệ thông tin và truyền thông",
+            schoolId="KCNTT",
             status=1
         )
         print(subjects.dict())

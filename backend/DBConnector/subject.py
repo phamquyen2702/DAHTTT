@@ -17,10 +17,10 @@ class SubjectConnector:
                                             database=self.config.db_name
                                             )
         """
-        self.sql_insert_subject = "INSERT INTO Subject (subjectId, subjectName, credit, programsemester, school," \
+        self.sql_insert_subject = "INSERT INTO Subject (subjectId, subjectName, credit, programsemester, schoolId," \
                                   " status, note) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         self.sql_update_subject = "UPDATE Subject SET subjectName=%s, credit=%s," \
-                                  " programsemester=%s, school=%s, status=%s, note=%s WHERE subjectId=%s "
+                                  " programsemester=%s, schoolId=%s, status=%s, note=%s WHERE subjectId=%s "
 
     @staticmethod
     def validate(subject: Subject):
@@ -40,8 +40,8 @@ class SubjectConnector:
             logging.error(f"Field `programsemester` is null in subject: {subject.dict()}")
             raise HTTPException(status_code=422, detail="Invalid Schema")
 
-        if subject.school is None or isinstance(subject.school, str) is False:
-            logging.error(f"Field `school` is null in subject: {subject.dict()}")
+        if subject.schoolId is None or isinstance(subject.schoolId, str) is False:
+            logging.error(f"Field `schoolId` is null in subject: {subject.dict()}")
             raise HTTPException(status_code=422, detail="Invalid Schema")
 
         return True
@@ -72,9 +72,10 @@ class SubjectConnector:
             mycursor.executemany(sql_other, data)
             db.commit()
         except mysql.connector.Error as error:
-            print("Failed to update record to database rollback: {}".format(error))
             # reverting changes because of exception
             db.rollback()
+            print(data)
+            raise HTTPException("Failed to update record to database rollback: {}".format(error))
         mycursor.close()
         db.close()
 

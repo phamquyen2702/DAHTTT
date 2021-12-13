@@ -35,6 +35,7 @@ class SubjectService:
         df = CSVUtils.read_content(content)
         subjects = CSVUtils.validate_subject(df)
         res = await self.connector.insert(subjects)
+        return res
 
     async def export_file(self, subjects: List[Subject]):
         subjects = [subject.dict() for subject in subjects]

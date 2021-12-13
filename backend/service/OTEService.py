@@ -12,15 +12,18 @@ class OTEService:
         self.settings = Settings()
         self.config = self._get_default_config()
 
-    @staticmethod
-    def _get_course_of_school_year(school_year):
+    def _get_course_of_school_year(self, school_year):
+        started_year = self.settings.started_year
         now = datetime.datetime.now()
         this_year = now.year
         this_month = now.month
+
+        course_now = this_year - started_year + 1
+
         if this_month > 9:
-            study_year = this_year - int(school_year) + 1
+            study_year = course_now - school_year + 1
         else:
-            study_year = this_year - int(school_year)
+            study_year = course_now - started_year
 
         if study_year == 1:
             return "first_year"
