@@ -7,6 +7,7 @@ import {
   RadioGroup,
   TextField,
 } from "@material-ui/core";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -14,29 +15,17 @@ import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { dbaccount } from "../dummydb/dbaccount";
+import { login } from "../reducers/userSlice";
 import Dangki from "./dangki";
 import getCookie from "./getcookie";
 import setcookie from "./setcookie";
+import { useDispatch } from "react-redux";
 import "./style.scss";
-
-function checkAccount(role, email, password) {
-  for (let i = 0; i < dbaccount.length; i++) {
-    if (
-      dbaccount[i].role === role &&
-      dbaccount[i].email === email &&
-      dbaccount[i].password === password
-    ) {
-      return true;
-      // eslint-disable-next-line no-unreachable
-      break;
-    }
-  }
-}
 
 function Formlogin(props) {
   const { enqueueSnackbar } = useSnackbar();
   setcookie("dbaccount", JSON.stringify(dbaccount), 16);
-  const [valueRole, setValueRole] = useState("ROLE_SV");
+  const [valueRole, setValueRole] = useState("ROLE_ADMIN");
   const history = useHistory();
 
   const schema = yup.object().shape({
@@ -47,11 +36,11 @@ function Formlogin(props) {
     password: yup
       .string()
       .required("please enter your password")
-      .min(6, "Please enter at least 6 characters"),
+      .min(4, "Please enter at least 6 characters"),
   });
   const form = useForm({
     defaultValues: {
-      role: "ROLE_SV",
+      role: "ROLE_ADMIN",
       email: "",
       password: "",
     },
@@ -74,18 +63,19 @@ function Formlogin(props) {
     // console.log("Captcha value:", value);
     setIsVeryFied(true);
   };
-  const handleOnSubmit = (value) => {
-    if (checkAccount(value.role, value.email, value.password)) {
-      setcookie("account", JSON.stringify(value), 15);
+  const dispatch = useDispatch();
+  const handleOnSubmit = async (values) => {
+    try {
+      const action = login(values);
+      console.log(JSON.stringify(values));
+      const resultAction = await dispatch(action);
+      unwrapResult(resultAction);
       window.location.href = "/home";
       form.reset();
-    } else {
-      enqueueSnackbar(
-        "email or password is incorrect, đăng kí account tại file dummydb/dbaccount.jsx",
-        {
-          variant: "error",
-        }
-      );
+    } catch (error) {
+      enqueueSnackbar("account is incorrect", {
+        variant: "error",
+      });
     }
   };
   const [open, setOpen] = useState(false);
@@ -111,7 +101,7 @@ function Formlogin(props) {
             >
               <FormControlLabel
                 {...register("role")}
-                value="ROLE_SV"
+                value="ROLE_STUDENT"
                 control={<Radio />}
                 label="Sinh viên"
                 className="radio"

@@ -4,17 +4,20 @@ import setcookie from "../component/setcookie";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
-export const register = createAsyncThunk("auth/register", async (payload) => {
-  //call api to register
-  const data = await userApi.register(payload);
-  return data;
-});
+export const register = createAsyncThunk(
+  "account/register",
+  async (payload) => {
+    //call api to register
+    const data = await userApi.register(payload);
+    return data;
+  }
+);
 
-export const login = createAsyncThunk("auth/login", async (payload) => {
+export const login = createAsyncThunk("account/login", async (payload) => {
   //call api to login
   const data = await userApi.login(payload);
   //set lại exprie từ chuỗi json trả về
-  setcookie("user", JSON.stringify(jwtDecode(data)), 15);
+  setcookie("account", JSON.stringify(jwtDecode(data)), 15);
   setcookie("accessToken", data);
   return data;
 });

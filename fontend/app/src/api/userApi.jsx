@@ -18,11 +18,11 @@ const userApi = {
         });
     },
     register(data) {
-        const url = "/auth/register";
+        const url = "/account/register";
         return axiosClient.post(url, data);
     },
     login(data) {
-        const url = "/auth/login";
+        const url = "/account/login";
         return axiosClient.post(url, data);
     },
     update(data) {
