@@ -13,7 +13,7 @@ from fastapi import FastAPI, HTTPException, Depends, Request
 import pandas as pd
 import io
 from datetime import date
-
+import time
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 class Class_regService:
@@ -29,13 +29,13 @@ class Class_regService:
     #         processed.append(acc)
     #     return await self.connector.subreg_insert(processed)
 
-    async def class_reg(self,classreg: list[Class_Reg], current_user: Class_Reg):
+    async def class_reg(self,classreg,current_user: Account):
         processed = []
-        for reg in classreg:
+        for class_ in classreg.classes:
             reg.Id = current_user.Id
             # reg.timestamp = date.today()
-            processed.append(reg)
+            processed.append(Class_Reg(Id = current_user.Id,classId = class_.classId,timestamp=int(time.time())))
         return await self.connector.classreg_insert(processed)
 
-    async def class_del(self, classId:list[Optional[str]], current_user: Class_Reg):
+    async def class_del(self, classId:List[Optional[str]], current_user: Account):
         return await self.connector.classdel(current_user.Id, classId)

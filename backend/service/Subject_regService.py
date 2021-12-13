@@ -22,15 +22,14 @@ class Subject_regService:
         self.settings = Settings()
         
 
-    async def subject_reg(self,subreg: list[Sub_Reg], current_user: Sub_Reg):
+    async def subject_reg(self,subreg, semester,current_user: Account):
         processed = []
-        for reg in subreg:
-            reg.Id = current_user.Id
-            processed.append(reg)
+        for subject in subreg.subjects:
+            processed.append(Sub_Reg(Id= current_user.Id,subjectId=subject.subjectId,semester=semester,timestamp=int(time.time())))
         return await self.connector.subreg_insert(processed)
 
     # async def subject_del(self,Id:Optional[str]=None, subjectId:Optional[str]= None):
     #     return await self.connector.subdel(Id,subjectId)
 
-    async def subject_del(self, subjectId:list[Optional[str]], current_user: Sub_Reg):
-        return await self.connector.subdel(current_user.Id, subjectId)
+    async def subject_del(self, subjectId:List[Optional[str]], semester : int,current_user: Account):
+        return await self.connector.subdel(current_user.Id,semester, subjectId)

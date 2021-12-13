@@ -7,8 +7,9 @@ from typing import List, Optional
 
 class classRegisterConnector:
     def __init__(self, ):
-
-    def object2data(self,account:Account):
+        self.config = Settings()
+        
+    def object2data(self,account:Class_Reg):
         account = account.dict()
         account = tuple(list(account.values()))
         return account
@@ -31,7 +32,7 @@ class classRegisterConnector:
         mycursor.close()
         db.close()
 
-    async def classreg_insert(self, classreg: list[Class_Reg]):
+    async def classreg_insert(self, classreg: List[Class_Reg]):
         aaa = []
 
         for reg in classreg:
@@ -60,7 +61,7 @@ class classRegisterConnector:
        
         return True
     
-    async def classdel(self, Id: int, classId: list[Optional[str]]):
+    async def classdel(self, Id: int, classId: List[Optional[str]]):
         aaa = []
         for classid in classId:
             aaa.append((Id, classid))

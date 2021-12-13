@@ -5,7 +5,7 @@ from datetime import datetime
 class Sub_Reg(BaseModel):
     Id: int
     subjectId: str
-    semeter: int
+    semester: int
     timestamp: int
 
     

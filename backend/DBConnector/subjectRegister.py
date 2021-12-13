@@ -17,20 +17,21 @@ class subjectRegisterConnector:
                                             database=self.config.db_name
                                             )
         """
-        self.sql_insert = "INSERT INTO subjectregister (Id, subjectId, semeter, timestamp) VALUES (%s,%s, %s, %s)"
+        self.sql_insert = "INSERT INTO subjectregister (Id, subjectId, semester, timestamp) VALUES (%s,%s, %s, %s)"
         # self.sql_insert_student =  "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role, schoolyear, cmnd,gender,program, schoolId,maxcredit) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         # self.sql_update_other = "UPDATE subjectregister SET  email=%s,  fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s WHERE Id = %s"
         # self.sql_update_student = "UPDATE Account SET  email=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s,schoolyear=%s, cmnd=%s,gender=%s,program=%s, schoolId=%s,maxcredit=%s WHERE Id = %s"
         self.sql_delete = "DELETE FROM subjectregister WHERE (Id = %s) and (subjectId = %s)"
 
-    def object2data(self,account:Account):
+    def object2data(self,account:Sub_Reg):
         account = account.dict()
         account = tuple(list(account.values()))
         return account
 
-    def validatetime
+    def validatetime(self):
+        pass
 
-    async def subreg_insert(self, subreg: list[Sub_Reg]):
+    async def subreg_insert(self, subreg: List[Sub_Reg]):
         aaa = []
 
         for reg in subreg:
@@ -49,7 +50,7 @@ class subjectRegisterConnector:
         mycursor = db.cursor()
         if True:
             try:
-                mycursor.executemany("INSERT INTO subjectregister (Id, subjectId, semeter, timestamp) VALUES (%s,%s,%s,%s)", aaa)
+                mycursor.executemany("INSERT INTO subjectregister (Id, subjectId, semester, timestamp) VALUES (%s,%s,%s,%s)", aaa)
                 db.commit()
             except mysql.connector.Error as error:
                 print("Failed to insert record to database rollback: {}".format(error))
@@ -59,10 +60,10 @@ class subjectRegisterConnector:
        
         return True
     
-    async def subdel(self, Id: int, subjectId: list[Optional[str]]):
+    async def subdel(self, Id: int, semester:int , subjectId: List[Optional[str]]):
         aaa = []
         for subid in subjectId:
-            aaa.append((Id, subid))
+            aaa.append((Id, subid,semester))
 
         db = mysql.connector.connect(
                                             host="localhost",
@@ -73,7 +74,7 @@ class subjectRegisterConnector:
         mycursor = db.cursor()
         if True:
             try:
-                mycursor.executemany("DELETE FROM subjectregister WHERE (Id = %s) and (subjectId = %s);", aaa)
+                mycursor.executemany("DELETE FROM subjectregister WHERE (Id = %s) and (subjectId = %s) and (semester = %s);", aaa)
                 db.commit()
             except mysql.connector.Error as error:
                 print("Failed to insert record to database rollback: {}".format(error))

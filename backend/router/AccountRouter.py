@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Header, Depends, HTTPException,File,UploadFile
-from model.model import Account
+from model.model import Account, Class,Subject
 from service.AccountService import AccountService
 
 #------------REGISTER--------------#
@@ -18,6 +18,11 @@ class Login(BaseModel):
     email : str
     password : str
     role : str
+class ClassRegRequest(BaseModel):
+    classes: List[Class]
+class SubjectRegRequest(BaseModel):
+    subjects: List[Subject]
+
 parse_role = {"ROLE_ADMIN":3,"ROLE_STUDENT":1,"ROLE_TM":2}
 
 router = APIRouter(prefix="/account")
@@ -38,20 +43,20 @@ async def read_users_me(current_user: Account = Depends(get_current_active_user)
 subject_regService = Subject_regService()
 class_regService = Class_regService()
 @router.post("/subReg")
-async def subReg(sub_reg: Sub_Reg, current_user: Account = Depends(get_current_active_user)):
-    return await subject_regService.subject_reg([sub_reg], current_user)
+async def subReg( semester,sub_reg: SubjectRegRequest,current_user: Account = Depends(get_current_active_user)):
+    return await subject_regService.subject_reg(sub_reg,semester, current_user)
 
 @router.post("/subDel")
-async def subDel(subjectId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
-    return await subject_regService.subject_del([subjectId], current_user)
+async def subDel(semester,subjectId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
+    return await subject_regService.subject_del([subjectId], semester,current_user)
 
 @router.post("/classReg")
-async def classReg(class_reg: Class_Reg, current_user: Account = Depends(get_current_active_user)):
-    return await class_regService.class_reg([class_reg], current_user)
+async def classReg(class_reg: ClassRegRequest,current_user: Account = Depends(get_current_active_user)):
+    return await class_regService.class_reg(class_reg, current_user)
 
 @router.post("/classDel")
 async def classDel(classId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
-    return await class_regService.class_del([classId], current_user)
+    return await class_regService.class_del([classId],current_user)
 #------------REGISTER--------------#
 
 @router.post("/login")
