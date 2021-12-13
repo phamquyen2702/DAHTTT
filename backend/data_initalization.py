@@ -1,14 +1,17 @@
 import mysql.connector
 
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="root"
-)
-mycursor = mydb.cursor()
-mycursor.execute("CREATE DATABASE DAHTTT")
-mycursor.close()
-mydb.close()
+try:
+    mydb = mysql.connector.connect(
+      host="localhost",
+      user="root",
+      password="root"
+    )
+    mycursor = mydb.cursor()
+    mycursor.execute("CREATE DATABASE DAHTTT")
+    mycursor.close()
+    mydb.close()
+except:
+    print("Database DAHTTT is exists")
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -24,7 +27,7 @@ mycursor = mydb.cursor()
 #mycursor.execute("SHOW DATABASES")
 #mycursor.execute("SHOW TABLES")
 
-"""
+
 mycursor.execute("CREATE TABLE Account (Id INT(32) PRIMARY KEY,\
 email VARCHAR(255) UNIQUE,\
 password VARCHAR(255),\
@@ -40,7 +43,7 @@ gender VARCHAR(255),\
 program VARCHAR(255),\
 schoolId VARCHAR(255),\
 maxcredit INT(8))")
-"""
+
 
 sql = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
 #sql = "UPDATE Account WHERE Id = %s SET  email=%s, password=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s "
@@ -75,3 +78,36 @@ sql = "INSERT INTO Class (subjectId, semester, location, day, timeStart, timeEnd
 val = (0, 20211, "TC-403", 2, 1, 4, 0, 120, 1)
 mycursor.execute(sql, val)
 mydb.commit()
+
+
+try:
+  mycursor.execute("CREATE TABLE Subject (\
+  subjectId VARCHAR(255) PRIMARY KEY,\
+  subjectName VARCHAR(255) UNIQUE,\
+  credit INT(8),\
+  programsemester INT(8),\
+  school VARCHAR(255),\
+  status Int,\
+  note VARCHAR(255))"
+  )
+except:
+  print("Table Subject is arleady exists")
+
+
+sql = "INSERT INTO Subject (subjectId, subjectName, credit, programsemester, school, note) VALUES (%s,%s, %s, %s, %s, %s)"
+# sql = "UPDATE Subject WHERE subjectId = %s SET  credit=%s, programsemester=%s, school=%s, note=%s)"
+#
+try:
+    val = ("IT1000", "Đồ án hệ thống thông tin", 3, 5, "Trường công nghệ thông tin và truyền thông", 1)
+    mycursor.execute(sql, val)
+    mydb.commit()
+except:
+    print("")
+
+mycursor.execute("select * from Subject where school='Trường công nghệ thông tin và truyền thông' LIMIT 5 OFFSET 0")
+records = mycursor.fetchall()
+print("Total number of rows in table: ", mycursor.rowcount)
+
+print("\nPrinting each row")
+for row in records:
+    print(row)
