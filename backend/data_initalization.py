@@ -48,7 +48,7 @@ maxcredit INT(8))")
 sql = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
 #sql = "UPDATE Account WHERE Id = %s SET  email=%s, password=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s "
 
-val = (10,"admin1@gmail.com","$2b$12$an6B5xNZK4t2gZmVxSEdku6yPM8aeI76ial.8yszxBFl3kNzh9cK6",\
+val = (0,"admin@gmail.com","$2b$12$an6B5xNZK4t2gZmVxSEdku6yPM8aeI76ial.8yszxBFl3kNzh9cK6",\
  "Nguyen Hoang Thuan","abdc","1999-02-08","01234560",1,3)
 mycursor.execute(sql, val)
 mydb.commit()
