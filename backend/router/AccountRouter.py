@@ -60,12 +60,12 @@ async def classDel(classId:Optional[str]=None, current_user: Account = Depends(g
 #------------REGISTER--------------#
 
 @router.post("/login")
-async def login(form_data: Login=Depends()):
+async def login(form_data: Login):
     form_data.role = parse_role[form_data.role]
     return await accountService.authenticate(form_data)
 
 @router.post("/register")
-async def register(account:Account=Depends()):
+async def register(account:Account):
     return await accountService.register([account])
 
 @router.get("/get-by-id")
@@ -95,7 +95,7 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
         return response
 
 @router.post("/update")
-async def update(account:Account=Depends()):
+async def update(account:Account):
     res = await accountService.update_one(account)
     return res
 
