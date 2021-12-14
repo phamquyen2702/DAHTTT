@@ -15,7 +15,7 @@ axiosClient.interceptors.request.use(
       config.headers = {
         ...config.headers,
         ...{
-          Authorization: `${token}`,
+          Authorization: `bearer ${token}`,
         },
       };
     }
