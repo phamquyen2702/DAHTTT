@@ -85,7 +85,7 @@ async def register(account:RegAccount):
     return await accountService.register([account])
 
 @router.post("/add")
-async def register(account:Account):
+async def add_account(account:Account):
     return await accountService.register(accountService.map_role([account]))
 
 @router.get("/get-by-id")
