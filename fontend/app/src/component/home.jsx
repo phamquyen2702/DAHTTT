@@ -30,12 +30,14 @@ function Home(props) {
   const account = getCookie("account");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const emailUser = JSON.parse(account).email;
-    const params = {
-      email: emailUser,
-    };
-    const data = await userApi.get(params);
-    setUser(data);
+    if (account) {
+      const emailUser = JSON.parse(account).email;
+      const params = {
+        email: emailUser,
+      };
+      const data = await userApi.get(params);
+      setUser(data);
+    }
   }, [account]);
 
   if (!account) {

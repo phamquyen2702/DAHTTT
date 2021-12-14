@@ -27,7 +27,9 @@ const userApi = {
   },
   changePassword(data) {
     const url = "/account/change-password";
-    return axiosClient.post(url, data);
+    return axiosClient.post(url, data, {
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+    });
   },
 };
 

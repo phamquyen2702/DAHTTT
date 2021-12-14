@@ -38,12 +38,14 @@ const App = () => {
   const account = getCookie("account");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const emailUser = JSON.parse(account).email;
-    const params = {
-      email: emailUser,
-    };
-    const data = await userApi.get(params);
-    setUser(data);
+    if (account) {
+      const emailUser = JSON.parse(account).email;
+      const params = {
+        email: emailUser,
+      };
+      const data = await userApi.get(params);
+      setUser(data);
+    }
   }, [account]);
   return (
     <div className="body">
@@ -90,7 +92,11 @@ export const Logout = ({ user, handleLogout }) => {
   const handleOnSubmit = async (values) => {
     try {
       console.log(values);
-      await userApi.changePassword(values);
+      const data = {
+        old_password: values.password,
+        new_password: values.newpassword,
+      };
+      await userApi.changePassword(data);
       setOpen(false);
       setcookie("account", "", 0);
       enqueueSnackbar("Success and Login", {
