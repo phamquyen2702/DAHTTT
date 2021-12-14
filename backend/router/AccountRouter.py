@@ -25,7 +25,7 @@ class SubjectRegRequest(BaseModel):
 class ChangePassword(BaseModel):
     old_password: str
     new_password : str
-parse_role = {"ROLE_ADMIN":3,"ROLE_STUDENT":1,"ROLE_TM":2}
+parse_role = {"ROLE_ADMIN":3,"ROLE_STUDENT":1,"ROLE_TM":2,"ROLE_GUEST":0}
 
 router = APIRouter(prefix="/account")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
