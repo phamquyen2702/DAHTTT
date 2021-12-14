@@ -14,17 +14,14 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import * as yup from "yup";
-import { dbaccount } from "../dummydb/dbaccount";
 import { login } from "../reducers/userSlice";
 import Dangki from "./dangki";
 import getCookie from "./getcookie";
-import setcookie from "./setcookie";
 import { useDispatch } from "react-redux";
 import "./style.scss";
 
 function Formlogin(props) {
   const { enqueueSnackbar } = useSnackbar();
-  setcookie("dbaccount", JSON.stringify(dbaccount), 16);
   const [valueRole, setValueRole] = useState("ROLE_ADMIN");
   const history = useHistory();
 
@@ -36,7 +33,7 @@ function Formlogin(props) {
     password: yup
       .string()
       .required("please enter your password")
-      .min(4, "Please enter at least 6 characters"),
+      .min(6, "Please enter at least 6 characters"),
   });
   const form = useForm({
     defaultValues: {
@@ -60,14 +57,12 @@ function Formlogin(props) {
   }
   const [isVeryFied, setIsVeryFied] = useState(false);
   const onChangeCapcha = (value) => {
-    // console.log("Captcha value:", value);
     setIsVeryFied(true);
   };
   const dispatch = useDispatch();
   const handleOnSubmit = async (values) => {
     try {
       const action = login(values);
-      console.log(JSON.stringify(values));
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
       window.location.href = "/home";
