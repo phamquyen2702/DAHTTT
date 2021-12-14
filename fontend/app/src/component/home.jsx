@@ -49,7 +49,7 @@ function Home(props) {
         <hr style={{ width: "80%" }} />
         <br />
         <div style={{ marginLeft: "10px" }}>
-          {user && JSON.parse(user).role === "ROLE_SV" && <MenuSV />}
+          {user && JSON.parse(user).role === "ROLE_STUDENT" && <MenuSV />}
           {user && JSON.parse(user).role === "ROLE_ADMIN" && <Menuadmin />}
           {user && JSON.parse(user).role === "ROLE_TM" && <Menutm />}
         </div>
@@ -58,7 +58,7 @@ function Home(props) {
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path={`${match.path}`}>
-              {user && JSON.parse(user).role === "ROLE_SV" ? (
+              {user && JSON.parse(user).role === "ROLE_STUDENT" ? (
                 <Redirect to={`${match.path}/thongtinsinhvien`} />
               ) : (
                 <Redirect to={`${match.path}/thongtinquanly`} />
