@@ -103,7 +103,7 @@ async def update(account:Account):
     res = await accountService.update_one(account)
     return res
 
-@router.get("/change-password")
+@router.post("/change-password")
 async def change_password(form:ChangePassword, current_user: Account = Depends(get_current_active_user) ):
     old_password, new_password = form.old_password,form.new_password
 
