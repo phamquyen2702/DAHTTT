@@ -22,7 +22,9 @@ class ClassRegRequest(BaseModel):
     classes: List[Class]
 class SubjectRegRequest(BaseModel):
     subjects: List[Subject]
-
+class ChangePassword(BaseModel):
+    old_password: str
+    new_password : str
 parse_role = {"ROLE_ADMIN":3,"ROLE_STUDENT":1,"ROLE_TM":2}
 
 router = APIRouter(prefix="/account")
@@ -102,7 +104,9 @@ async def update(account:Account):
     return res
 
 @router.get("/change-password")
-async def change_password(old_password, new_password, current_user: Account = Depends(get_current_active_user) ):
+async def change_password(form:ChangePassword, current_user: Account = Depends(get_current_active_user) ):
+    old_password, new_password = form.old_password,form.new_password
+
     res = await accountService.change_password(old_password,new_password,current_user)
     return res
 
