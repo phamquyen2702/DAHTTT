@@ -14,6 +14,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from pprint import pprint
 from fastapi.responses import StreamingResponse, FileResponse
+import random
 class Login(BaseModel):
     email : str
     password : str
@@ -25,6 +26,15 @@ class SubjectRegRequest(BaseModel):
 class ChangePassword(BaseModel):
     old_password: str
     new_password : str
+
+class RegAccount(BaseModel):
+    email : str
+    password :str
+    fullname : str
+    address : str
+    birthday : str
+    phone : str
+      
 parse_role = {"ROLE_ADMIN":3,"ROLE_STUDENT":1,"ROLE_TM":2,"ROLE_GUEST":0}
 
 router = APIRouter(prefix="/account")
@@ -67,6 +77,14 @@ async def login(form_data: Login):
     return await accountService.authenticate(form_data)
 
 @router.post("/register")
+async def register(account:RegAccount):
+    id_ = random.randint(100000,1000000)
+    while len(await accountService.get_account_by_id(Id=id_)) > 0:
+        id_ = random.randint(100000,1000000)
+    account = Account(Id = id_,role=0,status=1,**account.dict())
+    return await accountService.register([account])
+
+@router.post("/add")
 async def register(account:Account):
     return await accountService.register(accountService.map_role([account]))
 
