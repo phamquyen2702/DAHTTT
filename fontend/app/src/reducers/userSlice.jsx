@@ -21,14 +21,6 @@ export const login = createAsyncThunk("account/login", async (payload) => {
   setcookie("accessToken", data.access_token, 90);
   return data;
 });
-
-export const getByEmail = createAsyncThunk(
-  "account/get-by-id",
-  async (payload) => {
-    const data = await userApi.get(payload);
-    return data;
-  }
-);
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -41,9 +33,6 @@ const userSlice = createSlice({
       state.current = action.payload;
     },
     [login.fulfilled]: (state, action) => {
-      state.current = action.payload;
-    },
-    [getByEmail.fulfilled]: (state, action) => {
       state.current = action.payload;
     },
   },

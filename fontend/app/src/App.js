@@ -87,13 +87,21 @@ export const Logout = ({ user, handleLogout }) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOnSubmit = () => {
-    setOpen(false);
-    setcookie("account", "", 0);
-    enqueueSnackbar("Success and Login", {
-      variant: "success",
-    });
-    window.location.reload();
+  const handleOnSubmit = async (values) => {
+    try {
+      console.log(values);
+      await userApi.changePassword(values);
+      setOpen(false);
+      setcookie("account", "", 0);
+      enqueueSnackbar("Success and Login", {
+        variant: "success",
+      });
+      window.location.reload();
+    } catch (error) {
+      enqueueSnackbar("password is incorrect", {
+        variant: "error",
+      });
+    }
   };
   const schema = yup.object().shape({
     password: yup.string().required("please enter your password"),

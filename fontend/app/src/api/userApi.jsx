@@ -25,6 +25,10 @@ const userApi = {
     const url = `/account/remove/${id}`;
     return axiosClient.delete(url);
   },
+  changePassword(data) {
+    const url = "/account/change-password";
+    return axiosClient.post(url, data);
+  },
 };
 
 export default userApi;

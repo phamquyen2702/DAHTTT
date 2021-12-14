@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   Switch,
   Route,
@@ -7,6 +7,7 @@ import {
   useHistory,
   NavLink,
 } from "react-router-dom";
+import userApi from "../api/userApi";
 import getCookie from "./getcookie";
 import Loading from "./Loading";
 import NotFound from "./NotFound";
@@ -23,10 +24,21 @@ const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
 const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
 
 function Home(props) {
+  const [user, setUser] = useState("");
   const match = useRouteMatch();
   const history = useHistory();
-  const user = getCookie("account");
-  if (!user) {
+  const account = getCookie("account");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const emailUser = JSON.parse(account).email;
+    const params = {
+      email: emailUser,
+    };
+    const data = await userApi.get(params);
+    setUser(data);
+  }, [account]);
+
+  if (!account) {
     history.push("/Account");
   }
 
@@ -49,16 +61,16 @@ function Home(props) {
         <hr style={{ width: "80%" }} />
         <br />
         <div style={{ marginLeft: "10px" }}>
-          {user && JSON.parse(user).role === "ROLE_STUDENT" && <MenuSV />}
-          {user && JSON.parse(user).role === "ROLE_ADMIN" && <Menuadmin />}
-          {user && JSON.parse(user).role === "ROLE_TM" && <Menutm />}
+          {user && user.accounts[0].role === "ROLE_STUDENT" && <MenuSV />}
+          {user && user.accounts[0].role === "ROLE_ADMIN" && <Menuadmin />}
+          {user && user.accounts[0].role === "ROLE_TM" && <Menutm />}
         </div>
       </div>
       <div className="dangki-content-right">
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path={`${match.path}`}>
-              {user && JSON.parse(user).role === "ROLE_STUDENT" ? (
+              {user && user.accounts[0].role === "ROLE_STUDENT" ? (
                 <Redirect to={`${match.path}/thongtinsinhvien`} />
               ) : (
                 <Redirect to={`${match.path}/thongtinquanly`} />

@@ -22,7 +22,7 @@ import "./style.scss";
 
 function Formlogin(props) {
   const { enqueueSnackbar } = useSnackbar();
-  const [valueRole, setValueRole] = useState("ROLE_ADMIN");
+  const [valueRole, setValueRole] = useState("ROLE_STUDENT");
   const history = useHistory();
 
   const schema = yup.object().shape({
@@ -37,7 +37,7 @@ function Formlogin(props) {
   });
   const form = useForm({
     defaultValues: {
-      role: "ROLE_ADMIN",
+      role: "ROLE_STUDENT",
       email: "",
       password: "",
     },
@@ -66,6 +66,7 @@ function Formlogin(props) {
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
       window.location.href = "/home";
+      // history.push("/home");
       form.reset();
     } catch (error) {
       enqueueSnackbar("account is incorrect", {
