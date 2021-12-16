@@ -42,6 +42,8 @@ class AccountService:
             print("Update new password for Id:",account.Id," pass:",account.password)
             await self.connector.update_password(account.Id, JWTUtils.get_password_hash(account.password))
         return await self.connector.update([account])
+    async def lock(self,Id:int, status:int):
+        return await self.connector.lock(Id,status)
 
     async def register(self,accounts: List[Account]):
         processed = []

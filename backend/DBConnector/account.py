@@ -79,6 +79,26 @@ class AccountConnector:
             print(students)
             self.do_query(students,self.sql_insert_student)
         return True
+    async def lock(self,Id,status):
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        try:
+            mycursor.executemany("UPDATE Account SET status=%s WHERE Id = %s",[(status,Id)])
+            db.commit()
+        except mysql.connector.Error as error:
+            print("Failed to update record to database rollback: {}".format(error))
+    # reverting changes because of exception
+            db.rollback()
+            mycursor.close()
+            db.close()
+            raise HTTPException(status_code=422, detail="Failed to update record to database rollback: {}".format(error))
+        mycursor.close()
+        db.close()
 
     async def update(self,accounts : List[Account]):
         others = []

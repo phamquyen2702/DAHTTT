@@ -83,7 +83,12 @@ async def register(account:RegAccount):
         id_ = random.randint(100000,1000000)
     account = Account(Id = id_,role=0,status=1,**account.dict())
     return await accountService.register([account])
-
+@router.get("/lock/{Id}")
+async def lock(Id:str):
+    return await accountService.lock(Id,0)
+@router.get("/unlock/{Id}")
+async def unlock(Id:str):
+    return await accountService.lock(Id,1)
 @router.post("/add")
 async def add_account(account:Account):
     return await accountService.register(accountService.map_role([account]))
