@@ -116,7 +116,7 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
         return response
 
 @router.post("/update")
-async def update(account:Account):
+async def update(account:Account,Id:str ):
     account = accountService.map_role([account])[0]
     res = await accountService.update_one(account)
     return res
