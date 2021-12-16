@@ -30,7 +30,7 @@ async def add_class(_class: Class, current_user: Account = Depends(get_current_a
 
 
 @router.post("/update")
-async def update(_class: Class):
+async def update(_class: Class,classId:str):
     res = await classService.update_one(_class)
     return res
 
