@@ -13,14 +13,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import "./style.scss";
+import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { registers } from "../reducers/userSlice";
 function Dangki({ open, handleCloseDK }) {
   const { enqueueSnackbar } = useSnackbar();
-  const handleOnSubmitDK = () => {
-    handleCloseDK();
-    enqueueSnackbar("Success", {
-      variant: "success",
-    });
-  };
+  const dispatch = useDispatch();
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -56,6 +55,22 @@ function Dangki({ open, handleCloseDK }) {
     handleSubmit,
     formState: { errors },
   } = formDK;
+  const handleOnSubmitDK = async (values) => {
+    try {
+      const action = registers(values);
+      const resultAction = await dispatch(action);
+      unwrapResult(resultAction);
+      handleCloseDK();
+      formDK.reset();
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
+  };
   return (
     <>
       <Dialog open={open} onClose={handleCloseDK}>
@@ -92,7 +107,6 @@ function Dangki({ open, handleCloseDK }) {
               name="email"
               {...register("email")}
               margin="dense"
-              autoFocus
               label="Email"
               type="text"
               fullWidth

@@ -11,10 +11,11 @@ import {
 } from "@material-ui/core";
 import "antd/dist/antd.css";
 import { useSnackbar } from "notistack";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import * as yup from "yup";
+import userApi from "./api/userApi";
 import Footer from "./component/footer";
 import Formlogin from "./component/formlogin";
 import getCookie from "./component/getcookie";
@@ -22,12 +23,12 @@ import Home from "./component/home";
 import NotFound from "./component/NotFound";
 import setcookie from "./component/setcookie";
 import "./component/style.scss";
-import userApi from "./api/userApi";
 
 const App = () => {
   const [user, setUser] = useState("");
   const handleLogout = () => {
     setcookie("account", "", 0);
+    setcookie("user", "", 0);
     setcookie("cartDKHP", "", 0);
     setcookie("cartDKLH", "", 0);
     setcookie("accessToken", "", 0);
@@ -36,16 +37,18 @@ const App = () => {
     }
   };
   const account = getCookie("account");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(async () => {
-    if (account) {
-      const emailUser = JSON.parse(account).email;
-      const params = {
-        email: emailUser,
-      };
-      const data = await userApi.get(params);
-      setUser(data);
-    }
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (account) {
+        const emailUser = JSON.parse(account).email;
+        const params = {
+          email: emailUser,
+        };
+        const data = await userApi.get(params);
+        setUser(data.accounts[0]);
+      }
+    };
+    fetchUser();
   }, [account]);
   return (
     <div className="body">
@@ -69,7 +72,9 @@ const App = () => {
             {user ? <Redirect to="/home" /> : <Formlogin />}
           </Route>
 
-          <Route path="/home" component={Home} />
+          <Route path="/home">
+            <Home user={user} />
+          </Route>
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
@@ -139,7 +144,7 @@ export const Logout = ({ user, handleLogout }) => {
         <div className="header-account-icon">
           <UserOutlined className="site-form-item-icon" />
         </div>
-        <div className="header-account-name">{user.accounts[0].fullname}</div>
+        <div className="header-account-name">{user.fullname}</div>
       </div>
       <div className="header-account-bot">
         <button className="dangxuat doipass" onClick={handleLogout}>

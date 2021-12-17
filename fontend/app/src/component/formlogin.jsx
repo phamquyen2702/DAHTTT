@@ -66,7 +66,6 @@ function Formlogin(props) {
       const resultAction = await dispatch(action);
       unwrapResult(resultAction);
       window.location.href = "/home";
-      // history.push("/home");
       form.reset();
     } catch (error) {
       enqueueSnackbar("account is incorrect", {

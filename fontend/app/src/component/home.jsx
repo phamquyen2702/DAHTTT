@@ -1,11 +1,11 @@
 import React, { Suspense, useEffect, useState } from "react";
 import {
-  Switch,
-  Route,
-  useRouteMatch,
-  Redirect,
-  useHistory,
   NavLink,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useRouteMatch,
 } from "react-router-dom";
 import userApi from "../api/userApi";
 import getCookie from "./getcookie";
@@ -23,34 +23,19 @@ const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
 
 const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
 
-function Home(props) {
-  const [user, setUser] = useState("");
+function Home({ user }) {
   const match = useRouteMatch();
   const history = useHistory();
   const account = getCookie("account");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(async () => {
-    if (account) {
-      const emailUser = JSON.parse(account).email;
-      const params = {
-        email: emailUser,
-      };
-      const data = await userApi.get(params);
-      setUser(data);
-    }
-  }, [account]);
-
   if (!account) {
     history.push("/Account");
   }
-
   return (
     <div className="dangki-content">
       <div className="dangki-content-left">
         <p
           style={{
             fontSize: "20px",
-
             color: "rgb(161, 11, 11)",
             fontWeight: "600",
             marginLeft: "18px",
@@ -63,16 +48,16 @@ function Home(props) {
         <hr style={{ width: "80%" }} />
         <br />
         <div style={{ marginLeft: "10px" }}>
-          {user && user.accounts[0].role === "ROLE_STUDENT" && <MenuSV />}
-          {user && user.accounts[0].role === "ROLE_ADMIN" && <Menuadmin />}
-          {user && user.accounts[0].role === "ROLE_TM" && <Menutm />}
+          {user && user.role === "ROLE_STUDENT" && <MenuSV />}
+          {user && user.role === "ROLE_ADMIN" && <Menuadmin />}
+          {user && user.role === "ROLE_TM" && <Menutm />}
         </div>
       </div>
       <div className="dangki-content-right">
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path={`${match.path}`}>
-              {user && user.accounts[0].role === "ROLE_STUDENT" ? (
+              {user && user.role === "ROLE_STUDENT" ? (
                 <Redirect to={`${match.path}/thongtinsinhvien`} />
               ) : (
                 <Redirect to={`${match.path}/thongtinquanly`} />
@@ -94,10 +79,9 @@ function Home(props) {
               path={`${match.path}/thongtinlopmo`}
               component={Thongtinlopmo}
             />
-            <Route
-              path={`${match.path}/thongtinquanly`}
-              component={Thongtinquanly}
-            />
+            <Route path={`${match.path}/thongtinquanly`}>
+              <Thongtinquanly user={user} />
+            </Route>
             <Route
               path={`${match.path}/quanlytaikhoan`}
               component={Quanlysinhvien}

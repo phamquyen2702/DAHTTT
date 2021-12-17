@@ -6,7 +6,6 @@ const { createSlice } = require("@reduxjs/toolkit");
 const classSlice = createSlice({
   name: "class",
   initialState: {
-    checkItem: false,
     cartItems: getCookie("cartDKLH") ? JSON.parse(getCookie("cartDKLH")) : [],
   },
   reducers: {
@@ -33,5 +32,5 @@ const classSlice = createSlice({
   },
 });
 const { actions, reducer } = classSlice;
-export const { addToCart, deleteFromCart, swapCheck } = actions;
+export const { addToCart, deleteFromCart } = actions;
 export default reducer;

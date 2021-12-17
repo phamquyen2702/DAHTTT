@@ -30,7 +30,21 @@ function Quanlysinhvien(props) {
               transition: "0.1s",
             }}
           >
-            Danh sách tài khoản
+            Tài khoản sinh viên
+          </NavLink>
+        </div>
+
+        <div className="quanlysinhvien-bt">
+          <NavLink
+            style={{ textDecoration: "none", width: "100%" }}
+            to={`${match.url}/chucnangkhac`}
+            activeStyle={{
+              fontWeight: "bold",
+              color: "rgb(161, 11, 11)",
+              transition: "0.1s",
+            }}
+          >
+            Tài khoản khác
           </NavLink>
         </div>
         <div className="quanlysinhvien-bt">
@@ -44,19 +58,6 @@ function Quanlysinhvien(props) {
             }}
           >
             Thêm tài khoản
-          </NavLink>
-        </div>
-        <div className="quanlysinhvien-bt">
-          <NavLink
-            style={{ textDecoration: "none", width: "100%" }}
-            to={`${match.url}/chucnangkhac`}
-            activeStyle={{
-              fontWeight: "bold",
-              color: "rgb(161, 11, 11)",
-              transition: "0.1s",
-            }}
-          >
-            Chức năng khác
           </NavLink>
         </div>
       </div>

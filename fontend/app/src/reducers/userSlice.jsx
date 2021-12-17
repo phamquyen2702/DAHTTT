@@ -4,7 +4,7 @@ import setcookie from "../component/setcookie";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
-export const register = createAsyncThunk(
+export const registers = createAsyncThunk(
   "account/register",
   async (payload) => {
     //call api to register
@@ -29,7 +29,7 @@ const userSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [register.fulfilled]: (state, action) => {
+    [registers.fulfilled]: (state, action) => {
       state.current = action.payload;
     },
     [login.fulfilled]: (state, action) => {
