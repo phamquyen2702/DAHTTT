@@ -38,7 +38,7 @@ class AccountService:
         return await self.connector.search(limit=limit,offset=offset,**kwargs)
 
     async def update_one(self,account:Account):
-        if (account.password is not None ) or (account.password != "" ):
+        if (account.password is not None ) and (account.password != "" ):
             print("Update new password for Id:",account.Id," pass:",account.password)
             await self.connector.update_password(account.Id, JWTUtils.get_password_hash(account.password))
         return await self.connector.update([account])
