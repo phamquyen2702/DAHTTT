@@ -8,6 +8,7 @@ from fastapi import HTTPException
 import pandas as pd
 from model.model import Account, Class, Subject
 import yaml
+import numpy as np
 
 
 class CSVUtils:
@@ -27,15 +28,22 @@ class CSVUtils:
             raise HTTPException(status_code=422, detail="Invalid format")
         try:
             for col in list_col:
-                if col in ["Id","status","role","schoolyear","maxcredit"]:
-                    pd.to_numeric(df[col], downcast='integer')
+                if col in ["Id","status","schoolyear","maxcredit"]:
+                    df[col] = pd.to_numeric(df[col], downcast='integer')
         except:
-            raise HTTPException(status_code=422, detail="Invalid datatype")
+            raise HTTPException(status_code=422, detail="Invalid datatype int column")
         return_accounts =[]
+       
         for index, row in df.iterrows():
             try:
+                if row["role"] == "ROLE_STUDENT":
+                    row["schoolyear"] = int(row["schoolyear"])
+                    row["maxcredit"] = int(row["maxcredit"])
+                else:
+                    row = row.fillna(np.nan).replace([np.nan], [None])
                 return_accounts.append(Account(**row))
             except:
+                #print(row)
                 raise HTTPException(status_code=422, detail="Invalid datatype")
         #print(return_accounts)
         return return_accounts

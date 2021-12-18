@@ -14,6 +14,7 @@ import pandas as pd
 import io
 from datetime import date
 from .OTEService import OTEService
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 class Subject_regService:
@@ -21,6 +22,16 @@ class Subject_regService:
         self.connector = subjectRegisterConnector()
         self.settings = Settings()
         self.oteService =  OTEService()
+
+    async def vaildate(self, subjects:List[Subject], current_user:Account):
+        total = 0
+        for sub in subjects:
+            total += sub.credit
+        if total > current_user.maxcredit:
+            raise HTTPException(status_code=410, detail="vượt quá số tín chỉ tối đa")
+        else:
+            return True
+
 
     async def subject_reg(self,subreg, semester,current_user: Account):
         state = await self.oteService.validate_regis_subject_time()

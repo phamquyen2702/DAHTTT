@@ -101,9 +101,10 @@ async def get_by_id(Id:Optional[str]=None,email:Optional[str]=None):
 @router.get("/count")
 async def count(Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
                 address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
-                status: Optional[int]=None, role: Optional[int]=None, schoolyear: Optional[int]=None,\
+                status: Optional[int]=None, role: Optional[str]=None, schoolyear: Optional[int]=None,\
                 cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
                 schoolId : Optional[str]=None, maxcredit: Optional[int]=None,):
+    role = accountService.parse_role[role]
     return await accountService.count(Id = Id, email=email, fullname = fullname,address =address,\
                                             birthday=birthday, phone=phone,status=status, role=role,\
                                             schoolyear=schoolyear,cmnd=cmnd, gender=gender,program=program, \
@@ -112,9 +113,10 @@ async def count(Id : Optional[int]=None, email: Optional[str]=None, fullname: Op
 @router.get("/search")
 async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
                 address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
-                status: Optional[int]=None, role: Optional[int]=None, schoolyear: Optional[int]=None,\
+                status: Optional[int]=None, role: Optional[str]=None, schoolyear: Optional[int]=None,\
                 cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
                 schoolId : Optional[str]=None, maxcredit: Optional[int]=None,limit=20,offset=0,export:int=0):
+    role = accountService.parse_role[role]
     if export == 1:
         limit = None
         offset = None  

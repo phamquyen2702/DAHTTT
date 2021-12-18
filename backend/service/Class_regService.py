@@ -15,6 +15,8 @@ import io
 from datetime import date
 import time
 from .OTEService import OTEService
+from .ClassService import ClassService
+from .SubjectService import SubjectService
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 class Class_regService:
@@ -22,13 +24,41 @@ class Class_regService:
         self.connector = classRegisterConnector()
         self.settings = Settings()
         self.oteService = OTEService()
+        self.classService = ClassService()
+        self.subjectService = SubjectService()
 
     # async def subject_reg(self,subreg: list[Sub_Reg], current_user:Sub_Reg):
     #     processed = []
     #     for reg in subreg:
     #         reg.Id = current_user.Id
     #         processed.append(acc)
-    #     return await self.connector.subreg_insert(processed)
+    #     return await self.connector.subreg_insert(processed)    
+    def check_time(self,class1,class2):
+        x_left = max(class1.timeStart, class2.timeStart)    
+        x_right = min(class1.timeEnd, class2.timeEnd)
+        if x_right <= x_left :
+            return True
+        return False
+        
+    async def validate_register(self,list_class:List[str],current_user:Account):
+        listClass = []
+        total = 0
+
+        for id_ in list_class:
+            class_ = await self.classService.get_class_by_id(id_)
+            if class_[0].registered >= class_[0].limit:
+                raise HTTPException(status_code=410, detail=f"lớp {id_} đầy")
+            listClass += class_
+            c = await self.subjectService.get_subject_by_id(class_[0].subjectId)
+            total += c[0].credit
+        if total > current_user.maxcredit:
+            raise HTTPException(status_code=410, detail="vượt quá số tín chỉ tối đa")
+        for i, class1 in enumerate(listClass):
+            for j, class2 in enumerate(listClass):
+                if i==j : continue
+                if not self.check_time(class1,class2):
+                    raise HTTPException(status_code=410, detail=f"trùng lịch học 2 lớp {class1.classId} và {class2.classId}")
+        return listClass
 
     async def class_reg(self,classreg,current_user: Account):
         state = await self.oteService.validate_regis_class_time(current_user)
