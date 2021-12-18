@@ -14,13 +14,14 @@ import pandas as pd
 import io
 from datetime import date
 import time
+from .OTEService import OTEService
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 class Class_regService:
     def __init__(self, ):
         self.connector = classRegisterConnector()
         self.settings = Settings()
-        
+        self.oteService = OTEService()
 
     # async def subject_reg(self,subreg: list[Sub_Reg], current_user:Sub_Reg):
     #     processed = []
@@ -30,6 +31,9 @@ class Class_regService:
     #     return await self.connector.subreg_insert(processed)
 
     async def class_reg(self,classreg,current_user: Account):
+        state = await self.oteService.validate_regis_class_time(current_user)
+        if state == False:
+            raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
         processed = []
         for class_ in classreg.classes:
             reg.Id = current_user.Id
@@ -38,4 +42,7 @@ class Class_regService:
         return await self.connector.classreg_insert(processed)
 
     async def class_del(self, classId:List[Optional[str]], current_user: Account):
+        state = await self.oteService.validate_regis_class_time(current_user)
+        if state == False:
+            raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
         return await self.connector.classdel(current_user.Id, classId)
