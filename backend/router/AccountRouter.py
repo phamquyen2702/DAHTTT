@@ -124,7 +124,7 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
                                             schoolId =schoolId, maxcredit=maxcredit,limit=limit,offset=offset)
     accounts = accountService.map_revert_role(accounts)
     if export == 0:    
-        return accounts
+        return {"accounts":accounts}
     else:
         stream = await accountService.export_file(accounts)
         response = StreamingResponse(iter([stream.getvalue()]),media_type="text/csv" )#"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")#
