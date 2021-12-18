@@ -51,10 +51,6 @@ async def get_current_active_user(current_user: Account = Depends(accountService
 async def read_users_me(current_user: Account = Depends(get_current_active_user)):
 	return current_user
 
-#------------REGISTER--------------#
-
-#------------REGISTER--------------#
-
 @router.post("/login")
 async def login(form_data: Login):
     form_data.role = parse_role[form_data.role]

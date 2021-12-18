@@ -1,10 +1,115 @@
-Id,email,password,fullname,address,birthday,phone,status,role,schoolyear,cmnd,gender,program,schoolId,maxcredit
-0,admin@gmail.com,$2b$12$gXvNI6.iv4bs.Yoj4mQfXuFtBYp2I4uGdFtqQPp9VMphViOvIU/Ji,Nguyen Hoang Thuan,124431,1999-02-08 00:00:00,1234560,1,ROLE_ADMIN,,,,,,
-1,thuanh@gmail.com,$2b$12$hai/9l.CDrqzBZZPJe5ZrutJkHWZdvrKS/2vNcEarmIT/HRD2Y6yS,NHT,x,1999-06-29 00:00:00,123140192,1,ROLE_STUDENT,62,string,string,string,string,24
-2,string,$2b$12$5jmNAg80aWjLDCgS/j0cteUNleZE91k7Q.F4gV4wpc03Ugdnuu/RO,NHT,string,1999-02-08 00:00:00,string,0,ROLE_STUDENT,0,string,string,string,string,0
-4,string12,$2b$12$yfMu7YCkiS48mrD8RWdF6uki9wzdNy32nueVsjm.XxcFaNIWNaA62,string,string,1999-02-08 00:00:00,string,0,ROLE_STUDENT,0,string,string,string,string,0
-122,quyenpv97222@gmail.com,$2b$12$y5rCckmon5.l2/WRfipxxO.gq/cUxvK99uI3u7rOpHBE30cPHBhvC,Pham Van Quyen,Hai Duong,2021-12-02 00:00:00,1231300,1,ROLE_STUDENT,23,12312,nam,qưeqeqeq,CNTT,22
-284154,string1,$2b$12$XiS5e73tpJY3v0ew6EKmv.yyCXa56TYGfOV7qnV2adZEqjUsrTJwq,string,string,1999-08-02 00:00:00,string,1,ROLE_GUEST,,,,,,
-20173393,thuan.nh173393@sis.hust.edu.vn,$2b$12$f5WN5Ac3ed1NzQ/oyvPQ4uVhrGcaNN9S0wJAs7ZhqjUPujXErj.Ye,NHT,29,2021-12-17 00:00:00,344400094,1,ROLE_STUDENT,62,31099001520,nam,KHMT,CNTT,24
-20183941,student3@gmail.com,$2b$12$78bgx.KcDANBylSzZKgyP.WGXHf6uGQV8JnPKI6tEmp1DCEtVUzzq,NHT,29,2021-12-18 00:00:00,12412312,1,ROLE_STUDENT,64,129031,nam,KHMT,CNTT,24
-2017339456,quyenpv9722222222@gmail.com,$2b$12$5Ia45F7g6mQJWv2SDtIMp.Yw/Vb4b8.LMd7Lfk9AsevrvaQLhlbFm,Pham Van Quyen23131,Hai Duong,2021-12-02 00:00:00,1231300,1,ROLE_STUDENT,23,12312,nam,qưeqeqeq,CNTT,22
+subjectId,subjectName,credit,programsemester,schoolId,status,note
+PE3101,Chuyên sâu Bóng chuyền 1,0,1,BGDTC,1,
+PE3201,Chuyên sâu Bóng đá 1,0,1,BGDTC,1,
+PE3301,Chuyên sâu Bóng rổ 1,0,1,BGDTC,1,
+EM1170,Pháp luật đại cương,2,1,KKTVQL,1,Pháp luật đại cương
+SSH1110,Những NLCB của CNML I,2,1,KML,1,Lý luận chính trị
+PE1014,Lý luận TDTT,0,1,BGDTC,1,Giáo dục thể chất
+MIL1110,Đường lối quân sự,0,1,KGDQP,1,Giáo dục Quốc phòng - An ninh
+FL1100,Tiếng Anh 1,0,1,KNN,1,Tiếng Anh
+MI1111,Giải tích I,4,1,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
+MI1141,Đại số,4,1,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
+IT2000,Nhập môn CNTT và TT,3,1,KCNTT,1,Cơ sở và cốt lõi ngành
+EM1010,Quản trị học đại cương,2,1,KKTVQL,1,Khối kiến thức bổ trợ
+PE3102,Chuyên sâu Bóng chuyền 2,0,2,BGDTC,1,
+PE3202,Chuyên sâu Bóng đá 2,0,2,BGDTC,1,
+PE3302,Chuyên sâu Bóng rổ 2,0,2,BGDTC,1,
+SSH1120,Những NLCB của CNML II,3,2,KML,1,Lý luận chính trị
+PE1024,Bơi lội,0,2,BGDTC,1,Giáo dục thể chất
+MIL1120,Công tác quốc phòng-An ninh,0,2,KGDQP,1,Giáo dục Quốc phòng - An ninh
+FL1101,Tiếng Anh 2,0,2,KNN,1,Tiếng Anh
+IT1110,Tin học đại cương,4,2,KCNTT,1,Khối kiến thức Toán và Khoa học cơ bản
+MI1121,Giải tích II,3,2,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
+PH1110,Vật lý đại cương I,3,2,VVLKT,1,Khối kiến thức Toán và Khoa học cơ bản
+PE2101,Bóng chuyền 1,0,3,BGDTC,1,
+PE2151,Erobic,0,3,BGDTC,1,
+PE2201,Bóng đá 1,0,3,BGDTC,1,
+PE2251,Taekwondo 1,0,3,BGDTC,1,
+PE2301,Bóng rổ 1,0,3,BGDTC,1,
+PE2401,Bóng bàn 1,0,3,BGDTC,1,
+PE2501,Cầu lông 1,0,3,BGDTC,1,
+PE3103,Chuyên sâu Bóng chuyền 3,0,3,BGDTC,1,
+PE3203,Chuyên sâu Bóng đá 3,0,3,BGDTC,1,
+PE3303,Chuyên sâu Bóng rổ 3,0,3,BGDTC,1,
+SSH1050,Tư tưởng HCM,2,3,KML,1,Lý luận chính trị
+MIL1130,QS chung và KCT bắn súng AK,0,3,KGDQP,1,Giáo dục Quốc phòng - An ninh
+IT3020,Toán rời rạc,3,3,KCNTT,1,Khối kiến thức Toán và Khoa học cơ bản
+MI1131,Giải tích III,3,3,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
+MI2020,Xác suất thống kê,3,3,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
+MI3052,Nhập môn các phương pháp tối ưu,2,3,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
+PH1120,Vật lý đại cương II,3,3,VVLKT,1,Khối kiến thức Toán và Khoa học cơ bản
+PE2102,Bóng chuyền 2,0,4,BGDTC,1,
+PE2202,Bóng đá 2,0,4,BGDTC,1,
+PE2252,Taekwondo 2,0,4,BGDTC,1,
+PE2302,Bóng rổ 2,0,4,BGDTC,1,
+PE2402,Bóng bàn 2,0,4,BGDTC,1,
+PE2502,Cầu lông 2,0,4,BGDTC,1,
+PE3104,Chuyên sâu Bóng chuyền 4,0,4,BGDTC,1,
+PE3204,Chuyên sâu Bóng đá 4,0,4,BGDTC,1,
+PE3304,Chuyên sâu Bóng rổ 4,0,4,BGDTC,1,
+SSH1130,Đường lối CM của ĐCSVN,3,4,KML,1,Lý luận chính trị
+IT3011,Cấu trúc dữ liệu và thuật toán,2,4,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3030,Kiến trúc máy tính,3,4,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3040,Kỹ thuật lập trình,2,4,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3070,Nguyên lý hệ điều hành,3,4,KCNTT,1,Cơ sở và cốt lõi ngành
+IT4480,Làm việc nhóm và kỹ năng giao tiếp,2,4,KCNTT,1,Cơ sở và cốt lõi ngành
+PE2103,Bóng chuyền 3,0,5,BGDTC,1,
+PE2203,Bóng đá 3,0,5,BGDTC,1,
+PE2253,Taekwondo 3,0,5,BGDTC,1,
+PE2303,Bóng rổ 3,0,5,BGDTC,1,
+PE2403,Bóng bàn 3,0,5,BGDTC,1,
+PE2503,Cầu lông 3,0,5,BGDTC,1,
+PE3105,Chuyên sâu Bóng chuyền 5,0,5,BGDTC,1,
+PE3205,Chuyên sâu Bóng đá 5,0,5,BGDTC,1,
+PE3305,Chuyên sâu Bóng rổ 5,0,5,BGDTC,1,
+IT3080,Mạng máy tính,3,5,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3090,Cơ sở dữ liệu,3,5,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3100,Lập trình hướng đối tượng,2,5,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3150,Project I,2,5,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3160,Nhập môn Trí tuệ nhân tạo,3,5,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3180,Nhập môn công nghệ phần mềm,3,5,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3120,Phân tích và thiết kế hệ thống,2,6,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3170,Thuật toán ứng dụng,2,6,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3190,Nhập môn Học máy và khai phá dữ liệu,3,6,KCNTT,1,Cơ sở và cốt lõi ngành
+IT3930,Project II,2,6,KCNTT,1,Cơ sở và cốt lõi ngành
+IT4015,Nhập môn an toàn thông tin,3,6,KCNTT,1,Cơ sở và cốt lõi ngành
+IT4991,Thực tập kỹ thuật,2,6,KCNTT,1,Thực tập kỹ thuật
+IT4409,Công nghệ Web và dịch vụ trực tuyến,3,6,KCNTT,1,Mô đun 4 (PTUDNV)
+IT4663,Tối ưu lập kế hoạch,4,6,KCNTT,1,Mô đun 5 (PTUDTM)
+IT3940,Project III,3,7,KCNTT,1,Cơ sở và cốt lõi ngành
+EM1180,Văn hóa kinh doanh và tinh thần khởi nghiệp,2,7,KKTVQL,1,Khối kiến thức bổ trợ
+IT4441,Giao diện và trải nghiệm người dùng,3,7,KCNTT,1,Mô đun 1 (CNPM)
+IT4490,Thiết kế và xây dựng phần mềm,3,7,KCNTT,1,Mô đun 1 (CNPM)
+IT4501,Đảm bảo chất lượng Phần mềm,2,7,KCNTT,1,Mô đun 1 (CNPM)
+IT4785,Phát triển ứng dụng cho thiết bị di động,2,7,KCNTT,1,Mô đun 1 (CNPM)
+IT4341,Hệ trợ giúp quyết định,2,7,KCNTT,1,Mô đun 2 (HTTT)
+IT4350,Kiến trúc các hệ thống thông tin và ứng dụng,3,7,KCNTT,1,Mô đun 2 (HTTT)
+IT4611,Các hệ thống phân tán và ứng dụng,2,7,KCNTT,1,Mô đun 2 (HTTT)
+IT4863,Tìm kiếm thông tin,3,7,KCNTT,1,Mô đun 2 (HTTT)
+IT4653,Học sâu và ứng dụng,2,7,KCNTT,1,Mô đun 3 (PTDLTM)
+IT4906,Tính toán tiến hóa,3,7,KCNTT,1,Mô đun 3 (PTDLTM)
+IT4930,Nhập môn Khoa học dữ liệu,2,7,KCNTT,1,Mô đun 3 (PTDLTM)
+IT4931,Lưu trữ và xử lý dữ liệu lớn,3,7,KCNTT,1,Mô đun 3 (PTDLTM)
+IT4788,Phát triển ứng dụng đa nền tảng,3,7,KCNTT,1,Mô đun 4 (PTUDNV)
+IT4613,Hệ gợi ý,3,7,KCNTT,1,Mô đun 5 (PTUDTM)
+IT4995,Đồ án tốt nghiệp cử nhân,6,8,KCNTT,1,Đồ án tốt nghiệp cử nhân
+IT4818,Phân tích nghiệp vụ thông minh,2,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1/Bổ sung chuyên ngành kỹ sư 2
+IT5005,Đồ án thiết kế Hệ thống thông tin,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1
+IT5409,Thị giác máy tính,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
+IT5420,Tích hợp dữ liệu,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 3
+IT4470,Đồ họa và hiện thực ảo,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
+IT4536,Mẫu thiết kế phần mềm,2,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
+IT5006,Đồ án thiết kế Công nghệ phần mềm,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
+IT4435,Chuyên đề,2,8,KCNTT,1,Tự chọn kỹ sư 1
+IT4868,Khai phá Web,3,8,KCNTT,1,Tự chọn kỹ sư 2
+IT4885,Mô hình và thuật toán Internet phổ biến,3,8,KCNTT,1,Tự chọn kỹ sư 3
+IT4244,Quản trị dự án CNTT,2,8,KCNTT,1,Cơ sở và cốt lõi ngành
+IT4772,Xử lý ngôn ngữ tự nhiên,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1/Bổ sung chuyên ngành kỹ sư 2
+IT5419,Tích hợp Hệ thống thông tin,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1
+IT4422,Phát triển Hệ thống phần mềm doanh nghiệp,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
+IT4079,Ngôn ngữ và phương pháp dịch,2,9,KCNTT,1,Tự chọn kỹ sư 1
+IT4110,Tính toán khoa học,3,9,KCNTT,1,Tự chọn kỹ sư 2
+IT4898,"Multimedia, trò chơi và các hệ thống giải trí",2,9,KCNTT,1,Tự chọn kỹ sư 3
+IT5390,Web ngữ nghĩa,3,9,KCNTT,1,Tự chọn kỹ sư 4
+IT5001,Thực tập kỹ sư,3,9,KCNTT,1,Thực tập kỹ sư
+IT5140,Đồ án kỹ sư,9,19,KCNTT,1,Đồ án kỹ sư

@@ -107,10 +107,10 @@ async def unlock_subject(subjectId, current_user: Account = Depends(get_current_
 
 
 @router.post("/import")
-async def import_subject(file: UploadFile = File(...), current_user: Account = Depends(get_current_active_user)):
-    if current_user.role < 2:
-        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
-                                                    f" không có quyền import học phần")
+async def import_subject(file: UploadFile = File(...)):#, current_user: Account = Depends(get_current_active_user)):
+    # if current_user.role < 2:
+    #     raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
+    #                                                 f" không có quyền import học phần")
 
     content = await file.read()
     res = await subject_service.import_file(content)

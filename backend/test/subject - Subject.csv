@@ -7,7 +7,7 @@ SSH1110,Những NLCB của CNML I,2,1,KML,1,Lý luận chính trị
 PE1014,Lý luận TDTT,0,1,BGDTC,1,Giáo dục thể chất
 MIL1110,Đường lối quân sự,0,1,KGDQP,1,Giáo dục Quốc phòng - An ninh
 FL1100,Tiếng Anh 1,0,1,KNN,1,Tiếng Anh
-MI1111,Giải tích I	,4,1,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
+MI1111,Giải tích I,4,1,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
 MI1141,Đại số,4,1,KTTD,1,Khối kiến thức Toán và Khoa học cơ bản
 IT2000,Nhập môn CNTT và TT,3,1,KCNTT,1,Cơ sở và cốt lõi ngành
 EM1010,Quản trị học đại cương,2,1,KKTVQL,1,Khối kiến thức bổ trợ
@@ -77,7 +77,7 @@ IT4991,Thực tập kỹ thuật,2,6,KCNTT,1,Thực tập kỹ thuật
 IT4409,Công nghệ Web và dịch vụ trực tuyến,3,6,KCNTT,1,Mô đun 4 (PTUDNV)
 IT4663,Tối ưu lập kế hoạch,4,6,KCNTT,1,Mô đun 5 (PTUDTM)
 IT3940,Project III,3,7,KCNTT,1,Cơ sở và cốt lõi ngành
-EM1180	,Văn hóa kinh doanh và tinh thần khởi nghiệp,2,7,KKTVQL,1,Khối kiến thức bổ trợ
+EM1180,Văn hóa kinh doanh và tinh thần khởi nghiệp,2,7,KKTVQL,1,Khối kiến thức bổ trợ
 IT4441,Giao diện và trải nghiệm người dùng,3,7,KCNTT,1,Mô đun 1 (CNPM)
 IT4490,Thiết kế và xây dựng phần mềm,3,7,KCNTT,1,Mô đun 1 (CNPM)
 IT4501,Đảm bảo chất lượng Phần mềm,2,7,KCNTT,1,Mô đun 1 (CNPM)
@@ -94,21 +94,19 @@ IT4788,Phát triển ứng dụng đa nền tảng,3,7,KCNTT,1,Mô đun 4 (PTUDN
 IT4613,Hệ gợi ý,3,7,KCNTT,1,Mô đun 5 (PTUDTM)
 IT4995,Đồ án tốt nghiệp cử nhân,6,8,KCNTT,1,Đồ án tốt nghiệp cử nhân
 IT4818,Phân tích nghiệp vụ thông minh,2,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1/Bổ sung chuyên ngành kỹ sư 2
-IT5005,Đồ án thiết kế Hệ thống thông tin	,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1
+IT5005,Đồ án thiết kế Hệ thống thông tin,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1
 IT5409,Thị giác máy tính,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
 IT5420,Tích hợp dữ liệu,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 3
 IT4470,Đồ họa và hiện thực ảo,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
 IT4536,Mẫu thiết kế phần mềm,2,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
-IT4818,Phân tích nghiệp vụ thông minh,2,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1/Bổ sung chuyên ngành kỹ sư 2
 IT5006,Đồ án thiết kế Công nghệ phần mềm,3,8,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
 IT4435,Chuyên đề,2,8,KCNTT,1,Tự chọn kỹ sư 1
 IT4868,Khai phá Web,3,8,KCNTT,1,Tự chọn kỹ sư 2
 IT4885,Mô hình và thuật toán Internet phổ biến,3,8,KCNTT,1,Tự chọn kỹ sư 3
 IT4244,Quản trị dự án CNTT,2,8,KCNTT,1,Cơ sở và cốt lõi ngành
-IT4772,Xử lý ngôn ngữ tự nhiên,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1/Bổ sung chuyên ngành kỹ sư 2	
-IT5419,Tích hợp Hệ thống thông tin,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1	
-IT4422,Phát triển Hệ thống phần mềm doanh nghiệp,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
 IT4772,Xử lý ngôn ngữ tự nhiên,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1/Bổ sung chuyên ngành kỹ sư 2
+IT5419,Tích hợp Hệ thống thông tin,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 1
+IT4422,Phát triển Hệ thống phần mềm doanh nghiệp,3,9,KCNTT,1,Bổ sung chuyên ngành kỹ sư 2
 IT4079,Ngôn ngữ và phương pháp dịch,2,9,KCNTT,1,Tự chọn kỹ sư 1
 IT4110,Tính toán khoa học,3,9,KCNTT,1,Tự chọn kỹ sư 2
 IT4898,"Multimedia, trò chơi và các hệ thống giải trí",2,9,KCNTT,1,Tự chọn kỹ sư 3

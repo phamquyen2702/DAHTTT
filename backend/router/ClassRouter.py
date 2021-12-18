@@ -110,7 +110,7 @@ async def search(classId: Optional[int] = None,
 
 
 @router.post("/import")
-async def import_file(file: UploadFile = File(...), current_user: Account = Depends(get_current_active_user)):
+async def import_file(file: UploadFile = File(...)):#, current_user: Account = Depends(get_current_active_user)):
     print('ok')
     content = await file.read()
     res = await classService.import_file(content)

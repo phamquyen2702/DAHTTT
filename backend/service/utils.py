@@ -82,13 +82,14 @@ class CSVUtils:
 
         list_col = ["subjectId", "subjectName", "credit", "programsemester", "schoolId", "status", "note"]
         cols = list(df.columns)
-        if not (cols == list_col):
-            raise HTTPException(status_code=422, detail="Invalid format")
+        if not (list(cols) == list_col):
+            print(cols)
+            raise HTTPException(status_code=422, detail="Invalid format column")
 
         for col in list_col:
             if col in ["credit", "programsemester"]:
                 try:
-                    pd.to_numeric(df[col], downcast='integer')
+                    df[col] =pd.to_numeric(df[col], downcast='integer')
                 except:
                     raise HTTPException(status_code=422, detail=f"Field {col} must is integer not {df[col].dtype}")
 
