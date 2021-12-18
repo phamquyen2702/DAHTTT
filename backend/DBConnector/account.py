@@ -176,7 +176,7 @@ class AccountConnector:
                 gender = row[11] ,
                 program = row[12] ,
                 schoolId = row[13] ,
-                maxcredit = int(row[14]) if row[9] is not None else None, 
+                maxcredit = int(row[14]) if row[14] is not None else None, 
             ))    
         
         mycursor.close()
@@ -276,7 +276,7 @@ class AccountConnector:
                 gender = row[11] ,
                 program = row[12] ,
                 schoolId = row[13] ,
-                maxcredit = int(row[14])  if row[9] is not None else None, 
+                maxcredit = int(row[14])  if row[14] is not None else None, 
             ))
         mycursor.close()
         db.close()
