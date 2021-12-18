@@ -52,23 +52,7 @@ async def read_users_me(current_user: Account = Depends(get_current_active_user)
 	return current_user
 
 #------------REGISTER--------------#
-subject_regService = Subject_regService()
-class_regService = Class_regService()
-@router.post("/subReg")
-async def subReg( semester,sub_reg: SubjectRegRequest,current_user: Account = Depends(get_current_active_user)):
-    return await subject_regService.subject_reg(sub_reg,semester, current_user)
 
-@router.post("/subDel")
-async def subDel(semester,subjectId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
-    return await subject_regService.subject_del([subjectId], semester,current_user)
-
-@router.post("/classReg")
-async def classReg(class_reg: ClassRegRequest,current_user: Account = Depends(get_current_active_user)):
-    return await class_regService.class_reg(class_reg, current_user)
-
-@router.post("/classDel")
-async def classDel(classId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
-    return await class_regService.class_del([classId],current_user)
 #------------REGISTER--------------#
 
 @router.post("/login")

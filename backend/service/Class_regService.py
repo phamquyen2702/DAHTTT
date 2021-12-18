@@ -58,7 +58,7 @@ class Class_regService:
                 if i==j : continue
                 if not self.check_time(class1,class2):
                     raise HTTPException(status_code=410, detail=f"trùng lịch học 2 lớp {class1.classId} và {class2.classId}")
-        return listClass
+        return True
 
     async def class_reg(self,classreg,current_user: Account):
         state = await self.oteService.validate_regis_class_time(current_user)
@@ -69,7 +69,13 @@ class Class_regService:
             reg.Id = current_user.Id
             # reg.timestamp = date.today()
             processed.append(Class_Reg(Id = current_user.Id,classId = class_.classId,timestamp=int(time.time())))
-        return await self.connector.classreg_insert(processed)
+        await self.connector.classreg_insert(processed)
+        to_update = []
+        for class_ in classreg.classes:
+            class_.registered += 1
+            to_update.append(class_)
+        await self.classService.update(to_update)
+        return True
 
     async def class_del(self, classId:List[Optional[str]], current_user: Account):
         state = await self.oteService.validate_regis_class_time(current_user)
