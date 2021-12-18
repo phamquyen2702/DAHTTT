@@ -36,7 +36,8 @@ class AccountService:
 
     async def search(self,limit = 20, offset=0, **kwargs):
         return await self.connector.search(limit=limit,offset=offset,**kwargs)
-
+    async def count(self,**kwargs):
+        return await self.connector.search(count=1,**kwargs)
     async def update_one(self,account:Account):
         if (account.password is not None ) and (account.password != "" ):
             print("Update new password for Id:",account.Id," pass:",account.password)

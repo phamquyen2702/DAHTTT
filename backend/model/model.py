@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class Account(BaseModel):
-    Id : int 
+    Id : Union[int ,str]
     email : str
     password :str
     fullname : str

@@ -182,8 +182,22 @@ class AccountConnector:
         mycursor.close()
         db.close()
         return results
+    def do_count(self,sql:str):
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        
+        mycursor.execute(sql)
+        result=mycursor.fetchone()
+        mycursor.close()
+        db.close()
+        return result
 
-    async def search( self, limit = 20, offset=0, **kwargs) : 
+    async def search( self, count = 0, limit = 20, offset=0, **kwargs) : 
         """
         Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
         address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
@@ -191,7 +205,10 @@ class AccountConnector:
         cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
         schoolId : Optional[str]=None, maxcredit: Optional[int]=None,
         """
-        sql = "select * from Account "
+        if count == 0 : 
+            sql = "select * from Account "
+        else:
+            sql = "select count(*) from Account "
         i = 0
         
         accepted = []
@@ -215,12 +232,15 @@ class AccountConnector:
         if sql[-4:] == "AND " :
 
             sql = sql[:-4]+" "
-        if (limit is not None) and (offset is not None):    
+        if (limit is not None) and (offset is not None) and (count == 0):    
             sql += "LIMIT "+str(limit)+" OFFSET "+str(offset)
         else:
             sql = sql[:-1]
         print(sql)
-        results = self.do_search(sql)
+        if count == 0:
+            results = self.do_search(sql)
+        else:
+            results = self.do_count(sql)[0]
         return results
 
 

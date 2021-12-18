@@ -98,6 +98,17 @@ async def get_by_id(Id:Optional[str]=None,email:Optional[str]=None):
     accounts = await accountService.get_account_by_id(Id,email)
     return {"accounts":accountService.map_revert_role(accounts) }
 
+@router.get("/count")
+async def count(Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
+                address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
+                status: Optional[int]=None, role: Optional[int]=None, schoolyear: Optional[int]=None,\
+                cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
+                schoolId : Optional[str]=None, maxcredit: Optional[int]=None,):
+    return await accountService.count(Id = Id, email=email, fullname = fullname,address =fullname,\
+                                            birthday=birthday, phone=phone,status=status, role=role,\
+                                            schoolyear=schoolyear,cmnd=cmnd, gender=gender,program=program, \
+                                            schoolId =schoolId, maxcredit=maxcredit,)
+
 @router.get("/search")
 async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
                 address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
