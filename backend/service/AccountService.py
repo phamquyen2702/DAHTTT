@@ -82,6 +82,8 @@ class AccountService:
         processed = []
         for acc in accounts:
             acc.password = JWTUtils.get_password_hash(acc.password)
+            if type(acc.role) == str:
+                acc.role = self.parse_role[acc.role]
             processed.append(acc)
         res = await self.connector.insert(processed)
 

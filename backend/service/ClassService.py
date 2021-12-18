@@ -19,7 +19,6 @@ class ClassService:
     def __init__(self, ):
         self.connector = ClassConnector()
         self.settings = Settings()
-
     async def get_class_by_id(self, Id: Optional[str] = None):
         return await self.connector.get_class_by_id(Id)
 
