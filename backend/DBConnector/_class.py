@@ -111,7 +111,22 @@ class ClassConnector:
         db.close()
         return results
 
-    async def search(self, limit=20, offset=0, **kwargs):
+    def do_count(self, sql: str):
+        db = mysql.connector.connect(
+            host="localhost",
+            user=self.config.db_username,
+            password=self.config.db_password,
+            database=self.config.db_name
+        )
+        mycursor = db.cursor()
+
+        mycursor.execute(sql)
+        result = mycursor.fetchone()
+        mycursor.close()
+        db.close()
+        return result
+
+    async def search(self, count=0, limit=20, offset=0, **kwargs):
         """
              classId: Optional[int] = None,
              subjectId: Optional[str] = None,
@@ -127,7 +142,10 @@ class ClassConnector:
              offset: int = 0,
              export: int = 0
         """
-        sql = "select * from Class "
+        if count == 0:
+            sql = "select * from Class "
+        else:
+            sql = "select count(*) from Class "
         i = 0
 
         accepted = []
@@ -159,7 +177,10 @@ class ClassConnector:
             sql += "LIMIT " + str(limit) + " OFFSET " + str(offset)
         else:
             sql = sql[:-1]
-        results = self.do_search(sql)
+        if count == 0:
+            results = self.do_search(sql)
+        else:
+            results = self.do_count(sql)[0]
         return results
 
     async def get_class_by_id(self, Id=None):

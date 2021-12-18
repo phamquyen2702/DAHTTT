@@ -22,38 +22,52 @@ async def get_current_active_user(current_user: Account = Depends(accountService
     return current_user
 
 
-
-
 @router.post("/add")
 async def add_class(_class: Class, current_user: Account = Depends(get_current_active_user)):
     return await classService.add([_class])
 
 
 @router.post("/update")
-async def update(_class: Class,classId:str):
+async def update(_class: Class, classId: str, current_user: Account = Depends(get_current_active_user)):
     res = await classService.update_one(_class)
     return res
 
 
 @router.post("/lock/{classId}")
-async def lock(classId: int):
+async def lock(classId: int, current_user: Account = Depends(get_current_active_user)):
     res = await classService.lock_one(classId)
     return res
 
 
 @router.post("/unlock/{classId}")
-async def unlock(classId: int):
+async def unlock(classId: int, current_user: Account = Depends(get_current_active_user)):
     res = await classService.unlock_one(classId)
     return res
 
-"""
-@router.post("/import")
-async def import_file(file: UploadFile = File(...)):
-    content = await file.read()
-    res = await classService.import_file(content)
-    return res
 
-"""
+@router.get("/count")
+async def count(classId: Optional[int] = None,
+                subjectId: Optional[str] = None,
+                semester: Optional[int] = None,
+                location: Optional[str] = None,
+                day: Optional[int] = None,
+                timeStart: Optional[int] = None,
+                timeEnd: Optional[int] = None,
+                registered: Optional[int] = None,
+                _limit: Optional[int] = None,
+                status: Optional[str] = None):
+    return await classService.count(classId=classId,
+                                    subjectId=subjectId,
+                                    semester=semester,
+                                    location=location,
+                                    day=day,
+                                    timeStart=timeStart,
+                                    timeEnd=timeEnd,
+                                    registered=registered,
+                                    _limit=_limit,
+                                    status=status)
+
+
 @router.get("/search")
 async def search(classId: Optional[int] = None,
                  subjectId: Optional[str] = None,
@@ -96,7 +110,7 @@ async def search(classId: Optional[int] = None,
 
 
 @router.post("/import")
-async def import_file(file: UploadFile = File(...)):
+async def import_file(file: UploadFile = File(...), current_user: Account = Depends(get_current_active_user)):
     print('ok')
     content = await file.read()
     res = await classService.import_file(content)
