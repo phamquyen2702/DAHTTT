@@ -83,6 +83,7 @@ class OTEService:
 
         file_path = os.path.join(dir_path, "open_time_config.yaml")
         write_yaml(self.config, file_path)
+        print(f"Save ote config at file: {file_path}")
 
     def load_config(self, dir_path='.establish'):
         file_path = os.path.join(dir_path, "open_time_config.yaml")
@@ -120,6 +121,13 @@ class OTEService:
     async def validate_regis_subject_time(self):
         start_time = self._parse_time(self.config["subject"]["start_time"])
         end_time = self._parse_time(self.config["subject"]["end_time"])
+
+        if start_time is None:
+            return False
+
+        if end_time is None:
+            return False
+
         now = datetime.datetime.now()
         if start_time <= now <= end_time:
             return True
@@ -130,6 +138,12 @@ class OTEService:
         now = datetime.datetime.now()
         start_time = self._parse_time(self.config["class"]["start_time"])
         end_time = self._parse_time(self.config["class"]["end_time"])
+
+        if start_time is None:
+            return False
+
+        if end_time is None:
+            return False
 
         if now < start_time or now > end_time:
             return False

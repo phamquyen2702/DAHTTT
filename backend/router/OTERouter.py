@@ -8,11 +8,17 @@ from pprint import pprint
 from fastapi.responses import StreamingResponse, FileResponse
 
 from router.AccountRouter import get_current_active_user
+import sys
+import os
 
 
+ROOT_PATH = sys.path[1]
+file_config = os.path.join(ROOT_PATH, "backend/.eot/open_time_config.yaml")
 router = APIRouter(prefix="/ote")
+
 ote_service = OTEService()
-ote_service.load_config()
+ote_service.load_config(file_config)
+ote_service.save_config(file_config)
 
 
 @router.post("/update-subject-ote")

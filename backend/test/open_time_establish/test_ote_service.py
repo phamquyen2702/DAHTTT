@@ -125,11 +125,12 @@ def test_validate_regis_class_time():
 if __name__ == '__main__':
     # test_save_config()
     # test_load_config()
-    # test_update_subject_ote_around_now()
+    test_update_subject_ote_around_now()
     # test_validate_regis_subject_time()
     # # test_update_subject_ote_previous_now()
     # # test_validate_regis_subject_time()
     #
-    # test_update_class_ote_around_now()
+    test_update_class_ote_around_now()
     # test_validate_regis_class_time()
-    test_get_study_year(63)
+    # test_get_study_year(63)
+    test_save_config()
