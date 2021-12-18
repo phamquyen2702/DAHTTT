@@ -26,6 +26,9 @@ class ClassService:
     async def search(self, limit=20, offset=0, **kwargs):
         return await self.connector.search(limit=limit, offset=offset, **kwargs)
 
+    async def count(self, **kwargs):
+        return await self.connector.search(count=1, **kwargs)
+
     async def update_one(self, _class: Class):
         return await self.connector.update([_class])
 
