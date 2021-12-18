@@ -56,6 +56,29 @@ async def search_subject(
         return response
 
 
+@router.get("/count")
+async def count_subject(
+        subjectId: str = None,
+        subjectName: str = None,
+        credit: int = None,
+        programsemester:int = None,
+        schoolId: str = None,
+        status: int = None,
+        note: str = None
+):
+    filters = {
+        "subjectId": subjectId,
+        "subjectName": subjectName,
+        "credit": credit,
+        "programsemester": programsemester,
+        "schoolId": schoolId,
+        "status": status,
+        "note": note
+    }
+    subjects = await subject_service.count(filters=filters)
+    return subjects
+
+
 @router.post("/update")
 async def update_subject(subject: Subject, subjectId:str,current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
