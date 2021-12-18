@@ -104,7 +104,7 @@ async def count(Id : Optional[int]=None, email: Optional[str]=None, fullname: Op
                 status: Optional[int]=None, role: Optional[int]=None, schoolyear: Optional[int]=None,\
                 cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
                 schoolId : Optional[str]=None, maxcredit: Optional[int]=None,):
-    return await accountService.count(Id = Id, email=email, fullname = fullname,address =fullname,\
+    return await accountService.count(Id = Id, email=email, fullname = fullname,address =address,\
                                             birthday=birthday, phone=phone,status=status, role=role,\
                                             schoolyear=schoolyear,cmnd=cmnd, gender=gender,program=program, \
                                             schoolId =schoolId, maxcredit=maxcredit,)
@@ -118,7 +118,7 @@ async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: O
     if export == 1:
         limit = None
         offset = None  
-    accounts = await accountService.search( Id = Id, email=email, fullname = fullname,address =fullname,\
+    accounts = await accountService.search( Id = Id, email=email, fullname = fullname,address =address,\
                                             birthday=birthday, phone=phone,status=status, role=role,\
                                             schoolyear=schoolyear,cmnd=cmnd, gender=gender,program=program, \
                                             schoolId =schoolId, maxcredit=maxcredit,limit=limit,offset=offset)
