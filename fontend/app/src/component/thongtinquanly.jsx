@@ -37,10 +37,10 @@ function Thongtinquanly({ user }) {
       email: "",
       address: "",
       phone: "",
-      gender: "",
+      gender: GENDER_DEFAULT,
       role: "",
       cmnd: "",
-      schoolId: "",
+      schoolId: SCHOOL_ID_DEFAULT,
     },
     resolver: yupResolver(schema),
   });
@@ -58,10 +58,12 @@ function Thongtinquanly({ user }) {
       setValue("address", user.address);
       setValue("phone", user.phone);
       setValue("birthday", `${user.birthday}`.slice(0, 10));
-      setValue("gender", user.gender ? user.gender : GENDER_DEFAULT);
+      setValue("gender", user.gender);
+      setValueGender(user.gender);
       setValue("role", user.role);
       setValue("cmnd", user.cmnd);
-      setValue("schoolId", user.schoolId ? user.schoolId : SCHOOL_ID_DEFAULT);
+      setValue("schoolId", user.schoolId);
+      setKhoavien(user.schoolId);
     };
     setUser();
   }, [setValue, user]);

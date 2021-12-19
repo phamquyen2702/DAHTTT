@@ -119,3 +119,23 @@ table {
     width: 100%;
     text-align: center;
 }
+
+.filter-school {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-left: 15px;
+    gap: 20px;
+}
+
+.filter-school-right {
+    width: 35%;
+}
+
+.filter-school-left {
+    width: 16%;
+}
+
+.filter-school-right2 {
+    width: 40%;
+}

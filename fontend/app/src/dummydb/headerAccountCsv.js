@@ -1,0 +1,16 @@
+export const headerAccount = [
+  { label: "Id", key: "Id" },
+  { label: "fullname", key: "fullname" },
+  { label: "birthday", key: "birthday" },
+  { label: "cmnd", key: "cmnd" },
+  { label: "email", key: "email" },
+  { label: "gender", key: "gender" },
+  { label: "maxcredit", key: "maxcredit" },
+  { label: "password", key: "password" },
+  { label: "phone", key: "phone" },
+  { label: "program", key: "program" },
+  { label: "role", key: "role" },
+  { label: "schoolId", key: "schoolId" },
+  { label: "schoolyear", key: "schoolyear" },
+  { label: "status", key: "status" },
+];

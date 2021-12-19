@@ -1,9 +1,25 @@
 import axiosClient from "./axiosClient";
 
 const userApi = {
-  getAll(params) {
-    const url = "/account/get-all";
-    return axiosClient.get(url, { params });
+  getFilter(params) {
+    const url = "/account/search";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
+  },
+  count(params) {
+    const url = "/account/count";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
   },
   get(params) {
     const url = "/account/get-by-id";
@@ -32,6 +48,14 @@ const userApi = {
     const url = `/account/remove/${id}`;
     return axiosClient.delete(url);
   },
+  lock(Id) {
+    const url = `/account/lock/${Id}`;
+    return axiosClient.get(url);
+  },
+  unlock(Id) {
+    const url = `/account/unlock/${Id}`;
+    return axiosClient.get(url);
+  },
   changePassword(data) {
     const url = "/account/change-password";
     return axiosClient.post(url, data, {
@@ -42,6 +66,15 @@ const userApi = {
     const url = "/account/add";
     return axiosClient.post(url, data, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
+    });
+  },
+  import(data) {
+    const url = "/account/import";
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "X-Requested-With": "XMLHttpRequest",
+      },
     });
   },
 };

@@ -1,449 +1,503 @@
+import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, MenuItem, TextField } from "@material-ui/core";
+import {
+  Button,
+  FormControlLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
-import { listgioitinh } from "../../dummydb/gioitinh";
+import userApi from "../../api/userApi";
+import {
+  GENDER_DEFAULT,
+  ROLE_DEFAULT,
+  SCHOOLYEAR_DEFAULT,
+  SCHOOL_ID_DEFAULT,
+} from "../../dummydb/dataDefault";
+import { lophocs } from "../../dummydb/dblophocdk";
 import { listkhoavien } from "../../dummydb/khoavien";
+import { listRole } from "../../dummydb/role";
+import { schoolyears } from "../../dummydb/schoolyear";
 import "../style2.css";
+import "../style3.css";
 
 function Chitiettaikhoan(props) {
+  const { Id } = useParams();
+  console.log(Id);
+  const [valueGender, setValueGender] = useState(GENDER_DEFAULT);
+  const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
+  const [valueRole, setValueRole] = useState(ROLE_DEFAULT);
+  const [valueSchoolyear, setValueSchoolyear] = useState(SCHOOLYEAR_DEFAULT);
+  const [user, setUser1] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const [edit, setEdit] = useState(false);
-  const handleEdit = () => {
-    setEdit(true);
-  };
-
-  const schema = yup.object().shape({});
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .required("please enter your email")
+      .email("please enter a valid"),
+    Id: yup.string().required("please enter your Id"),
+    fullname: yup.string().required("please enter your fullname"),
+    address: yup.string().required("please enter your address"),
+    phone: yup.string().required("please enter your phone"),
+    birthday: yup.string().required("please enter your birthday"),
+    cmnd: yup.string().required("please enter your cmnd"),
+  });
   const form = useForm({
     defaultValues: {
-      fullName: "Phạm Văn Quyền",
-      chuongtrinh: "CT Nhóm ngành CNTT-TT 2-2015",
-      bacdaotao: "Đại học đại trà",
-      khoavien: "Viện Công nghệ Thông tin và Truyền thông",
-      gioitinh: "Nam",
-      lop: "CNTT2.1 K60",
-      khoa: "60",
-      email: "quyen.pv153093@sis.hust.edu.vn",
-      sodienthoai: "0969456215",
-      cmt: "142844602",
-      tinhtranghoctap: "học",
+      Id: "",
+      fullname: "",
+      email: "",
+      address: "",
+      phone: "",
+      gender: GENDER_DEFAULT,
+      role: ROLE_DEFAULT,
+      cmnd: "",
+      schoolId: SCHOOL_ID_DEFAULT,
+      schoolyear: SCHOOLYEAR_DEFAULT,
+      program: "",
+      maxcredit: 0,
+      status: 0,
     },
     resolver: yupResolver(schema),
   });
   const {
     register,
-    getValues,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = form;
-  const handleOnSubmit = (value) => {
-    setEdit(false);
-    enqueueSnackbar("Success", {
-      variant: "success",
-    });
-    console.log(value);
+
+  useEffect(() => {
+    const setUsers = async () => {
+      //setValue Form
+      setValue("Id", user.Id);
+      setValue("fullname", user.fullname);
+      setValue("email", user.email);
+      setValue("address", user.address);
+      setValue("phone", user.phone);
+      setValue("birthday", `${user.birthday}`.slice(0, 10));
+      setValue("gender", user.gender);
+      setValueGender(user.gender);
+      setValue("role", user.role);
+      setValueRole(user.role);
+      setValue("cmnd", user.cmnd);
+      setValue("schoolId", user.schoolId);
+      setKhoavien(user.schoolId);
+      setValue("program", user.program);
+      setValue("schoolyear", user.schoolyear);
+      setValueSchoolyear(user.schoolyear);
+      setValue("maxcredit", user.maxcredit);
+      setValue("status", user.status);
+    };
+    setUsers();
+  }, [setValue, user]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const params = {
+        Id: Id,
+      };
+      const users = await userApi.get(params);
+      setUser1(users.accounts[0]);
+    };
+    fetchUser();
+  }, [Id]);
+  const handleOnSubmit = async (value) => {
+    try {
+      const params = {
+        Id: Id,
+      };
+      value.password = "";
+      await userApi.update(value, params);
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
   };
-  const [khoavien, setKhoavien] = useState(getValues("khoavien"));
+  const handleChangeSchoolyear = (event) => {
+    setValueSchoolyear(event.target.value);
+  };
   const handleChangeKhoavien = (event) => {
     setKhoavien(event.target.value);
   };
-  const [gioitinh, setGioitinh] = useState(getValues("gioitinh"));
-  const handleChangeGioitinh = (event) => {
-    setGioitinh(event.target.value);
+  const handleChangeRole = (event) => {
+    setValueRole(event.target.value);
+  };
+  const handleChangeGender = (event) => {
+    setValueGender(event.target.value);
   };
 
-  const lophocs = [
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4444",
-      tenhocphan: "Phân tích và thiết kế hệ thống thông tin",
-      phonghoc: "TC401",
-      sotinchi: 3,
-    },
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4455",
-      tenhocphan: "Đồ án 3",
-      phonghoc: "TC401",
-      sotinchi: 2,
-    },
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4455",
-      tenhocphan: "Đồ án 3",
-      phonghoc: "TC401",
-      sotinchi: 2,
-    },
-    {
-      malophoc: "1991231",
-      mahocphan: "IT4455",
-      tenhocphan: "Đồ án 3",
-      phonghoc: "TC401",
-      sotinchi: 2,
-    },
-  ];
-  const row = lophocs.map((data, index) => (
-    <tr key={index}>
-      <td>{index}</td>
-      <td>{data.malophoc}</td>
-      <td>{data.mahocphan}</td>
-      <td className="td-tenhocphan">{data.tenhocphan}</td>
-      <td>{data.phonghoc}</td>
-      <td>{data.sotinchi}</td>
-    </tr>
-  ));
-
+  const handleBlock = async () => {
+    try {
+      await userApi.lock(Id);
+      window.location.reload();
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
+  };
+  const handleUnBlock = async () => {
+    try {
+      await userApi.unlock(Id);
+      window.location.reload();
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
+  };
   return (
     <div className="thongtincanhan">
-      <p className="thongtincanhan-title">Thông tin cá nhân</p>
-
       <div className="thongtincanhan-content">
-        <div className="thongtincanhan-left">
-          <div className="thongtincanhan-table">
-            <form onSubmit={handleSubmit(handleOnSubmit)}>
-              <table>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Hẹ và tên :</th>
-                      <td>
-                        <TextField
-                          {...register("fullName")}
-                          name="fullName"
-                          autoFocus
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Họ và tên :</th>
-                      <td>{getValues("fullName")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Chương trình :</th>
-                      <td>
-                        <TextField
-                          {...register("chuongtrinh")}
-                          name="chuongtrinh"
-                          autoFocus
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Chương trình :</th>
-                      <td>{getValues("chuongtrinh")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Bậc đào tạo :</th>
-                      <td>
-                        <TextField
-                          {...register("bacdaotao")}
-                          name="bacdaotao"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Bậc đào tạo :</th>
-                      <td>{getValues("bacdaotao")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Khoa/Viện quản lý :</th>
-                      <td>
-                        <TextField
-                          {...register("khoavien")}
-                          name="khoavien"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                          select
-                          value={khoavien}
-                          onChange={handleChangeKhoavien}
-                        >
-                          {listkhoavien.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Khoa/Viện quản lý :</th>
-                      <td>{getValues("khoavien")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Giới tính :</th>
-                      <td>
-                        <TextField
-                          {...register("gioitinh")}
-                          name="gioitinh"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                          select
-                          value={gioitinh}
-                          onChange={handleChangeGioitinh}
-                        >
-                          {listgioitinh.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Giới tính :</th>
-                      <td>{getValues("gioitinh")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Lớp :</th>
-                      <td>
-                        <TextField
-                          {...register("lop")}
-                          name="lop"
-                          autoFocus
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Lớp :</th>
-                      <td>{getValues("lop")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Khóa :</th>
-                      <td>
-                        <TextField
-                          {...register("khoa")}
-                          name="khoa"
-                          autoFocus
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Khóa :</th>
-                      <td>{getValues("khoa")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Email :</th>
-                      <td>
-                        <TextField
-                          {...register("email")}
-                          name="email"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                          disabled="true"
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Email :</th>
-                      <td>{getValues("email")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Số điện thoại :</th>
-                      <td>
-                        <TextField
-                          {...register("sodienthoai")}
-                          name="sodienthoai"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Số điện thoại :</th>
-                      <td>{getValues("sodienthoai")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>CMT/CCCD :</th>
-                      <td>
-                        <TextField
-                          {...register("cmt")}
-                          name="cmt"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>SCMT/CCCD :</th>
-                      <td>{getValues("cmt")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Tình trạng học tập :</th>
-                      <td>
-                        <TextField
-                          disabled
-                          {...register("tinhtranghoctap")}
-                          name="tinhtranghoctap"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Tình trạng học tập :</th>
-                      <td>{getValues("tinhtranghoctap")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {!edit && (
-                    <Button
-                      style={{
-                        width: "250px",
-                        marginTop: "40px",
-                        marginLeft: "9px",
-                        fontWeight: "400",
-                        background: "rgb(235, 43, 43)",
-                        color: "white",
-                      }}
-                      variant="contained"
-                      onClick={handleEdit}
-                    >
-                      Cập nhật thông tin
-                    </Button>
-                  )}
-                  {edit && (
-                    <Button
-                      type="submit"
-                      style={{
-                        width: "250px",
-                        marginTop: "40px",
-                        marginLeft: "3px",
-                        fontWeight: "400",
-                        background: "rgb(235, 43, 43)",
-                        color: "white",
-                      }}
-                      variant="contained"
-                    >
-                      Lưu thay đổi
-                    </Button>
-                  )}
-                </tr>
-              </table>
-            </form>
+        <form onSubmit={handleSubmit(handleOnSubmit)}>
+          <p className="thongtincanhan-title">Thông tin cá nhân</p>
+          <hr style={{ opacity: "0.3", width: "100%" }} />
+          <br />
+          {/* id */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Mã số :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("Id")}
+                name="Id"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                disabled
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="Id" />
+              </p>
+            </div>
+          </div>
+          {/* fullname */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Họ và tên :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("fullname")}
+                name="fullname"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="fullname" />
+              </p>
+            </div>
+          </div>
+          {/* email */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Email :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("email")}
+                name="email"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                disabled
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="email" />
+              </p>
+            </div>
+          </div>
+          {/* Ngày sinh */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Ngày sinh :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("birthday")}
+                name="birthday"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                type="date"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="birthday" />
+              </p>
+            </div>
+          </div>
+          {/* Địa chỉ */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Địa chỉ :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("address")}
+                name="address"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                placeholder="Chưa cập nhật"
+                fullWidth
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="address" />
+              </p>
+            </div>
+          </div>
+
+          {/* CMT */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Số CMT/CCCD:</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("cmnd")}
+                name="cmnd"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+                type="number"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="cmnd" />
+              </p>
+            </div>
+          </div>
+          {/* Số điện thoại */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Số điện thoại :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("phone")}
+                name="phone"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+                type="number"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="phone" />
+              </p>
+            </div>
+          </div>
+          {/* giới tính */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Giới tính:</div>
+            <div className="thongtincanhan-contents-input">
+              <RadioGroup
+                row
+                aria-label="gender"
+                name="row-radio-buttons-group"
+                style={{ marginTop: "5px" }}
+                onChange={handleChangeGender}
+                value={valueGender}
+              >
+                <FormControlLabel
+                  {...register("gender")}
+                  value="nam"
+                  control={<Radio />}
+                  label="Nam"
+                />
+                <FormControlLabel
+                  {...register("gender")}
+                  value="nu"
+                  control={<Radio />}
+                  label="Nữ"
+                />
+              </RadioGroup>
+            </div>
+          </div>
+          <hr style={{ opacity: "0.3", width: "100%" }} />
+          <br />
+          {/* Khoá  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Khoá học :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("schoolyear")}
+                name="schoolyear"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                select
+                value={valueSchoolyear}
+                onChange={handleChangeSchoolyear}
+              >
+                {schoolyears.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+          </div>
+          {/* Khoa viện  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Khoa/Viện :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("schoolId")}
+                name="schoolId"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                select
+                value={khoavien}
+                onChange={handleChangeKhoavien}
+              >
+                {listkhoavien.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+          </div>
+          {/*Chương trình */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Chương trình :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("program")}
+                name="program"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+              />
+            </div>
+          </div>
+          {/*Số tín chỉ  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">
+              Tín chỉ tối đa :
+            </div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("maxcredit")}
+                name="maxcredit"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                type="number"
+                placeholder="Chưa cập nhật"
+              />
+            </div>
+          </div>
+          {/* Lại tài khoản */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">
+              Loại tài khoản :
+            </div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("role")}
+                name="role"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                select
+                value={valueRole}
+                onChange={handleChangeRole}
+              >
+                {listRole.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="role" />
+              </p>
+            </div>
+          </div>
+          <div className="thongtincanhan-contents-input">
+            <TextField
+              {...register("status")}
+              name="status"
+              className="outlined-basic"
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              type="number"
+              placeholder="Chưa cập nhật"
+              hidden
+            />
+          </div>
+          <div className="thongtincanhan-contents">
             <Button
               style={{
                 width: "250px",
-                float: "right",
-                marginTop: "-35px",
-                marginRight: "12px",
+                marginTop: "40px",
+                marginLeft: "0px",
                 fontWeight: "400",
                 background: "rgb(235, 43, 43)",
                 color: "white",
               }}
               variant="contained"
+              type="submit"
             >
-              Khóa tài khoản sinh viên
+              Cập nhật thông tin
             </Button>
           </div>
-        </div>
+        </form>
+        {user.status === 1 && (
+          <Button
+            style={{
+              width: "250px",
+              float: "right",
+              marginTop: "-35px",
+              marginRight: "12px",
+              fontWeight: "400",
+              background: "rgb(235, 43, 43)",
+              color: "white",
+            }}
+            variant="contained"
+            onClick={handleBlock}
+          >
+            Khóa tài khoản
+          </Button>
+        )}
+        {user.status === 0 && (
+          <Button
+            style={{
+              width: "250px",
+              float: "right",
+              marginTop: "-35px",
+              marginRight: "12px",
+              fontWeight: "400",
+              background: "rgb(235, 43, 43)",
+              color: "white",
+            }}
+            variant="contained"
+            onClick={handleUnBlock}
+          >
+            Mở khóa tài khoản
+          </Button>
+        )}
       </div>
       <div className="thongtindangkisv-bottom">
         <hr style={{ width: "100%", marginTop: "5%" }} />
@@ -459,7 +513,16 @@ function Chitiettaikhoan(props) {
               <th>Phòng học</th>
               <th>Số tín chỉ</th>
             </tr>
-            {row}
+            {lophocs.map((data, index) => (
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{data.malophoc}</td>
+                <td>{data.mahocphan}</td>
+                <td className="td-tenhocphan">{data.tenhocphan}</td>
+                <td>{data.phonghoc}</td>
+                <td>{data.sotinchi}</td>
+              </tr>
+            ))}
           </table>
         </div>
       </div>

@@ -16,10 +16,12 @@ import userApi from "../../api/userApi";
 import {
   GENDER_DEFAULT,
   ROLE_DEFAULT,
+  SCHOOLYEAR_DEFAULT,
   SCHOOL_ID_DEFAULT,
 } from "../../dummydb/dataDefault";
 import { listkhoavien } from "../../dummydb/khoavien";
 import { listRole } from "../../dummydb/role";
+import { schoolyears } from "../../dummydb/schoolyear";
 import "../style2.css";
 import "../style3.css";
 
@@ -27,6 +29,7 @@ function Themtaikhoan(props) {
   const [valueGender, setValueGender] = useState(GENDER_DEFAULT);
   const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
   const [valueRole, setValueRole] = useState(ROLE_DEFAULT);
+  const [valueSchoolyear, setValueSchoolyear] = useState(SCHOOLYEAR_DEFAULT);
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({
     email: yup
@@ -51,9 +54,9 @@ function Themtaikhoan(props) {
       role: ROLE_DEFAULT,
       cmnd: "",
       schoolId: SCHOOL_ID_DEFAULT,
-      schoolyear: "",
+      schoolyear: SCHOOLYEAR_DEFAULT,
       program: "",
-      maxcredit: "",
+      maxcredit: 0,
     },
     resolver: yupResolver(schema),
   });
@@ -66,7 +69,6 @@ function Themtaikhoan(props) {
     try {
       value.password = value.Id;
       value.status = 1;
-      console.log(value);
       await userApi.add(value);
       enqueueSnackbar("Success", {
         variant: "success",
@@ -77,6 +79,9 @@ function Themtaikhoan(props) {
       });
     }
   };
+  const handleChangeSchoolyear = (event) => {
+    setValueSchoolyear(event.target.value);
+  };
   const handleChangeKhoavien = (event) => {
     setKhoavien(event.target.value);
   };
@@ -86,7 +91,6 @@ function Themtaikhoan(props) {
   const handleChangeGender = (event) => {
     setValueGender(event.target.value);
   };
-
   return (
     <div>
       <div className="quanlysinhvien-content">
@@ -105,6 +109,7 @@ function Themtaikhoan(props) {
                 variant="outlined"
                 margin="dense"
                 fullWidth
+                placeholder="Chưa cập nhật"
               />
               <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
                 <ErrorMessage errors={errors} name="Id" />
@@ -122,6 +127,7 @@ function Themtaikhoan(props) {
                 variant="outlined"
                 margin="dense"
                 fullWidth
+                placeholder="Chưa cập nhật"
               />
               <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
                 <ErrorMessage errors={errors} name="fullname" />
@@ -139,6 +145,7 @@ function Themtaikhoan(props) {
                 variant="outlined"
                 margin="dense"
                 fullWidth
+                placeholder="Chưa cập nhật"
               />
               <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
                 <ErrorMessage errors={errors} name="email" />
@@ -173,6 +180,7 @@ function Themtaikhoan(props) {
                 className="outlined-basic"
                 variant="outlined"
                 margin="dense"
+                placeholder="Chưa cập nhật"
                 fullWidth
               />
               <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
@@ -248,9 +256,9 @@ function Themtaikhoan(props) {
           </div>
           <hr style={{ opacity: "0.3", width: "100%" }} />
           <br />
-          {/* Khóa */}
+          {/* Khoá  */}
           <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Khóa học :</div>
+            <div className="thongtincanhan-contents-label">Khoá học :</div>
             <div className="thongtincanhan-contents-input">
               <TextField
                 {...register("schoolyear")}
@@ -259,11 +267,18 @@ function Themtaikhoan(props) {
                 variant="outlined"
                 margin="dense"
                 fullWidth
-                type="number"
-              />
+                select
+                value={valueSchoolyear}
+                onChange={handleChangeSchoolyear}
+              >
+                {schoolyears.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </div>
           </div>
-
           {/* Khoa viện  */}
           <div className="thongtincanhan-contents">
             <div className="thongtincanhan-contents-label">Khoa/Viện :</div>
@@ -285,9 +300,6 @@ function Themtaikhoan(props) {
                   </MenuItem>
                 ))}
               </TextField>
-              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
-                <ErrorMessage errors={errors} name="schoolId" />
-              </p>
             </div>
           </div>
           {/*Chương trình */}
@@ -301,6 +313,7 @@ function Themtaikhoan(props) {
                 variant="outlined"
                 margin="dense"
                 fullWidth
+                placeholder="Chưa cập nhật"
               />
             </div>
           </div>
@@ -318,6 +331,7 @@ function Themtaikhoan(props) {
                 margin="dense"
                 fullWidth
                 type="number"
+                placeholder="Chưa cập nhật"
               />
             </div>
           </div>
@@ -363,26 +377,64 @@ function Themtaikhoan(props) {
               variant="contained"
               type="submit"
             >
-              Cập nhật thông tin
-            </Button>
-            <Button
-              style={{
-                width: "250px",
-                marginTop: "40px",
-                marginLeft: "500px",
-                fontWeight: "400",
-                background: "rgb(235, 43, 43)",
-                color: "white",
-              }}
-              variant="contained"
-            >
-              Import File
+              Thêm tài khoản
             </Button>
           </div>
         </form>
       </div>
+      <ImportFile></ImportFile>
     </div>
   );
 }
 
 export default Themtaikhoan;
+
+export const ImportFile = () => {
+  const { register, handleSubmit } = useForm();
+  const { enqueueSnackbar } = useSnackbar();
+  const handleImport = async (value) => {
+    console.log(value.file);
+    try {
+      await userApi.import(value.file);
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
+  };
+  return (
+    <>
+      <form onSubmit={handleSubmit(handleImport)}>
+        <div className="thongtincanhan-contents">
+          <div className="thongtincanhan-contents-input">
+            <Button
+              style={{
+                width: "250px",
+                marginTop: "40px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+              type="submit"
+            >
+              Import
+            </Button>
+          </div>
+          <div className="thongtincanhan-contents-file">
+            <TextField
+              {...register("file")}
+              type="file"
+              variant="outlined"
+              margin="dense"
+              name="file"
+            />
+          </div>
+        </div>
+      </form>
+    </>
+  );
+};
