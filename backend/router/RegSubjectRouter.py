@@ -23,6 +23,14 @@ class SubjectRegRequest(BaseModel):
 router = APIRouter(prefix="/regSubject")
 subject_regService = Subject_regService()
 
+@router.get("/search")
+async def search( semester : int,Id:Optional[int]=None,current_user: Account = Depends(get_current_active_user)):
+    if current_user.role != 1:
+        Id = Id
+    else:
+        Id = current_user.Id
+    return await subject_regService.search(Id,semester,subjectId)
+
 @router.post("/subReg")
 async def subReg( semester,sub_reg: SubjectRegRequest,current_user: Account = Depends(get_current_active_user)):
     return await subject_regService.subject_reg(sub_reg,semester, current_user)

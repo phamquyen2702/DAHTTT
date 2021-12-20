@@ -23,24 +23,24 @@ async def get_current_active_user(current_user: Account = Depends(accountService
 
 
 @router.post("/add")
-async def add_class(_class: Class, current_user: Account = Depends(get_current_active_user)):
+async def add_class(_class: Class):#, current_user: Account = Depends(get_current_active_user)):
     return await classService.add([_class])
 
 
 @router.post("/update")
-async def update(_class: Class, classId: str, current_user: Account = Depends(get_current_active_user)):
+async def update(_class: Class):#, classId: str, current_user: Account = Depends(get_current_active_user)):
     res = await classService.update_one(_class)
     return res
 
 
 @router.post("/lock/{classId}")
-async def lock(classId: int, current_user: Account = Depends(get_current_active_user)):
+async def lock(classId: int):#, current_user: Account = Depends(get_current_active_user)):
     res = await classService.lock_one(classId)
     return res
 
 
 @router.post("/unlock/{classId}")
-async def unlock(classId: int, current_user: Account = Depends(get_current_active_user)):
+async def unlock(classId: int):#, current_user: Account = Depends(get_current_active_user)):
     res = await classService.unlock_one(classId)
     return res
 

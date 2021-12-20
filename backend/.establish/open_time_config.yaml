@@ -1,11 +1,11 @@
 subject:
-  start_time: "11:30 06/12/2021"
-  end_time: "11:30 31/12/2021"
+  start_time: "2021-11-01 10:30:00"
+  end_time: "2021-11-21 10:30:00"
   meta:
     establish_time: 1639837064.001687
 class:
-  start_time: "11:30 06/12/2021"
-  end_time: "11:30 31/12/2021"
+  start_time: "2021-11-01 10:30:00"
+  end_time: "2022-11-01 10:30:00"
   timeframe:
     first_year:
       start_time: "00:00"

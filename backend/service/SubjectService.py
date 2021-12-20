@@ -26,7 +26,7 @@ class SubjectService:
         return await self.connector.search(limit=limit, offset=offset, filters=filters, **kwargs)
 
     async def count(self, filters: Dict = {}, **kwargs):
-        return await self.connector.search(limit=None, offset=None, filters=filters, **kwargs)
+        return await self.connector.count(limit=None, offset=None, filters=filters, **kwargs)
 
     async def update(self, subjects: Union[Subject, List[Subject]]):
         return await self.connector.update(subjects)

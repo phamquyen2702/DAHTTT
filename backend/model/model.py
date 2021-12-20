@@ -32,6 +32,8 @@ class Class(BaseModel):
     registered: int
     limit: int
     status: int
+    credit : Optional[int]=None
+    subjectName : Optional[str]=None
 
 
 class Subject(BaseModel):

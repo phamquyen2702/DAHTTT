@@ -11,19 +11,37 @@ from typing import Optional, List
 from fastapi import FastAPI, HTTPException, Depends, Request
 import pandas as pd
 import io
-
+from .SubjectService import SubjectService
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 
 class ClassService:
     def __init__(self, ):
         self.connector = ClassConnector()
+        self.subjectService = SubjectService()
         self.settings = Settings()
+
+    async def aggerate(self,classes:List[Class]):
+        res = []
+        for clss in classes:
+            subject = await self.subjectService.get_subject_by_id(subjectId=clss.subjectId)
+            try:
+                credit = subject[0].credit
+                name = subject[0].subjectName
+                clss.credit = credit
+                clss.subjectName = name
+            except:
+                print(clss.subjectId)
+            res.append(clss)
+        return res
+
     async def get_class_by_id(self, Id: Optional[str] = None):
-        return await self.connector.get_class_by_id(Id)
+        cls_ = await self.connector.get_class_by_id(Id)
+        return await self.aggerate(cls_)
 
     async def search(self, limit=20, offset=0, **kwargs):
-        return await self.connector.search(limit=limit, offset=offset, **kwargs)
+        classes =  await self.connector.search(limit=limit, offset=offset, **kwargs)
+        return await self.aggerate(classes)
 
     async def count(self, **kwargs):
         return await self.connector.search(count=1, **kwargs)

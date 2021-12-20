@@ -27,7 +27,15 @@ mycursor = mydb.cursor()
 #mycursor.execute("SHOW DATABASES")
 #mycursor.execute("SHOW TABLES")
 
-"""
+# mycursor.execute("CREATE TABLE classregister (Id INT(32) ,\
+# classId INT(32) ,\
+# timestamp INT(32), primary key (Id,classId))")
+
+mycursor.execute("CREATE TABLE subjectregister (Id INT(32) ,\
+subjectId VARCHAR(255),semester INT(32) ,\
+timestamp INT(32), primary key (Id,subjectId,semester))")
+
+
 mycursor.execute("CREATE TABLE Account (Id INT(32) PRIMARY KEY,\
 email VARCHAR(255) UNIQUE,\
 password VARCHAR(255),\
@@ -43,7 +51,7 @@ gender VARCHAR(255),\
 program VARCHAR(255),\
 schoolId VARCHAR(255),\
 maxcredit INT(8))")
-"""
+
 
 sql = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
 #sql = "UPDATE Account WHERE Id = %s SET  email=%s, password=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s "
@@ -60,24 +68,26 @@ print("Total number of rows in table: ", mycursor.rowcount)
 print("\nPrinting each row")
 for row in records:
     print(row)
+try:
+  mycursor.execute("CREATE TABLE Class (classId INT(32) PRIMARY KEY AUTO_INCREMENT,\
+  subjectId	VARCHAR(10),\
+  semester	INT(32),\
+  location	VARCHAR(20),\
+  day	INT(8),\
+  timeStart	INT(32),\
+  timeEnd	INT(32),\
+  registered	INT(32),\
+  `limit`	INT(32),\
+  status	INT(8))")
 
-mycursor.execute("CREATE TABLE Class (classId INT(32) PRIMARY KEY AUTO_INCREMENT,\
-subjectId	VARCHAR(10),\
-semester	INT(32),\
-location	VARCHAR(20),\
-day	INT(8),\
-timeStart	INT(32),\
-timeEnd	INT(32),\
-registered	INT(32),\
-`limit`	INT(32),\
-status	INT(8))")
-
-sql = "INSERT INTO Class (subjectId, semester, location, day, timeStart, timeEnd, registered, `limit`, status) VALUES (" \
+  sql = "INSERT INTO Class (subjectId, semester, location, day, timeStart, timeEnd, registered, `limit`, status) VALUES (" \
       "%s,%s, %s, %s, %s, %s,%s,%s,%s) "
+  val = (0, 20211, "TC-403", 2, 1, 4, 0, 120, 1)
+  mycursor.execute(sql, val)
+  mydb.commit()
+except:
+  print("Table Class is arleady exists")
 
-val = (0, 20211, "TC-403", 2, 1, 4, 0, 120, 1)
-mycursor.execute(sql, val)
-mydb.commit()
 
 
 try:

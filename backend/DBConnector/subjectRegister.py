@@ -30,6 +30,41 @@ class subjectRegisterConnector:
 
     def validatetime(self):
         pass
+    
+    async def search(self,Id,semester,subjectId=None):
+        sql = f"select * from subjectregister where semester={semester}"
+        if subjectId != None:
+            sql += f" and subjectId='{subjectId}'"
+        if Id != None:
+            sql += f" and Id='{Id}'"
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        
+        try:
+            mycursor.execute(sql)
+            
+        except mysql.connector.Error as error:
+            print("Failed to insert record to database rollback: {}".format(error))
+        records = mycursor.fetchall()
+        results = []
+        for row in records:
+            row = list(row)
+            
+            results.append(Sub_Reg(
+                Id =int(row[0]),
+                subjectId=int(row[1]),
+                semester=int(row[2]),
+                timestamp = int(row[3])
+            ))
+        mycursor.close()
+        db.close()
+        return results
+           
 
     async def subreg_insert(self, subreg: List[Sub_Reg]):
         aaa = []

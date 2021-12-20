@@ -17,15 +17,15 @@ file_config = os.path.join(ROOT_PATH, "backend/.eot/open_time_config.yaml")
 router = APIRouter(prefix="/ote")
 
 ote_service = OTEService()
-ote_service.load_config(file_config)
-ote_service.save_config(file_config)
+#ote_service.load_config(file_config)
+#ote_service.save_config(file_config)
 
 
 @router.post("/update-subject-ote")
 def update_subject_ote(
         config: Dict = {
-                "start_time": "10:30 01/11/2021",
-                "end_time":  "10:30 21/11/2021",
+                "start_time": "2021-11-01 10:30:00",
+                "end_time":  "2021-11-21 10:30:00",
                 "meta": {}
             },
         current_user: Account = Depends(get_current_active_user)):
@@ -35,8 +35,8 @@ def update_subject_ote(
 @router.post("/update-class-ote")
 def update_subject_ote(
         config: Dict = {
-                "start_time": "10:30 01/11/2021",
-                "end_time": "10:30 21/11/2021",
+                "start_time": "2021-11-01 10:30:00",
+                "end_time": "2021-11-21 10:30:00",
                 "timeframe": {
                     "first_year": {"start_time": "00:00", "end_time": "4:30"},
                     "second_year": {"start_time": "4:30", "end_time": "9:00"},

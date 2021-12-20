@@ -36,7 +36,7 @@ class ClassConnector:
     def object2data(self, _class: Class):
         self.validate(_class)
         _class = _class.dict()
-        _class = tuple(list(_class.values()))
+        _class = tuple(list(_class.values())[:-2])
         return _class
 
     def do_query(self, _classes: List[tuple], sql_other: str):

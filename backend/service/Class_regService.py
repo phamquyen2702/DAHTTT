@@ -49,8 +49,8 @@ class Class_regService:
             if class_[0].registered >= class_[0].limit:
                 raise HTTPException(status_code=410, detail=f"lớp {id_} đầy")
             listClass += class_
-            c = await self.subjectService.get_subject_by_id(class_[0].subjectId)
-            total += c[0].credit
+            #c = await self.subjectService.get_subject_by_id(class_[0].subjectId)
+            total += class_[0].credit
         if total > current_user.maxcredit:
             raise HTTPException(status_code=410, detail="vượt quá số tín chỉ tối đa")
         for i, class1 in enumerate(listClass):

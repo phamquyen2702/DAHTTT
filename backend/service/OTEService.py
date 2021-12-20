@@ -10,7 +10,8 @@ import datetime
 class OTEService:
     def __init__(self, ):
         self.settings = Settings()
-        self.config = self._get_default_config()
+        #self.config = self._get_default_config()
+        self.load_config()
 
     def _get_course_of_school_year(self, school_year):
         started_year = self.settings.started_year
@@ -89,6 +90,7 @@ class OTEService:
         file_path = os.path.join(dir_path, "open_time_config.yaml")
         if os.path.exists(file_path):
             self.config = load_yaml(file_path)
+            print("LOADED OTE")
 
     def update_subject_ote(self, config):
         establish_time = time.time()
@@ -114,9 +116,9 @@ class OTEService:
 
     def _parse_time(self, t):
         try:
-            return datetime.datetime.strptime(t, "%H:%M %d/%m/%Y")
+            return datetime.datetime.strptime(t, "%Y-%m-%d %H:%M")
         except:
-            return datetime.datetime.strptime(t, "%H:%M:%S %d/%m/%Y")
+            return datetime.datetime.strptime(t, "%Y-%m-%d %H:%M:%S")
 
     async def validate_regis_subject_time(self):
         start_time = self._parse_time(self.config["subject"]["start_time"])
