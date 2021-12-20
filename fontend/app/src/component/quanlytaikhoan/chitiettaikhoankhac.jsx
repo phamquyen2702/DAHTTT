@@ -1,15 +1,8 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Button,
-  FormControlLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@material-ui/core";
+import { Button, MenuItem, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
@@ -20,19 +13,13 @@ import {
   SCHOOLYEAR_DEFAULT,
   SCHOOL_ID_DEFAULT,
 } from "../../dummydb/dataDefault";
-import { lophocs } from "../../dummydb/dblophocdk";
-import { listkhoavien } from "../../dummydb/khoavien";
 import { listRole } from "../../dummydb/role";
-import { schoolyears } from "../../dummydb/schoolyear";
 import "../style2.css";
 import "../style3.css";
 
-function Chitiettaikhoan(props) {
+function Chitiettaikhoankhac(props) {
   const { Id } = useParams();
-  const [valueGender, setValueGender] = useState(GENDER_DEFAULT);
-  const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
   const [valueRole, setValueRole] = useState(ROLE_DEFAULT);
-  const [valueSchoolyear, setValueSchoolyear] = useState(SCHOOLYEAR_DEFAULT);
   const [user, setUser1] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({
@@ -45,7 +32,6 @@ function Chitiettaikhoan(props) {
     address: yup.string().required("please enter your address"),
     phone: yup.string().required("please enter your phone"),
     birthday: yup.string().required("please enter your birthday"),
-    cmnd: yup.string().required("please enter your cmnd"),
   });
   const form = useForm({
     defaultValues: {
@@ -54,13 +40,7 @@ function Chitiettaikhoan(props) {
       email: "",
       address: "",
       phone: "",
-      gender: GENDER_DEFAULT,
       role: ROLE_DEFAULT,
-      cmnd: "",
-      schoolId: SCHOOL_ID_DEFAULT,
-      schoolyear: SCHOOLYEAR_DEFAULT,
-      program: "",
-      maxcredit: 0,
       status: 0,
     },
     resolver: yupResolver(schema),
@@ -81,18 +61,8 @@ function Chitiettaikhoan(props) {
       setValue("address", user.address);
       setValue("phone", user.phone);
       setValue("birthday", `${user.birthday}`.slice(0, 10));
-      setValue("gender", user.gender);
-      setValueGender(user.gender);
       setValue("role", user.role);
       setValueRole(user.role);
-      setValue("cmnd", user.cmnd);
-      setValue("schoolId", user.schoolId);
-      setKhoavien(user.schoolId);
-      setValue("program", user.program);
-      setValue("schoolyear", user.schoolyear);
-      setValueSchoolyear(user.schoolyear);
-      setValue("maxcredit", user.maxcredit);
-      setValue("status", user.status);
     };
     setUsers();
   }, [setValue, user]);
@@ -101,6 +71,7 @@ function Chitiettaikhoan(props) {
       const params = {
         Id: Id,
       };
+
       const users = await userApi.get(params);
       setUser1(users.accounts[0]);
     };
@@ -122,17 +93,9 @@ function Chitiettaikhoan(props) {
       });
     }
   };
-  const handleChangeSchoolyear = (event) => {
-    setValueSchoolyear(event.target.value);
-  };
-  const handleChangeKhoavien = (event) => {
-    setKhoavien(event.target.value);
-  };
+
   const handleChangeRole = (event) => {
     setValueRole(event.target.value);
-  };
-  const handleChangeGender = (event) => {
-    setValueGender(event.target.value);
   };
 
   const handleBlock = async () => {
@@ -307,138 +270,7 @@ function Chitiettaikhoan(props) {
               </p>
             </div>
           </div>
-          <hr style={{ opacity: "0.3", width: "100%" }} />
           <br />
-          {/* CMT */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Số CMT/CCCD:</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("cmnd")}
-                name="cmnd"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                placeholder="Chưa cập nhật"
-                type="number"
-              />
-              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
-                <ErrorMessage errors={errors} name="cmnd" />
-              </p>
-            </div>
-          </div>
-          {/*Chương trình */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Chương trình :</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("program")}
-                name="program"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                placeholder="Chưa cập nhật"
-              />
-            </div>
-          </div>
-          <p></p>
-          {/* Khoá  */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Khoá học :</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("schoolyear")}
-                name="schoolyear"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                select
-                value={valueSchoolyear}
-                onChange={handleChangeSchoolyear}
-              >
-                {schoolyears.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
-          </div>
-          <p></p>
-          {/* Khoa viện  */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Khoa/Viện :</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("schoolId")}
-                name="schoolId"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                select
-                value={khoavien}
-                onChange={handleChangeKhoavien}
-              >
-                {listkhoavien.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
-          </div>
-          <p></p>
-          {/*Số tín chỉ  */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">
-              Tín chỉ tối đa :
-            </div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("maxcredit")}
-                name="maxcredit"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                type="number"
-                placeholder="Chưa cập nhật"
-              />
-            </div>
-          </div>
-          <p></p>
-          {/* giới tính */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Giới tính:</div>
-            <div className="thongtincanhan-contents-input">
-              <RadioGroup
-                row
-                aria-label="gender"
-                name="row-radio-buttons-group"
-                style={{ marginTop: "5px" }}
-                onChange={handleChangeGender}
-                value={valueGender}
-              >
-                <FormControlLabel
-                  {...register("gender")}
-                  value="nam"
-                  control={<Radio />}
-                  label="Nam"
-                />
-                <FormControlLabel
-                  {...register("gender")}
-                  value="nu"
-                  control={<Radio />}
-                  label="Nữ"
-                />
-              </RadioGroup>
-            </div>
-          </div>
-          <p></p>
           <div className="thongtincanhan-contents">
             <Button
               style={{
@@ -491,35 +323,8 @@ function Chitiettaikhoan(props) {
           </Button>
         )}
       </div>
-      <div className="thongtindangkisv-bottom">
-        <hr style={{ width: "100%", marginTop: "5%" }} />
-        <p className="thongtincanhan-title">Thông tin đăng kí</p>
-
-        <div className="table-dangki">
-          <table style={{ width: "100%", padding: "10px" }}>
-            <tr>
-              <th>STT</th>
-              <th>Mã lớp học</th>
-              <th>Mã học phần</th>
-              <th>Tên học phần</th>
-              <th>Phòng học</th>
-              <th>Số tín chỉ</th>
-            </tr>
-            {lophocs.map((data, index) => (
-              <tr key={index}>
-                <td>{index}</td>
-                <td>{data.malophoc}</td>
-                <td>{data.mahocphan}</td>
-                <td className="td-tenhocphan">{data.tenhocphan}</td>
-                <td>{data.phonghoc}</td>
-                <td>{data.sotinchi}</td>
-              </tr>
-            ))}
-          </table>
-        </div>
-      </div>
     </div>
   );
 }
 
-export default Chitiettaikhoan;
+export default Chitiettaikhoankhac;

@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import userApi from "../../api/userApi";
@@ -30,6 +30,7 @@ function Themtaikhoan(props) {
   const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
   const [valueRole, setValueRole] = useState(ROLE_DEFAULT);
   const [valueSchoolyear, setValueSchoolyear] = useState(SCHOOLYEAR_DEFAULT);
+  const [disable, setDisable] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({
     email: yup
@@ -41,7 +42,6 @@ function Themtaikhoan(props) {
     address: yup.string().required("please enter your address"),
     phone: yup.string().required("please enter your phone"),
     birthday: yup.string().required("please enter your birthday"),
-    cmnd: yup.string().required("please enter your cmnd"),
   });
   const form = useForm({
     defaultValues: {
@@ -73,6 +73,7 @@ function Themtaikhoan(props) {
       enqueueSnackbar("Success", {
         variant: "success",
       });
+      form.reset();
     } catch (error) {
       enqueueSnackbar("Error", {
         variant: "error",
@@ -91,6 +92,13 @@ function Themtaikhoan(props) {
   const handleChangeGender = (event) => {
     setValueGender(event.target.value);
   };
+  useEffect(() => {
+    if (valueRole !== ROLE_DEFAULT) {
+      setDisable(true);
+    } else {
+      setDisable(false);
+    }
+  }, [valueRole]);
   return (
     <div>
       <div className="quanlysinhvien-content">
@@ -189,25 +197,6 @@ function Themtaikhoan(props) {
             </div>
           </div>
 
-          {/* CMT */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Số CMT/CCCD:</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("cmnd")}
-                name="cmnd"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                placeholder="Chưa cập nhật"
-                type="number"
-              />
-              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
-                <ErrorMessage errors={errors} name="cmnd" />
-              </p>
-            </div>
-          </div>
           {/* Số điện thoại */}
           <div className="thongtincanhan-contents">
             <div className="thongtincanhan-contents-label">Số điện thoại :</div>
@@ -225,114 +214,6 @@ function Themtaikhoan(props) {
               <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
                 <ErrorMessage errors={errors} name="phone" />
               </p>
-            </div>
-          </div>
-          {/* giới tính */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Giới tính:</div>
-            <div className="thongtincanhan-contents-input">
-              <RadioGroup
-                row
-                aria-label="gender"
-                name="row-radio-buttons-group"
-                style={{ marginTop: "5px" }}
-                onChange={handleChangeGender}
-                value={valueGender}
-              >
-                <FormControlLabel
-                  {...register("gender")}
-                  value="nam"
-                  control={<Radio />}
-                  label="Nam"
-                />
-                <FormControlLabel
-                  {...register("gender")}
-                  value="nu"
-                  control={<Radio />}
-                  label="Nữ"
-                />
-              </RadioGroup>
-            </div>
-          </div>
-          <hr style={{ opacity: "0.3", width: "100%" }} />
-          <br />
-          {/* Khoá  */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Khoá học :</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("schoolyear")}
-                name="schoolyear"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                select
-                value={valueSchoolyear}
-                onChange={handleChangeSchoolyear}
-              >
-                {schoolyears.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
-          </div>
-          {/* Khoa viện  */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Khoa/Viện :</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("schoolId")}
-                name="schoolId"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                select
-                value={khoavien}
-                onChange={handleChangeKhoavien}
-              >
-                {listkhoavien.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
-          </div>
-          {/*Chương trình */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">Chương trình :</div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("program")}
-                name="program"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                placeholder="Chưa cập nhật"
-              />
-            </div>
-          </div>
-          {/*Số tín chỉ  */}
-          <div className="thongtincanhan-contents">
-            <div className="thongtincanhan-contents-label">
-              Tín chỉ tối đa :
-            </div>
-            <div className="thongtincanhan-contents-input">
-              <TextField
-                {...register("maxcredit")}
-                name="maxcredit"
-                className="outlined-basic"
-                variant="outlined"
-                margin="dense"
-                fullWidth
-                type="number"
-                placeholder="Chưa cập nhật"
-              />
             </div>
           </div>
           {/* Lại tài khoản */}
@@ -361,6 +242,144 @@ function Themtaikhoan(props) {
               <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
                 <ErrorMessage errors={errors} name="role" />
               </p>
+            </div>
+          </div>
+          <hr style={{ opacity: "0.3", width: "100%" }} />
+          <br />
+          {/* CMT */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Số CMT/CCCD:</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("cmnd")}
+                name="cmnd"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+                type="number"
+                disabled={disable}
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="cmnd" />
+              </p>
+            </div>
+          </div>
+          {/*Chương trình */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Chương trình :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("program")}
+                name="program"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+                disabled={disable}
+              />
+            </div>
+          </div>
+          <p></p>
+          {/* Khoá  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Khoá học :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("schoolyear")}
+                name="schoolyear"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                select
+                value={valueSchoolyear}
+                onChange={handleChangeSchoolyear}
+                disabled={disable}
+              >
+                {schoolyears.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+          </div>
+          <p></p>
+          {/* Khoa viện  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Khoa/Viện :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("schoolId")}
+                name="schoolId"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                select
+                value={khoavien}
+                onChange={handleChangeKhoavien}
+                disabled={disable}
+              >
+                {listkhoavien.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+          </div>
+          <p></p>
+          {/*Số tín chỉ  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">
+              Tín chỉ tối đa :
+            </div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("maxcredit")}
+                name="maxcredit"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                type="number"
+                placeholder="Chưa cập nhật"
+                disabled={disable}
+              />
+            </div>
+          </div>
+          <p></p>
+          {/* giới tính */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Giới tính:</div>
+            <div className="thongtincanhan-contents-input">
+              <RadioGroup
+                row
+                aria-label="gender"
+                name="row-radio-buttons-group"
+                style={{ marginTop: "5px" }}
+                onChange={handleChangeGender}
+                value={valueGender}
+              >
+                <FormControlLabel
+                  {...register("gender")}
+                  value="nam"
+                  control={<Radio />}
+                  label="Nam"
+                  disabled={disable}
+                />
+                <FormControlLabel
+                  {...register("gender")}
+                  value="nu"
+                  control={<Radio />}
+                  label="Nữ"
+                  disabled={disable}
+                />
+              </RadioGroup>
             </div>
           </div>
           <br />

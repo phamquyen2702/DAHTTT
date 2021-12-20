@@ -13,7 +13,7 @@ const Danhsachtaikhoan = React.lazy(() => import("./danhsachtaikhoan"));
 const Themtaikhoan = React.lazy(() => import("./themtaikhoan"));
 const Chucnangkhac = React.lazy(() => import("./chucnangkhac"));
 const Chitiettaikhoan = React.lazy(() => import("./chitiettaikhoan"));
-
+const Chitiettaikhoankhac = React.lazy(() => import("./chitiettaikhoankhac"));
 function Quanlysinhvien(props) {
   const match = useRouteMatch();
   return (
@@ -37,7 +37,7 @@ function Quanlysinhvien(props) {
         <div className="quanlysinhvien-bt">
           <NavLink
             style={{ textDecoration: "none", width: "100%" }}
-            to={`${match.url}/chucnangkhac`}
+            to={`${match.url}/taikhoankhac`}
             activeStyle={{
               fontWeight: "bold",
               color: "rgb(161, 11, 11)",
@@ -83,8 +83,13 @@ function Quanlysinhvien(props) {
               component={Themtaikhoan}
             />
             <Route
-              path={`${match.path}/chucnangkhac`}
+              exact
+              path={`${match.path}/taikhoankhac`}
               component={Chucnangkhac}
+            />
+            <Route
+              path={`${match.path}/taikhoankhac/:Id`}
+              component={Chitiettaikhoankhac}
             />
             <Route component={NotFound} />
           </Switch>

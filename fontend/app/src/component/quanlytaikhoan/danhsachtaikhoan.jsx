@@ -1,24 +1,24 @@
 import { FormOutlined } from "@ant-design/icons";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, MenuItem, TextField } from "@material-ui/core";
-import { Pagination } from "antd";
+import { Empty, Pagination } from "antd";
 import { useSnackbar } from "notistack";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
+import { useForm } from "react-hook-form";
 import { Link, useRouteMatch } from "react-router-dom";
+import * as yup from "yup";
 import userApi from "../../api/userApi";
-import { Empty } from "antd";
 import {
   LIMIT_PAGE_DEFAULT,
+  ROLE_DEFAULT,
   SCHOOLYEAR_DEFAULT,
   SCHOOL_ID_DEFAULT,
 } from "../../dummydb/dataDefault";
+import { headerAccount } from "../../dummydb/headerAccountCsv";
 import { listkhoavien } from "../../dummydb/khoavien";
 import { schoolyears } from "../../dummydb/schoolyear";
 import "../style2.css";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { headerAccount } from "../../dummydb/headerAccountCsv";
-import { CSVLink } from "react-csv";
 
 function Danhsachtaikhoan(props) {
   const [valueSchoolyear, setValueSchoolyear] = useState(SCHOOLYEAR_DEFAULT);
@@ -38,7 +38,7 @@ function Danhsachtaikhoan(props) {
   };
   const handleExport = async () => {
     enqueueSnackbar("Success", {
-      variant: "error",
+      variant: "success",
     });
   };
   useEffect(() => {
@@ -47,7 +47,7 @@ function Danhsachtaikhoan(props) {
         const params = {
           schoolyear: valueSchoolyear,
           schoolId: valueSchoolId,
-          role: 1,
+          role: "ROLE_STUDENT",
           limit: 99999999,
           offset: 0,
         };
@@ -68,12 +68,12 @@ function Danhsachtaikhoan(props) {
         const paramsCount = {
           schoolyear: valueSchoolyear,
           schoolId: valueSchoolId,
-          role: 1,
+          role: ROLE_DEFAULT,
         };
         const params = {
           schoolyear: valueSchoolyear,
           schoolId: valueSchoolId,
-          role: 1,
+          role: ROLE_DEFAULT,
           limit: limit,
           offset: page === 1 ? 0 : (page - 1) * limit,
         };
@@ -112,7 +112,7 @@ function Danhsachtaikhoan(props) {
   const handleOnSubmit = async (value) => {
     const params = {
       Id: value.Id,
-      role: 1,
+      role: ROLE_DEFAULT,
       limit: limit,
       offset: 0,
     };

@@ -1,34 +1,21 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Button,
-  FormControlLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import userApi from "../api/userApi";
-import { GENDER_DEFAULT, SCHOOL_ID_DEFAULT } from "../dummydb/dataDefault";
-import { listkhoavien } from "../dummydb/khoavien";
 import "./style2.css";
 import "./style3.css";
 
 function Thongtinquanly({ user }) {
   const { enqueueSnackbar } = useSnackbar();
-  const [valueGender, setValueGender] = useState(GENDER_DEFAULT);
-  const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
   const schema = yup.object().shape({
     fullname: yup.string().required("please enter your fullname"),
     address: yup.string().required("please enter your address"),
     phone: yup.string().required("please enter your phone"),
     birthday: yup.string().required("please enter your birthday"),
-    cmnd: yup.string().required("please enter your cmnd"),
-    schoolId: yup.string().required("please enter your schoolId"),
   });
   const form = useForm({
     defaultValues: {
@@ -37,10 +24,7 @@ function Thongtinquanly({ user }) {
       email: "",
       address: "",
       phone: "",
-      gender: GENDER_DEFAULT,
       role: "",
-      cmnd: "",
-      schoolId: SCHOOL_ID_DEFAULT,
     },
     resolver: yupResolver(schema),
   });
@@ -58,12 +42,7 @@ function Thongtinquanly({ user }) {
       setValue("address", user.address);
       setValue("phone", user.phone);
       setValue("birthday", `${user.birthday}`.slice(0, 10));
-      setValue("gender", user.gender);
-      setValueGender(user.gender);
       setValue("role", user.role);
-      setValue("cmnd", user.cmnd);
-      setValue("schoolId", user.schoolId);
-      setKhoavien(user.schoolId);
     };
     setUser();
   }, [setValue, user]);
@@ -85,13 +64,6 @@ function Thongtinquanly({ user }) {
         variant: "error",
       });
     }
-  };
-
-  const handleChangeKhoavien = (event) => {
-    setKhoavien(event.target.value);
-  };
-  const handleChangeGender = (event) => {
-    setValueGender(event.target.value);
   };
 
   return (
@@ -190,25 +162,6 @@ function Thongtinquanly({ user }) {
           </div>
         </div>
 
-        {/* CMT */}
-        <div className="thongtincanhan-contents">
-          <div className="thongtincanhan-contents-label">Số CMT/CCCD:</div>
-          <div className="thongtincanhan-contents-input">
-            <TextField
-              {...register("cmnd")}
-              name="cmnd"
-              className="outlined-basic"
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              placeholder="Chưa cập nhật"
-              type="number"
-            />
-            <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
-              <ErrorMessage errors={errors} name="cmnd" />
-            </p>
-          </div>
-        </div>
         {/* Số điện thoại */}
         <div className="thongtincanhan-contents">
           <div className="thongtincanhan-contents-label">Số điện thoại :</div>
@@ -225,61 +178,6 @@ function Thongtinquanly({ user }) {
             />
             <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
               <ErrorMessage errors={errors} name="phone" />
-            </p>
-          </div>
-        </div>
-        {/* giới tính */}
-        <div className="thongtincanhan-contents">
-          <div className="thongtincanhan-contents-label">Giới tính:</div>
-          <div className="thongtincanhan-contents-input">
-            <RadioGroup
-              row
-              aria-label="gender"
-              name="row-radio-buttons-group"
-              style={{ marginTop: "5px" }}
-              onChange={handleChangeGender}
-              value={valueGender}
-            >
-              <FormControlLabel
-                {...register("gender")}
-                value="nam"
-                control={<Radio />}
-                label="Nam"
-              />
-              <FormControlLabel
-                {...register("gender")}
-                value="nu"
-                control={<Radio />}
-                label="Nữ"
-              />
-            </RadioGroup>
-          </div>
-        </div>
-        <hr style={{ opacity: "0.3", width: "100%" }} />
-        <br />
-        {/* Khoa viện  */}
-        <div className="thongtincanhan-contents">
-          <div className="thongtincanhan-contents-label">Khoa/Viện :</div>
-          <div className="thongtincanhan-contents-input">
-            <TextField
-              {...register("schoolId")}
-              name="schoolId"
-              className="outlined-basic"
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              select
-              value={khoavien}
-              onChange={handleChangeKhoavien}
-            >
-              {listkhoavien.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
-              <ErrorMessage errors={errors} name="schoolId" />
             </p>
           </div>
         </div>

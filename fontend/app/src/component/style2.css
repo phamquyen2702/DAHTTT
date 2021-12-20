@@ -130,9 +130,11 @@ table {
 
 .filter-school-right {
     width: 35%;
+    margin-top: 3px;
 }
 
 .filter-school-left {
+    margin-top: 3px;
     width: 16%;
 }
 
