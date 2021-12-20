@@ -13,11 +13,11 @@ import os
 
 
 ROOT_PATH = sys.path[1]
-file_config = os.path.join(ROOT_PATH, "backend/.eot/open_time_config.yaml")
+file_config = os.path.join(ROOT_PATH, "backend/.establish/open_time_config.yaml")
 router = APIRouter(prefix="/ote")
 
 ote_service = OTEService()
-#ote_service.load_config(file_config)
+ote_service.load_config(file_config)
 #ote_service.save_config(file_config)
 
 
