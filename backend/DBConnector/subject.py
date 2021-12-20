@@ -150,6 +150,7 @@ class SubjectConnector:
         mycursor.close()
         db.close()
         return results
+
     def do_count(self,sql:str):
         db = mysql.connector.connect(
                                             host="localhost",
@@ -160,13 +161,13 @@ class SubjectConnector:
         mycursor = db.cursor()
         
         mycursor.execute(sql)
-        result=mycursor.fetchone()
+        result = mycursor.fetchone()
         mycursor.close()
         db.close()
         return result
 
-    async def search(self,count=0, limit: int = 20, offset: int = 0, filters: Dict = {}, **kwargs):
-        if count ==0:
+    async def search(self, count=0, limit: int = 20, offset: int = 0, filters: Dict = {}, **kwargs):
+        if count == 0:
             sql = "select * from Subject"
         else:
             sql = "select count(*) from Subject"

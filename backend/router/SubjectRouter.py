@@ -80,11 +80,20 @@ async def count_subject(
 
 
 @router.post("/update")
-async def update_subject(subject: Subject, subjectId:str,current_user: Account = Depends(get_current_active_user)):
+async def update_subject(subject: Subject, subjectId : str, current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
         raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
                                                     f" không có quyền sửa đổi thông tin học phần.")
     res = await subject_service.update(subject)
+    return res
+
+
+@router.post("/add")
+async def add_subject(subject: Subject, current_user: Account = Depends(get_current_active_user)):
+    if current_user.role < 2:
+        raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
+                                                    f" không có quyền thêm học phần.")
+    res = await subject_service.add(subject)
     return res
 
 
