@@ -32,6 +32,7 @@ class ClassService:
                 clss.subjectName = name
             except:
                 print(clss.subjectId)
+                raise HTTPException(status_code=422, detail="subjectId not found")
             res.append(clss)
         return res
 
@@ -42,13 +43,13 @@ class ClassService:
     async def search(self, limit=20, offset=0, **kwargs):
         classes =  await self.connector.search(limit=limit, offset=offset, **kwargs)
         return await self.aggerate(classes)
-
     async def count(self, **kwargs):
         return await self.connector.search(count=1, **kwargs)
     async def update (self,classes:List[Class]):
         return await self.connector.update(classes)
     async def update_one(self, _class: Class):
-        return await self.connector.update([_class])
+        _class = await self.aggerate([_class])
+        return await self.connector.update(_class)
 
     async def lock_one(self, classId: int):
         return await self.connector.lock([classId])
@@ -57,6 +58,7 @@ class ClassService:
         return await self.connector.unlock([classId])
 
     async def add(self, _classes: List[Class]):
+        _classes = await self.aggerate(_classes)
         return await self.connector.insert(_classes)
 
     async def import_file(self, content):
