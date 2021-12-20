@@ -130,7 +130,7 @@ class SubjectConnector:
         db.close()
         return True
 
-    def do_search(self, sql: str):
+    def do_search(self, sql: str,count=0):
         db = mysql.connector.connect(
             host="localhost",
             user=self.config.db_username,
@@ -143,14 +143,33 @@ class SubjectConnector:
         records = mycursor.fetchall()
         results = []
         for row in records:
+            
             subject = Subject.from_list(row)
+            
             results.append(subject)
         mycursor.close()
         db.close()
         return results
+    def do_count(self,sql:str):
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        
+        mycursor.execute(sql)
+        result=mycursor.fetchone()
+        mycursor.close()
+        db.close()
+        return result
 
-    async def search(self, limit: int = 20, offset: int = 0, filters: Dict = {}, **kwargs):
-        sql = "select * from Subject"
+    async def search(self,count=0, limit: int = 20, offset: int = 0, filters: Dict = {}, **kwargs):
+        if count ==0:
+            sql = "select * from Subject"
+        else:
+            sql = "select count(*) from Subject"
         if filters:
             condition = ""
             for i, (key, value) in enumerate(filters.items()):
@@ -165,14 +184,17 @@ class SubjectConnector:
             if len(condition) > 0:
                 sql += " WHERE" + condition
 
-        if limit:
+        if limit and count == 0:
             sql += f" LIMIT {limit}"
 
-        if offset:
+        if offset and count == 0:
             sql += f" OFFSET {offset}"
 
         # print(sql)
-        results = self.do_search(sql)
+        if count == 0:
+            results = self.do_search(sql)
+        else:
+            results = self.do_count(sql)[0]
         return results
 
     async def get_subject_by_id(self, subjectID: Text):
