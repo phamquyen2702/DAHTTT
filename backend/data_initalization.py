@@ -27,9 +27,9 @@ mycursor = mydb.cursor()
 #mycursor.execute("SHOW DATABASES")
 #mycursor.execute("SHOW TABLES")
 
-# mycursor.execute("CREATE TABLE classregister (Id INT(32) ,\
-# classId INT(32) ,\
-# timestamp INT(32), primary key (Id,classId))")
+mycursor.execute("CREATE TABLE classregister (Id INT(32) ,\
+classId INT(32) ,\
+semester INT(32), timestamp INT(32), primary key (Id,classId))")
 
 mycursor.execute("CREATE TABLE subjectregister (Id INT(32) ,\
 subjectId VARCHAR(255),semester INT(32) ,\

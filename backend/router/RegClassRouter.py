@@ -26,6 +26,15 @@ class ValidateReg(BaseModel):
 router = APIRouter(prefix="/regClass")
 
 class_regService = Class_regService()
+
+@router.get("/search")
+async def search(semester,Id:Optional[int]=None,classId:Optional[str]=None,current_user: Account = Depends(get_current_active_user)):
+    if current_user.role != 1:
+        Id = Id
+    else:
+        Id = current_user.Id
+    return await class_regService.search(Id,semester,classId)
+
 @router.post("/classReg")
 async def classReg(class_reg: ClassRegRequest,current_user: Account = Depends(get_current_active_user)):
     if current_user.role != 1:

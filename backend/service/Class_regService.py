@@ -26,6 +26,8 @@ class Class_regService:
         self.oteService = OTEService()
         self.classService = ClassService()
         self.subjectService = SubjectService()
+    async def search(self,Id,semester,classId):
+        return await self.connector.search(Id,semester,classId)
 
     # async def subject_reg(self,subreg: list[Sub_Reg], current_user:Sub_Reg):
     #     processed = []

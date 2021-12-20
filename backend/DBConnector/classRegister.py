@@ -16,7 +16,7 @@ class classRegisterConnector:
     async def search(self,Id,semester,classId=None):
         sql = f"select * from classregister where semester={semester}"
         if classId != None:
-            sql += f" and subjectId='{classId}'"
+            sql += f" and classId='{classId}'"
         if Id != None:
             sql += f" and Id='{Id}'"
         db = mysql.connector.connect(

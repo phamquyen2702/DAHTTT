@@ -43,7 +43,7 @@ class Subject(BaseModel):
     programsemester: int
     schoolId: Text
     status: Optional[int] = 1  # 1 active, 0 inactive
-    note: Optional[int] = None
+    note: Optional[str] = None
 
     @classmethod
     def from_list(cls, data):

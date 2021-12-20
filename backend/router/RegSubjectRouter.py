@@ -24,7 +24,7 @@ router = APIRouter(prefix="/regSubject")
 subject_regService = Subject_regService()
 
 @router.get("/search")
-async def search( semester : int,Id:Optional[int]=None,current_user: Account = Depends(get_current_active_user)):
+async def search( semester : int,Id:Optional[int]=None,subjectId:Optional[str] = None, current_user: Account = Depends(get_current_active_user)):
     if current_user.role != 1:
         Id = Id
     else:
