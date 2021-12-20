@@ -9,7 +9,7 @@ from service.Subject_regService import Subject_regService
 from service.Class_regService import Class_regService
 #------------REGISTER--------------#
 
-from typing import Optional, List 
+from typing import Optional, List , Union
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from pprint import pprint
@@ -79,11 +79,12 @@ async def get_by_id(Id:Optional[str]=None,email:Optional[str]=None):
     return {"accounts":accountService.map_revert_role(accounts) }
 
 @router.get("/count")
-async def count(Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
+async def count(Id : Optional[Union[int,str]]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
                 address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
                 status: Optional[int]=None, role: Optional[str]=None, schoolyear: Optional[int]=None,\
                 cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
                 schoolId : Optional[str]=None, maxcredit: Optional[int]=None,):
+    if Id == "":Id = None
     role = accountService.parse_role[role]
     return await accountService.count(Id = Id, email=email, fullname = fullname,address =address,\
                                             birthday=birthday, phone=phone,status=status, role=role,\
@@ -91,12 +92,13 @@ async def count(Id : Optional[int]=None, email: Optional[str]=None, fullname: Op
                                             schoolId =schoolId, maxcredit=maxcredit,)
 
 @router.get("/search")
-async def search(Id : Optional[int]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
+async def search(Id : Optional[Union[int,str]]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
                 address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\
                 status: Optional[int]=None, role: Optional[str]=None, schoolyear: Optional[int]=None,\
                 cmnd: Optional[str]=None, gender: Optional[str]=None,program: Optional[str]=None, \
                 schoolId : Optional[str]=None, maxcredit: Optional[int]=None,limit=20,offset=0,export:int=0):
     role = accountService.parse_role[role]
+    if Id == "":Id = None
     if export == 1:
         limit = None
         offset = None  

@@ -1,5 +1,4 @@
 Id,email,password,fullname,address,birthday,phone,status,role,schoolyear,cmnd,gender,program,schoolId,maxcredit
-0,admin@gmail.com,$2b$12$gXvNI6.iv4bs.Yoj4mQfXuFtBYp2I4uGdFtqQPp9VMphViOvIU/Ji,Nguyen Hoang Thuan,124431,1999-02-08 00:00:00,1234560,1,ROLE_ADMIN,,,,,,
 1,thuanh@gmail.com,$2b$12$hai/9l.CDrqzBZZPJe5ZrutJkHWZdvrKS/2vNcEarmIT/HRD2Y6yS,NHT,x,1999-06-29 00:00:00,123140192,1,ROLE_STUDENT,62,string,string,string,string,24
 2,string,$2b$12$5jmNAg80aWjLDCgS/j0cteUNleZE91k7Q.F4gV4wpc03Ugdnuu/RO,NHT,string,1999-02-08 00:00:00,string,0,ROLE_STUDENT,0,string,string,string,string,0
 4,string12,$2b$12$yfMu7YCkiS48mrD8RWdF6uki9wzdNy32nueVsjm.XxcFaNIWNaA62,string,string,1999-02-08 00:00:00,string,0,ROLE_STUDENT,0,string,string,string,string,0

@@ -27,7 +27,7 @@ mycursor = mydb.cursor()
 #mycursor.execute("SHOW DATABASES")
 #mycursor.execute("SHOW TABLES")
 
-
+"""
 mycursor.execute("CREATE TABLE Account (Id INT(32) PRIMARY KEY,\
 email VARCHAR(255) UNIQUE,\
 password VARCHAR(255),\
@@ -43,7 +43,7 @@ gender VARCHAR(255),\
 program VARCHAR(255),\
 schoolId VARCHAR(255),\
 maxcredit INT(8))")
-
+"""
 
 sql = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
 #sql = "UPDATE Account WHERE Id = %s SET  email=%s, password=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s "
