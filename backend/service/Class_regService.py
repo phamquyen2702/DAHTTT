@@ -68,7 +68,7 @@ class Class_regService:
         for class_ in classreg.classes:
             reg.Id = current_user.Id
             # reg.timestamp = date.today()
-            processed.append(Class_Reg(Id = current_user.Id,classId = class_.classId,timestamp=int(time.time())))
+            processed.append(Class_Reg(Id = current_user.Id,classId = class_.classId,semester=class_.semester,timestamp=int(time.time())))
         await self.connector.classreg_insert(processed)
         to_update = []
         for class_ in classreg.classes:

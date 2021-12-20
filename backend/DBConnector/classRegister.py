@@ -13,7 +13,39 @@ class classRegisterConnector:
         account = account.dict()
         account = tuple(list(account.values()))
         return account
-
+    async def search(self,Id,semester,classId=None):
+        sql = f"select * from classregister where semester={semester}"
+        if classId != None:
+            sql += f" and subjectId='{classId}'"
+        if Id != None:
+            sql += f" and Id='{Id}'"
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        
+        try:
+            mycursor.execute(sql)
+            
+        except mysql.connector.Error as error:
+            print("Failed to insert record to database rollback: {}".format(error))
+        records = mycursor.fetchall()
+        results = []
+        for row in records:
+            row = list(row)
+            
+            results.append(Class_Reg(
+                Id =int(row[0]),
+                classId=int(row[1]),
+                semester=int(row[2]),
+                timestamp = int(row[3])
+            ))
+        mycursor.close()
+        db.close()
+        return results
     def do_query(self,accounts:List[tuple],sql_other:str):   
         db = mysql.connector.connect(
                                             host="localhost",
@@ -51,7 +83,7 @@ class classRegisterConnector:
         mycursor = db.cursor()
         if True:
             try:
-                mycursor.executemany("INSERT INTO classregister (Id, classId, timestamp) VALUES (%s,%s,%s)", aaa)
+                mycursor.executemany("INSERT INTO classregister (Id, classId, semester,timestamp) VALUES (%s,%s,%s,%s)", aaa)
                 db.commit()
             except mysql.connector.Error as error:
                 print("Failed to insert record to database rollback: {}".format(error))
