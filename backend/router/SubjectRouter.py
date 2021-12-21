@@ -97,7 +97,7 @@ async def add_subject(subject: Subject):#, current_user: Account = Depends(get_c
     return res
 
 
-@router.post("/lock")
+@router.get("/lock")
 async def lock_subject(subjectId, current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
         raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
@@ -106,7 +106,7 @@ async def lock_subject(subjectId, current_user: Account = Depends(get_current_ac
     return res
 
 
-@router.post("/unlock")
+@router.get("/unlock")
 async def unlock_subject(subjectId, current_user: Account = Depends(get_current_active_user)):
     if current_user.role < 2:
         raise HTTPException(status_code=400, detail=f"Tài khoản với vai trò {current_user.role}"
