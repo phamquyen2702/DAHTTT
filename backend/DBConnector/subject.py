@@ -174,7 +174,7 @@ class SubjectConnector:
         if filters:
             condition = ""
             for i, (key, value) in enumerate(filters.items()):
-                if value:
+                if value != None:
                     if isinstance(value, str):
                         value = f'"{value}"'
                     if len(condition) == 0:
@@ -191,7 +191,7 @@ class SubjectConnector:
         if offset and count == 0:
             sql += f" OFFSET {offset}"
 
-        # print(sql)
+        print(sql)
         if count == 0:
             results = self.do_search(sql)
         else:
