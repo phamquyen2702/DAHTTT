@@ -11,7 +11,7 @@ from config import Settings
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException, Depends, Request
 import pandas as pd
-import io
+import io, time
 from datetime import date
 from .OTEService import OTEService
 
@@ -23,12 +23,12 @@ class Subject_regService:
         self.settings = Settings()
         self.oteService =  OTEService()
 
-    async def vaildate(self, subjects:List[Subject], current_user:Account):
+    async def validate(self, subjects:List[Subject], current_user:Account):
         total = 0
         for sub in subjects:
             total += sub.credit
         if total > current_user.maxcredit:
-            raise HTTPException(status_code=410, detail="vượt quá số tín chỉ tối đa")
+            raise HTTPException(status_code=410, detail=f"vượt quá số tín chỉ tối đa {current_user.maxcredit}")
         else:
             return True
     async def search(self,Id,semester,subjectId=None):

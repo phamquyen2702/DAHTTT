@@ -96,6 +96,7 @@ class OTEService:
         establish_time = time.time()
         config["meta"]["establish_time"] = establish_time
         self.config["subject"] = config
+        print(self.config)
         self.save_config()
         return True
 
@@ -131,6 +132,7 @@ class OTEService:
             return False
 
         now = datetime.datetime.now()
+        print(start_time,now,end_time)
         if start_time <= now <= end_time:
             return True
         else:

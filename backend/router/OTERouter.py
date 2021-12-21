@@ -27,8 +27,8 @@ def update_subject_ote(
                 "start_time": "2021-11-01 10:30:00",
                 "end_time":  "2021-11-21 10:30:00",
                 "meta": {}
-            },
-        current_user: Account = Depends(get_current_active_user)):
+            },):
+        #current_user: Account = Depends(get_current_active_user)):
     return ote_service.update_subject_ote(config)
 
 
@@ -45,8 +45,8 @@ def update_subject_ote(
                     "last_year": {"start_time": "18:00", "end_time": "23:59"},
                 },
                 "meta": {}
-            },
-        current_user: Account = Depends(get_current_active_user)):
+            },):
+        #current_user: Account = Depends(get_current_active_user)):
     return ote_service.update_class_ote(config)
 
 

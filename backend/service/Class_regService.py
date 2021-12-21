@@ -36,6 +36,7 @@ class Class_regService:
     #         processed.append(acc)
     #     return await self.connector.subreg_insert(processed)    
     def check_time(self,class1,class2):
+        if class1.day != class2.day: return True
         x_left = max(class1.timeStart, class2.timeStart)    
         x_right = min(class1.timeEnd, class2.timeEnd)
         if x_right <= x_left :
@@ -53,6 +54,7 @@ class Class_regService:
             listClass += class_
             #c = await self.subjectService.get_subject_by_id(class_[0].subjectId)
             total += class_[0].credit
+        print("total registered credit",total)
         if total > current_user.maxcredit:
             raise HTTPException(status_code=410, detail="vượt quá số tín chỉ tối đa")
         for i, class1 in enumerate(listClass):

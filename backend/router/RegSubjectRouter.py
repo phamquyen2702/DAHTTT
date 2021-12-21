@@ -23,6 +23,10 @@ class SubjectRegRequest(BaseModel):
 router = APIRouter(prefix="/regSubject")
 subject_regService = Subject_regService()
 
+@router.post("/validate")
+async def validate(body:SubjectRegRequest, current_user: Account = Depends(get_current_active_user)):
+    return await subject_regService.validate(body.subjects,current_user)
+
 @router.get("/search")
 async def search( semester : int,Id:Optional[int]=None,subjectId:Optional[str] = None, current_user: Account = Depends(get_current_active_user)):
     if current_user.role != 1:
