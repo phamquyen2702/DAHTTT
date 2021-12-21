@@ -8,19 +8,19 @@ class:
   end_time: '2022-11-01 10:30:00'
   timeframe:
     first_year:
-      start_time: 00:00
-      end_time: '4:30'
+      start_time: '00:00:00'
+      end_time: '04:30:00'
     second_year:
-      start_time: '4:30'
-      end_time: '9:00'
+      start_time: '04:30:00'
+      end_time: '09:00:00'
     third_year:
-      start_time: '9:00'
-      end_time: '13:30'
+      start_time: '09:00:00'
+      end_time: '13:30:00'
     fourth_year:
-      start_time: '13:30'
-      end_time: '18:00'
+      start_time: '13:30:00'
+      end_time: '18:00:00'
     last_year:
-      start_time: '18:00'
-      end_time: '23:59'
+      start_time: '18:00:00'
+      end_time: '23:59:00'
   meta:
     establish_time: 1639837064.0036798

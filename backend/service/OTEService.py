@@ -154,8 +154,8 @@ class OTEService:
 
         study_year = self._get_course_of_school_year(student.schoolyear)
         time_frame = self.config["class"]["timeframe"][study_year]
-        student_start_time = str(time_frame["start_time"]) + f" {now.day}/{now.month}/{now.year}"
-        student_end_time = str(time_frame["end_time"]) + f" {now.day}/{now.month}/{now.year}"
+        student_start_time = f"{now.year}-{now.month}-{now.day} "+ str(time_frame["start_time"]) 
+        student_end_time = f"{now.year}-{now.month}-{now.day} "+  str(time_frame["end_time"])
 
         student_start_time = self._parse_time(student_start_time)
         student_end_time = self._parse_time(student_end_time)

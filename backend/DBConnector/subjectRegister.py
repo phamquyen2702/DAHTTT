@@ -56,10 +56,10 @@ class subjectRegisterConnector:
             row = list(row)
             
             results.append(Sub_Reg(
-                Id =int(row[0]),
-                subjectId=int(row[1]),
-                semester=int(row[2]),
-                timestamp = int(row[3])
+                Id =row[0],
+                subjectId=row[1],
+                semester=row[2],
+                timestamp = row[3]
             ))
         mycursor.close()
         db.close()

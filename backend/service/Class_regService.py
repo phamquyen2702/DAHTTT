@@ -70,7 +70,7 @@ class Class_regService:
             raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
         processed = []
         for class_ in classreg.classes:
-            reg.Id = current_user.Id
+           # reg.Id = current_user.Id
             # reg.timestamp = date.today()
             processed.append(Class_Reg(Id = current_user.Id,classId = class_.classId,semester=class_.semester,timestamp=int(time.time())))
         await self.connector.classreg_insert(processed)
