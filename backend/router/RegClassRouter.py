@@ -21,7 +21,7 @@ class ClassRegRequest(BaseModel):
     classes: List[Class]
 
 class ValidateReg(BaseModel):
-    classes: List[int]
+    classes: List[Class]
 
 router = APIRouter(prefix="/regClass")
 

@@ -43,12 +43,15 @@ class Class_regService:
             return True
         return False
         
-    async def validate_register(self,list_class:List[str],current_user:Account):
+    async def validate_register(self,list_class:List[Class],current_user:Account):
         listClass = []
         total = 0
 
-        for id_ in list_class:
-            class_ = await self.classService.get_class_by_id(id_)
+        for class_ in list_class:
+            #class_ = await self.classService.get_class_by_id(id_)
+            id_ = class_.classId
+            if class_[0].status != 1: 
+                raise HTTPException(status_code=410, detail=f"lớp {id_} bị khóa")
             if class_[0].registered >= class_[0].limit:
                 raise HTTPException(status_code=410, detail=f"lớp {id_} đầy")
             listClass += class_

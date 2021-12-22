@@ -35,7 +35,8 @@ services:
         max-file: "2"
     depends_on:
       - database
-
+    environment:
+      - TZ="/usr/share/zoneinfo/Asia/Ho_Chi_Minh"
     command:
       uvicorn app:app --host 0.0.0.0 --port 8000 --reload
     

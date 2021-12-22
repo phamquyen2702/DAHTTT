@@ -155,13 +155,14 @@ class OTEService:
             return False
 
         study_year = self._get_course_of_school_year(student.schoolyear)
+        print(study_year)
         time_frame = self.config["class"]["timeframe"][study_year]
         student_start_time = f"{now.year}-{now.month}-{now.day}T"+ str(time_frame["start_time"]) 
         student_end_time = f"{now.year}-{now.month}-{now.day}T"+  str(time_frame["end_time"])
 
         student_start_time = self._parse_time(student_start_time)
         student_end_time = self._parse_time(student_end_time)
-
+        print(student_start_time,now,student_end_time)
         if student_start_time <= now <= student_end_time:
             return True
         else:
