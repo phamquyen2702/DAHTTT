@@ -198,6 +198,27 @@ class SubjectConnector:
             results = self.do_count(sql)[0]
         return results
 
+    async def get_all_subject_id(self,status):
+        
+        sql = f"select subjectId from Subject where status={status}"
+        db = mysql.connector.connect(
+            host="localhost",
+            user=self.config.db_username,
+            password=self.config.db_password,
+            database=self.config.db_name
+        )
+        mycursor = db.cursor()
+
+        mycursor.execute(sql)
+        records = mycursor.fetchall()
+        results = []
+        for row in records:
+            
+            results.append({"value":row[0],"label":row[0]})
+        mycursor.close()
+        db.close()
+        return results
+
     async def get_subject_by_id(self, subjectID: Text):
         db = mysql.connector.connect(
             host="localhost",

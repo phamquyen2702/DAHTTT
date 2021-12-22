@@ -18,6 +18,8 @@ class SubjectService:
     def __init__(self, ):
         self.connector = SubjectConnector()
         self.settings = Settings()
+    async def get_all_subject_id(self,status):
+        return await self.connector.get_all_subject_id(status)
 
     async def get_subject_by_id(self, subjectId: Optional[str] = None,):
         return await self.connector.get_subject_by_id(subjectId)
