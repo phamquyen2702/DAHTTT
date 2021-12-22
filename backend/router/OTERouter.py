@@ -24,8 +24,8 @@ ote_service.load_config(file_config)
 @router.post("/update-subject-ote")
 def update_subject_ote(
         config: Dict = {
-                "start_time": "2021-11-01 10:30:00",
-                "end_time":  "2021-11-21 10:30:00",
+                "start_time": "2021-11-01T10:30",
+                "end_time":  "2021-11-21T10:30",
                 "meta": {}
             },):
         #current_user: Account = Depends(get_current_active_user)):
@@ -35,8 +35,8 @@ def update_subject_ote(
 @router.post("/update-class-ote")
 def update_subject_ote(
         config: Dict = {
-                "start_time": "2021-11-01 10:30:00",
-                "end_time": "2021-11-21 10:30:00",
+                "start_time": "2021-11-01T10:30",
+                "end_time": "2021-11-21T10:30",
                 "timeframe": {
                     "first_year": {"start_time": "00:00:00", "end_time": "4:30:00"},
                     "second_year": {"start_time": "04:30:00", "end_time": "9:00:00"},

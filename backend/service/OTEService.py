@@ -117,9 +117,9 @@ class OTEService:
 
     def _parse_time(self, t):
         try:
-            return datetime.datetime.strptime(t, "%Y-%m-%d %H:%M")
+            return datetime.datetime.strptime(t, "%Y-%m-%dT%H:%M")
         except:
-            return datetime.datetime.strptime(t, "%Y-%m-%d %H:%M:%S")
+            return datetime.datetime.strptime(t, "%Y-%m-%dT%H:%M:%S")
 
     async def validate_regis_subject_time(self):
         start_time = self._parse_time(self.config["subject"]["start_time"])
@@ -154,8 +154,8 @@ class OTEService:
 
         study_year = self._get_course_of_school_year(student.schoolyear)
         time_frame = self.config["class"]["timeframe"][study_year]
-        student_start_time = f"{now.year}-{now.month}-{now.day} "+ str(time_frame["start_time"]) 
-        student_end_time = f"{now.year}-{now.month}-{now.day} "+  str(time_frame["end_time"])
+        student_start_time = f"{now.year}-{now.month}-{now.day}T"+ str(time_frame["start_time"]) 
+        student_end_time = f"{now.year}-{now.month}-{now.day}T"+  str(time_frame["end_time"])
 
         student_start_time = self._parse_time(student_start_time)
         student_end_time = self._parse_time(student_end_time)
