@@ -94,6 +94,7 @@ class OTEService:
 
     def update_subject_ote(self, config):
         establish_time = time.time()
+        config["meta"]={}
         config["meta"]["establish_time"] = establish_time
         self.config["subject"] = config
         print(self.config)
@@ -102,6 +103,7 @@ class OTEService:
 
     def update_class_ote(self, config):
         establish_time = time.time()
+        config["meta"]={}
         config["meta"]["establish_time"] = establish_time
         self.config["class"] = config
         self.save_config()
