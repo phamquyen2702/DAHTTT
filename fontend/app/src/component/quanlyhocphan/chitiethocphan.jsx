@@ -10,7 +10,6 @@ import * as yup from "yup";
 import subjectApi from "../../api/subjectApi";
 import { SCHOOL_ID_DEFAULT } from "../../dummydb/dataDefault";
 import { listkhoavien } from "../../dummydb/khoavien";
-import { liststatus } from "../../dummydb/status";
 import "../style2.css";
 import "../style3.css";
 
@@ -74,7 +73,6 @@ function Chitiethocphan(props) {
       enqueueSnackbar("Success", {
         variant: "success",
       });
-      form.reset();
     } catch (error) {
       enqueueSnackbar("Error", {
         variant: "error",

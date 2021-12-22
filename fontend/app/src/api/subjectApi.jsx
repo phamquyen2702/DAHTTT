@@ -73,6 +73,22 @@ const subjectApi = {
       },
     });
   },
+  getOte() {
+    const url = "/ote/get-subject-ote";
+    return axiosClient.get(url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  updateOte(data) {
+    const url = "/ote/update-subject-ote";
+    return axiosClient.post(url, data, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
 };
 
 export default subjectApi;

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import {
   NavLink,
   Redirect,
@@ -7,7 +7,7 @@ import {
   useHistory,
   useRouteMatch,
 } from "react-router-dom";
-import userApi from "../api/userApi";
+import { ROLE_DEFAULT } from "../dummydb/dataDefault";
 import getCookie from "./getcookie";
 import Loading from "./Loading";
 import NotFound from "./NotFound";
@@ -57,11 +57,7 @@ function Home({ user }) {
         <Suspense fallback={<Loading />}>
           <Switch>
             <Route exact path={`${match.path}`}>
-              {user && user.role === "ROLE_STUDENT" ? (
-                <Redirect to={`${match.path}/thongtinsinhvien`} />
-              ) : (
-                <Redirect to={`${match.path}/thongtinquanly`} />
-              )}
+              <Redirect to={`${match.path}/thongtincanhan`} />
             </Route>
             <Route
               path={`${match.path}/thongtinsinhvien`}
@@ -79,8 +75,9 @@ function Home({ user }) {
               path={`${match.path}/thongtinlopmo`}
               component={Thongtinlopmo}
             />
-            <Route path={`${match.path}/thongtinquanly`}>
-              <Thongtinquanly user={user} />
+            <Route path={`${match.path}/thongtincanhan`}>
+              {user.role === ROLE_DEFAULT && <Thongtincanhan user={user} />}
+              {user.role !== ROLE_DEFAULT && <Thongtinquanly user={user} />}
             </Route>
             <Route
               path={`${match.path}/quanlytaikhoan`}
@@ -139,7 +136,7 @@ export const MenuSV = () => {
       <li style={{ paddingTop: "5px", listStyle: "none" }}>
         <NavLink
           style={{ textDecoration: "none" }}
-          to={`${match.url}/thongtinsinhvien`}
+          to={`${match.url}/thongtincanhan`}
           activeStyle={{
             fontWeight: "bold",
             color: "rgb(161, 11, 11)",
@@ -183,7 +180,7 @@ export const Menuadmin = () => {
       <li style={{ paddingTop: "5px" }}>
         <NavLink
           style={{ textDecoration: "none" }}
-          to={`${match.url}/thongtinquanly`}
+          to={`${match.url}/thongtincanhan`}
           activeStyle={{
             fontWeight: "bold",
             color: "rgb(161, 11, 11)",
@@ -239,7 +236,7 @@ export const Menutm = () => {
       <li style={{ paddingTop: "5px" }}>
         <NavLink
           style={{ textDecoration: "none" }}
-          to={`${match.url}/thongtinquanly`}
+          to={`${match.url}/thongtincanhan`}
           activeStyle={{
             fontWeight: "bold",
             color: "rgb(161, 11, 11)",
