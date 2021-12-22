@@ -7,12 +7,7 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import userApi from "../../api/userApi";
-import {
-  GENDER_DEFAULT,
-  ROLE_DEFAULT,
-  SCHOOLYEAR_DEFAULT,
-  SCHOOL_ID_DEFAULT,
-} from "../../dummydb/dataDefault";
+import { ROLE_DEFAULT } from "../../dummydb/dataDefault";
 import { listRole } from "../../dummydb/role";
 import "../style2.css";
 import "../style3.css";

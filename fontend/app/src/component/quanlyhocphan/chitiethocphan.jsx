@@ -1,52 +1,122 @@
+import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, MenuItem, TextField } from "@material-ui/core";
 import { Pagination } from "antd";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import * as yup from "yup";
+import subjectApi from "../../api/subjectApi";
+import { SCHOOL_ID_DEFAULT } from "../../dummydb/dataDefault";
 import { listkhoavien } from "../../dummydb/khoavien";
+import { liststatus } from "../../dummydb/status";
 import "../style2.css";
+import "../style3.css";
 
 function Chitiethocphan(props) {
+  const { Id } = useParams();
+  const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
+  const [subject, setSubject] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const [edit, setEdit] = useState(false);
-  const handleEdit = () => {
-    setEdit(true);
-  };
-
-  const schema = yup.object().shape({});
+  const schema = yup.object().shape({
+    subjectName: yup.string().required("please enter your subjectName"),
+    credit: yup.number().min(1, "Please enter at least 1 "),
+    note: yup.string().required("please enter your note"),
+    programsemester: yup.number().min(1, "Please enter at least 1 "),
+  });
   const form = useForm({
     defaultValues: {
-      mahocphan: "IT444",
-      tenhocphan: "Nhập môn công nghệ thông tin",
-      chuongtrinh: "CT Nhóm ngành CNTT-TT 2-2015",
-      khoavien: "Viện Công nghệ Thông tin và Truyền thông",
-      sotinchi: 3,
-      trangthaihocphan: "mở",
-      soluongdangki: 1000,
+      subjectId: "",
+      subjectName: "",
+      credit: 0,
+      schoolId: SCHOOL_ID_DEFAULT,
+      note: "",
+      programsemester: 0,
     },
     resolver: yupResolver(schema),
   });
   const {
     register,
-    getValues,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = form;
-  const handleOnSubmit = (value) => {
-    setEdit(false);
-    enqueueSnackbar("Success", {
-      variant: "success",
-    });
-    console.log(value);
+  useEffect(() => {
+    const setSubjects = async () => {
+      //setValue Form
+      setValue("subjectId", subject.subjectId);
+      setValue("subjectName", subject.subjectName);
+      setValue("credit", subject.credit);
+      setValue("schoolId", subject.schoolId);
+      setKhoavien(subject.schoolId);
+      setValue("programsemester", subject.programsemester);
+      setValue("note", subject.note);
+    };
+    setSubjects();
+  }, [setValue, subject]);
+  useEffect(() => {
+    const fetchSubject = async () => {
+      const params = {
+        subjectId: Id,
+      };
+      const list = await subjectApi.get(params);
+      setSubject(list.subject[0]);
+    };
+    fetchSubject();
+  }, [Id]);
+  const handleOnSubmit = async (value) => {
+    try {
+      const params = {
+        subjectId: Id,
+      };
+      await subjectApi.update(value, params);
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+      form.reset();
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
   };
-  const [khoavien, setKhoavien] = useState(getValues("khoavien"));
+
   const handleChangeKhoavien = (event) => {
     setKhoavien(event.target.value);
   };
-
+  const handleBlock = async () => {
+    try {
+      const params = {
+        subjectId: Id,
+      };
+      await subjectApi.lock(params);
+      window.location.reload();
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
+  };
+  const handleUnBlock = async () => {
+    try {
+      const params = {
+        subjectId: Id,
+      };
+      await subjectApi.unlock(params);
+      window.location.reload();
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar("Error", {
+        variant: "error",
+      });
+    }
+  };
   const hocphan = [
     {
       malophoc: "1991231",
@@ -75,230 +145,176 @@ function Chitiethocphan(props) {
   return (
     <div className="thongtincanhan">
       <p className="thongtincanhan-title">1. Thông tin học phần</p>
-
-      <div className="thongtincanhan-content">
-        <div className="thongtincanhan-left">
-          <div className="thongtincanhan-table">
-            <form onSubmit={handleSubmit(handleOnSubmit)}>
-              <table>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Mã học phần :</th>
-                      <td>
-                        <TextField
-                          {...register("mahocphan")}
-                          name="mahocphan"
-                          autoFocus
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Mã học phần :</th>
-                      <td>{getValues("mahocphan")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Tên học phần :</th>
-                      <td>
-                        <TextField
-                          {...register("tenhocphan")}
-                          name="tenhocphan"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Tên học phần :</th>
-                      <td>{getValues("tenhocphan")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Chương trình :</th>
-                      <td>
-                        <TextField
-                          {...register("chuongtrinh")}
-                          name="chuongtrinh"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Chương trình :</th>
-                      <td>{getValues("chuongtrinh")}</td>
-                    </>
-                  )}
-                </tr>
-
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Khoa/Viện quản lý :</th>
-                      <td>
-                        <TextField
-                          {...register("khoavien")}
-                          name="khoavien"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                          select
-                          value={khoavien}
-                          onChange={handleChangeKhoavien}
-                        >
-                          {listkhoavien.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Khoa/Viện quản lý :</th>
-                      <td>{getValues("khoavien")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Số tín chỉ :</th>
-                      <td>
-                        <TextField
-                          {...register("sotinchi")}
-                          name="sotinchi"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Số tín chỉ :</th>
-                      <td>{getValues("sotinchi")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Trạng thái học phần :</th>
-                      <td>
-                        <TextField
-                          {...register("trangthaihocphan")}
-                          name="trangthaihocphan"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Trạng thái học phần :</th>
-                      <td>{getValues("trangthaihocphan")}</td>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  {edit && (
-                    <>
-                      <th>Khối lượng sv đk :</th>
-                      <td>
-                        <TextField
-                          {...register("soluongdangki")}
-                          name="soluongdangki"
-                          className="outlined-basic"
-                          variant="outlined"
-                          required
-                          margin="dense"
-                          fullWidth
-                        />
-                      </td>
-                    </>
-                  )}
-                  {!edit && (
-                    <>
-                      <th style={{ padding: "12px" }}>Khối lượng sv đk :</th>
-                      <td>{getValues("soluongdangki")}</td>
-                    </>
-                  )}
-                </tr>
-
-                <tr>
-                  {!edit && (
-                    <Button
-                      style={{
-                        width: "250px",
-                        marginTop: "40px",
-                        marginLeft: "9px",
-                        fontWeight: "400",
-                        background: "rgb(235, 43, 43)",
-                        color: "white",
-                      }}
-                      variant="contained"
-                      onClick={handleEdit}
-                    >
-                      Cập nhật thông tin
-                    </Button>
-                  )}
-                  {edit && (
-                    <Button
-                      type="submit"
-                      style={{
-                        width: "250px",
-                        marginTop: "40px",
-                        marginLeft: "3px",
-                        fontWeight: "400",
-                        background: "rgb(235, 43, 43)",
-                        color: "white",
-                      }}
-                      variant="contained"
-                    >
-                      Lưu thay đổi
-                    </Button>
-                  )}
-                </tr>
-              </table>
-            </form>
+      <div className="quanlysinhvien-content">
+        <form onSubmit={handleSubmit(handleOnSubmit)}>
+          <hr style={{ opacity: "0.3", width: "100%" }} />
+          <br />
+          {/* subjectId */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Mã học phần :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("subjectId")}
+                name="subjectId"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                disabled
+              />
+              <p></p>
+            </div>
           </div>
-        </div>
+          {/* Tên học phần */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Tên học phần :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("subjectName")}
+                name="subjectName"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="subjectName" />
+              </p>
+            </div>
+          </div>
+          {/* Số tín chỉ*/}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Số tín chỉ :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("credit")}
+                name="credit"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+                type="number"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="credit" />
+              </p>
+            </div>
+          </div>
+          {/* Kì học */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Kì học :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("programsemester")}
+                name="programsemester"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+                type="number"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="programsemester" />
+              </p>
+            </div>
+          </div>
+          {/* Khoa viện  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Khoa/Viện :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("schoolId")}
+                name="schoolId"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                select
+                value={khoavien}
+                onChange={handleChangeKhoavien}
+              >
+                {listkhoavien.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+          </div>
+          <p></p>
+          {/*Note  */}
+          <div className="thongtincanhan-contents">
+            <div className="thongtincanhan-contents-label">Ghi chú :</div>
+            <div className="thongtincanhan-contents-input">
+              <TextField
+                {...register("note")}
+                name="note"
+                className="outlined-basic"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                placeholder="Chưa cập nhật"
+              />
+              <p style={{ color: "red", fontSize: "12px", textAlign: "left" }}>
+                <ErrorMessage errors={errors} name="note" />
+              </p>
+            </div>
+          </div>
+          <br />
+          <div className="thongtincanhan-contents">
+            <Button
+              style={{
+                width: "250px",
+                marginTop: "40px",
+                marginLeft: "0px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+              type="submit"
+            >
+              Cập nhật học phần
+            </Button>
+          </div>
+        </form>
+        {subject.status === 1 && (
+          <Button
+            style={{
+              width: "250px",
+              float: "right",
+              marginTop: "-35px",
+              marginRight: "12px",
+              fontWeight: "400",
+              background: "rgb(235, 43, 43)",
+              color: "white",
+            }}
+            variant="contained"
+            onClick={handleBlock}
+          >
+            Khóa học phần
+          </Button>
+        )}
+        {subject.status === 0 && (
+          <Button
+            style={{
+              width: "250px",
+              float: "right",
+              marginTop: "-35px",
+              marginRight: "12px",
+              fontWeight: "400",
+              background: "rgb(235, 43, 43)",
+              color: "white",
+            }}
+            variant="contained"
+            onClick={handleUnBlock}
+          >
+            Mở khóa học phần
+          </Button>
+        )}
       </div>
       <div className="thongtindangkisv-bottom">
         <hr style={{ width: "100%", marginTop: "5%" }} />

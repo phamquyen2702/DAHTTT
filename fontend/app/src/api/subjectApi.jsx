@@ -1,50 +1,76 @@
 import axiosClient from "./axiosClient";
 
 const subjectApi = {
-  getAll(params) {
-    const url = "/api/subject";
-    return axiosClient.get(url, {
-      params,
-      headers: { "X-Requested-With": "XMLHttpRequest" },
-    });
+  getFilter(params) {
+    const url = "/subject/search";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
   },
-  get(id) {
-    const url = `/api/subject/${id}`;
-    return axiosClient.get(url, {
-      headers: { "X-Requested-With": "XMLHttpRequest" },
-    });
+  count(params) {
+    const url = "/subject/count";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
   },
+  get(params) {
+    const url = "/subject/get-by-id";
+    return axiosClient.get(url, { params });
+  },
+  update(data, params) {
+    const url = "/subject/update";
+    return axiosClient.post(
+      url,
+      data,
+      { params },
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
+  },
+
+  lock(params) {
+    const url = "/subject/lock";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
+  },
+  unlock(params) {
+    const url = "/subject/unlock";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }
+    );
+  },
+
   add(data) {
-    const url = `/api/subject`;
+    const url = "/subject/add";
     return axiosClient.post(url, data, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     });
   },
-  update(data) {
-    const url = `/api/subject/${data.id}`;
-    return axiosClient.put(url, data, {
-      headers: { "X-Requested-With": "XMLHttpRequest" },
-    });
-  },
-  remove(id) {
-    const url = `/api/subject/${id}`;
-    return axiosClient.delete(url, {
-      headers: { "X-Requested-With": "XMLHttpRequest" },
-    });
-  },
-  uploadfile(data) {
-    const url = "/api/uploadFile";
+  import(data) {
+    const url = "/subject/import";
     return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
         "X-Requested-With": "XMLHttpRequest",
       },
-    });
-  },
-  downloadFile(file) {
-    const url = `/api/downloadFile/${file}`;
-    return axiosClient.get(url, file, {
-      headers: { "X-Requested-With": "XMLHttpRequest" },
     });
   },
 };

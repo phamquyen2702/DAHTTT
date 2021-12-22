@@ -75,7 +75,7 @@ function Quanlyhocphan(props) {
               component={Danhsachhocphan}
             />
             <Route
-              path={`${match.path}/danhsachhocphan/chitiethocphan`}
+              path={`${match.path}/danhsachhocphan/:Id`}
               component={Chitiethocphan}
             />
             <Route path={`${match.path}/themhocphan`} component={Themhocphan} />
