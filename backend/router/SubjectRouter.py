@@ -19,7 +19,10 @@ async def get_by_id(subjectId):
     subject = await subject_service.get_subject_by_id(subjectId)
     return {"subject": subject}
 
-
+@router.get("/get-like-id")
+async def get_like_id(subjectId,limit:str=20,offset:str=0):
+    subject = await subject_service.get_subject_like_id(subjectId,limit,offset)
+    return {"subject": subject}
 @router.get("/search")
 async def search_subject(
         subjectId: str = None,

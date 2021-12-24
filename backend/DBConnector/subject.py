@@ -219,6 +219,29 @@ class SubjectConnector:
         db.close()
         return results
 
+    async def get_subject_like_id(self,subjectID,limit,offset):
+        db = mysql.connector.connect(
+            host="localhost",
+            user=self.config.db_username,
+            password=self.config.db_password,
+            database=self.config.db_name
+        )
+        mycursor = db.cursor()
+        sql = f"select * from Subject where subjectId like '%{subjectID}%' limit {limit} offset {offset}"
+        print(sql)
+        mycursor.execute(sql)
+
+        records = mycursor.fetchall()
+        results = []
+
+        for row in records:
+            subject = Subject.from_list(row)
+            results.append(subject)
+
+        mycursor.close()
+        db.close()
+        return results
+
     async def get_subject_by_id(self, subjectID: Text):
         db = mysql.connector.connect(
             host="localhost",
@@ -228,7 +251,7 @@ class SubjectConnector:
         )
         mycursor = db.cursor()
 
-        mycursor.execute("select * from Subject where subjectID=%s", (subjectID,))
+        mycursor.execute("select * from Subject where subjectId=%s", (subjectID,))
 
         records = mycursor.fetchall()
         results = []

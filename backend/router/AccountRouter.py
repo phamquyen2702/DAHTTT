@@ -78,6 +78,11 @@ async def get_by_id(Id:Optional[str]=None,email:Optional[str]=None):
     accounts = await accountService.get_account_by_id(Id,email)
     return {"accounts":accountService.map_revert_role(accounts) }
 
+@router.get("/get-like-id")
+async def get_like_id(Id:Optional[str]=None,limit=20,offset=0):
+    accounts = await accountService.get_account_like_id(Id,limit,offset)
+    return {"accounts":accountService.map_revert_role(accounts) }
+
 @router.get("/count")
 async def count(Id : Optional[Union[int,str]]=None, email: Optional[str]=None, fullname: Optional[str]=None,\
                 address : Optional[str]=None, birthday: Optional[str]=None, phone: Optional[str]=None,\

@@ -183,6 +183,37 @@ class ClassConnector:
             results = self.do_count(sql)[0]
         return results
 
+    async def get_class_like_id(self,classId,limit,offset):
+        db = mysql.connector.connect(
+            host="localhost",
+            user=self.config.db_username,
+            password=self.config.db_password,
+            database=self.config.db_name
+        )
+        my_cursor = db.cursor()
+        if classId is not None:
+            print("search class")
+            my_cursor.execute(f"select * from Class where classId like '%{classId}%' limit {limit} offset {offset}")
+
+        records = my_cursor.fetchall()
+        results = []
+        for row in records:
+            row = list(row)
+            results.append(Class(
+                classId=int(row[0]),
+                subjectId=row[1],
+                semester=int(row[2]),
+                location=row[3],
+                day=int(row[4]),
+                timeStart=int(row[5]),
+                timeEnd=int(row[6]),
+                registered=int(row[7]),
+                limit=int(row[8]),
+                status=int(row[9])
+            ))
+        my_cursor.close()
+        db.close()
+        return results
     async def get_class_by_id(self, Id=None):
         db = mysql.connector.connect(
             host="localhost",

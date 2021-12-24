@@ -23,6 +23,8 @@ class SubjectService:
 
     async def get_subject_by_id(self, subjectId: Optional[str] = None,):
         return await self.connector.get_subject_by_id(subjectId)
+    async def get_subject_like_id(self,subjectId,limit,offset):
+        return await self.connector.get_subject_like_id(subjectId,limit,offset)
 
     async def search(self, limit=20, offset=0, filters: Dict = {}, **kwargs):
         return await self.connector.search(limit=limit, offset=offset, filters=filters, **kwargs)

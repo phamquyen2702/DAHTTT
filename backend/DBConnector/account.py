@@ -242,7 +242,43 @@ class AccountConnector:
         else:
             results = self.do_count(sql)[0]
         return results
-
+    async def get_account_like_id(self,Id,limit,offset):
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        sql = f"select * from Account where Id like '%{Id}%' limit {limit} offset {offset}"
+        print(sql)
+        mycursor.execute(sql)
+        
+        records = mycursor.fetchall()
+        results = []
+        for row in records:
+            row = list(row)
+            row[5] = str(row[5]) # format datetime to str
+            results.append(Account(
+                Id =int(row[0]),
+                email =row[1],
+                password =row[2],
+                fullname =row[3],
+                address =row[4],
+                birthday =row[5],
+                phone =row[6],
+                status =int(row[7]),
+                role =int(row[8]),
+                schoolyear = int(row[9])  if row[9] is not None else None, 
+                cmnd = row[10] ,
+                gender = row[11] ,
+                program = row[12] ,
+                schoolId = row[13] ,
+                maxcredit = int(row[14])  if row[14] is not None else None, 
+            ))
+        mycursor.close()
+        db.close()
+        return results
 
     async def get_account_by_id(self,Id=None,email=None):
         db = mysql.connector.connect(
