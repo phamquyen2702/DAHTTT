@@ -61,7 +61,25 @@ async def get_subject_ote():
     res = await ote_service.get_class_ote()
     return res
 
+@router.get("/get-list-semester")
+async def get_list_semester():
+    return await ote_service.get_list_semester()
 
+@router.get("/get-semester-class-register")
+async def get_semester_config():
+    return await ote_service.get_semester_class_config()
+
+@router.get("/get-semester-subject-register")
+async def get_semester_config():
+    return await ote_service.get_semester_subject_config()
+
+@router.get("/update-semester-class-register")
+async def update_semester_config(semester:int):
+    return await ote_service.update_semester_class_config(semester)
+
+@router.get("/update-semester-subject-register")
+async def update_semester_config(semester:int):
+    return await ote_service.update_semester_subject_config(semester)
 # @router.get("/validate-regis-class-time")
 # async def validate_regis_class_time(student: Account):
 #     res = await ote_service.validate_regis_class_time(student)

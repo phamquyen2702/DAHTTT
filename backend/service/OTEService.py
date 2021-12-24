@@ -117,6 +117,29 @@ class OTEService:
         class_cfg = self.config["class"]
         return class_cfg
 
+    async def get_semester_class_config(self):
+        return self.config["semester"]["config"]["class"]
+    async def update_semester_class_config(self,semester:int):
+        self.config['semester']["config"]["class"] = semester
+        if semester not in self.config["semester"]["list"].keys():
+            self.config["semester"]["list"][semester] = semester
+        self.save_config()
+        return True
+    async def get_semester_subject_config(self):
+        return self.config["semester"]["config"]["subject"]
+    async def update_semester_subject_config(self,semester:int):
+        self.config['semester']["config"]["subject"] = semester
+        if semester not in self.config["semester"]["list"].keys():
+            self.config["semester"]["list"][semester] = semester
+        self.save_config()
+        return True
+
+    async def get_list_semester(self):
+        list_semester = self.config["semester"]["list"]
+        return_list = []
+        for u,v in list_semester.items():
+            return_list.append({"value":u,"label":v})
+        return return_list
     def _parse_time(self, t):
         try:
             return datetime.datetime.strptime(t, "%Y-%m-%dT%H:%M")
