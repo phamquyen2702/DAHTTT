@@ -39,7 +39,7 @@ class Class_regService:
         if class1.day != class2.day: return True
         x_left = max(class1.timeStart, class2.timeStart)    
         x_right = min(class1.timeEnd, class2.timeEnd)
-        if x_right <= x_left :
+        if x_right < x_left :
             return True
         return False
         

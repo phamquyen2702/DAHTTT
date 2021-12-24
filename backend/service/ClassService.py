@@ -35,7 +35,11 @@ class ClassService:
                 raise HTTPException(status_code=422, detail="subjectId not found")
             res.append(clss)
         return res
-
+    async def search_collision(self,class_:Class):
+        res = await self.connector.search_collision(semester=class_.semester,day=class_.day,location=class_.location,timeEnd=class_.timeEnd,timeStart=class_.timeStart)
+        if len(res):
+            raise HTTPException(status_code=422, detail=f"lớp {class_.classId} trùng thời khóa biểu với lớp {res[0].classId}")
+        
     async def get_class_by_id(self, Id: Optional[str] = None):
         cls_ = await self.connector.get_class_by_id(Id)
         return await self.aggerate(cls_)
@@ -49,6 +53,7 @@ class ClassService:
     async def update (self,classes:List[Class]):
         return await self.connector.update(classes)
     async def update_one(self, _class: Class):
+        await self.search_collision(_class)
         _class = await self.aggerate([_class])
         return await self.connector.update(_class)
 
@@ -56,15 +61,21 @@ class ClassService:
         return await self.connector.lock([classId])
 
     async def unlock_one(self, classId: int):
+        class_ = await self.get_class_by_id(classId)
+        await self.search_collision(class_[0])
         return await self.connector.unlock([classId])
 
     async def add(self, _classes: List[Class]):
+        for _class in _classes:
+            await self.search_collision(_class)
         _classes = await self.aggerate(_classes)
         return await self.connector.insert(_classes)
 
     async def import_file(self, content):
         df = CSVUtils.read_content(content)
         _classes = CSVUtils.validate_class(df)
+        for _class in _classes:
+            await self.search_collision(_class)
         res = await self.connector.insert(_classes)
 
     async def export_file(self, _classes: List[Class]):
