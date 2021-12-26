@@ -32,7 +32,7 @@ class ClassService:
                 clss.subjectName = name
             except:
                 print(clss.subjectId)
-                raise HTTPException(status_code=422, detail="subjectId not found")
+                raise HTTPException(status_code=422, detail=f"subjectId {clss.subjectId} not found")
             res.append(clss)
         return res
     async def search_collision(self,class_:Class):
