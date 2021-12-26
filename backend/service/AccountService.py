@@ -33,6 +33,8 @@ class AccountService:
 
     async def get_account_by_id(self,Id:Optional[str]= None, email:Optional[str]= None):
         return await self.connector.get_account_by_id(Id,email)
+    async def count_account_like_id(self,Id):
+        return await self.connector.count_account_like_id(Id)
     async def get_account_like_id(self,Id,limit,offset):
         return await self.connector.get_account_like_id(Id,limit,offset)
     async def search(self,limit = 20, offset=0, **kwargs):

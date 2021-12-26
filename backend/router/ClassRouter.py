@@ -28,7 +28,7 @@ async def add_class(_class: Class):#, current_user: Account = Depends(get_curren
 
 
 @router.post("/update")
-async def update(_class: Class):#, classId: str, current_user: Account = Depends(get_current_active_user)):
+async def update(_class: Class, classId: str):# current_user: Account = Depends(get_current_active_user)):
     res = await classService.update_one(_class)
     return res
 
@@ -124,3 +124,7 @@ async def get_class_by_id(classId: int):
 @router.get("/get-like-id/{classId}")
 async def get_class_like_id(classId:int ,limit=20,offset=0):
     return await classService.get_class_like_id(classId,limit,offset)
+
+@router.get("/count-like-id/{classId}")
+async def count_class_like_id(classId:int):
+    return await classService.count_class_like_id(classId)

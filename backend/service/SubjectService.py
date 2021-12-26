@@ -23,6 +23,8 @@ class SubjectService:
 
     async def get_subject_by_id(self, subjectId: Optional[str] = None,):
         return await self.connector.get_subject_by_id(subjectId)
+    async def count_subject_like_id(self,subjectId):
+        return await self.connector.count_subject_like_id(subjectId)
     async def get_subject_like_id(self,subjectId,limit,offset):
         return await self.connector.get_subject_like_id(subjectId,limit,offset)
 

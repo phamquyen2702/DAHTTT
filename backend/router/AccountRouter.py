@@ -77,7 +77,10 @@ async def add_account(account:Account):
 async def get_by_id(Id:Optional[str]=None,email:Optional[str]=None):
     accounts = await accountService.get_account_by_id(Id,email)
     return {"accounts":accountService.map_revert_role(accounts) }
-
+@router.get("/count-like-id")
+async def count_account_like_id(Id:str):
+    accounts = await accountService.count_account_like_id(Id)
+    return accounts
 @router.get("/get-like-id")
 async def get_like_id(Id:Optional[str]=None,limit=20,offset=0):
     accounts = await accountService.get_account_like_id(Id,limit,offset)

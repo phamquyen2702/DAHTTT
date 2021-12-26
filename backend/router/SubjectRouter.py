@@ -18,7 +18,9 @@ subject_service = SubjectService()
 async def get_by_id(subjectId):
     subject = await subject_service.get_subject_by_id(subjectId)
     return {"subject": subject}
-
+@router.get("/count-like-id")
+async def count_subject_like_id(subjectId:str):
+    return await subject_service.count_subject_like_id(subjectId)
 @router.get("/get-like-id")
 async def get_like_id(subjectId,limit:str=20,offset:str=0):
     subject = await subject_service.get_subject_like_id(subjectId,limit,offset)
