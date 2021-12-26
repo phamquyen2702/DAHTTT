@@ -243,7 +243,7 @@ class AccountConnector:
             results = self.do_count(sql)[0]
         return results
 
-    async def count_account_like_id(self,Id):
+    async def count_account_like_id(self,Id,role):
         db = mysql.connector.connect(
                                             host="localhost",
                                             user=self.config.db_username,
@@ -251,7 +251,7 @@ class AccountConnector:
                                             database=self.config.db_name
                                             )     
         mycursor = db.cursor()
-        sql = f"select count(*) from Account where Id like '%{Id}%'"
+        sql = f"select count(*) from Account where Id like '%{Id}%' and role={role}"
         print(sql)
         mycursor.execute(sql)
         
@@ -263,7 +263,7 @@ class AccountConnector:
         mycursor.close()
         db.close()
         return results[0]
-    async def get_account_like_id(self,Id,limit,offset):
+    async def get_account_like_id(self,Id,role,limit,offset):
         db = mysql.connector.connect(
                                             host="localhost",
                                             user=self.config.db_username,
@@ -271,7 +271,7 @@ class AccountConnector:
                                             database=self.config.db_name
                                             )     
         mycursor = db.cursor()
-        sql = f"select * from Account where Id like '%{Id}%' limit {limit} offset {offset}"
+        sql = f"select * from Account where Id like '%{Id}%' and role={role} limit {limit} offset {offset}"
         print(sql)
         mycursor.execute(sql)
         
