@@ -41,7 +41,7 @@ async def classReg(class_reg: ClassRegRequest,current_user: Account = Depends(ge
         raise HTTPException(status_code=402, detail="Not student role")
     return await class_regService.class_reg(class_reg, current_user)
 
-@router.post("/classDel")
+@router.get("/classDel")
 async def classDel(classId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
     if current_user.role != 1:
         raise HTTPException(status_code=402, detail="Not student role")

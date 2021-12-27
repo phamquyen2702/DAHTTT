@@ -39,7 +39,7 @@ async def search( semester : int,Id:Optional[int]=None,subjectId:Optional[str] =
 async def subReg( semester,sub_reg: SubjectRegRequest,current_user: Account = Depends(get_current_active_user)):
     return await subject_regService.subject_reg(sub_reg,semester, current_user)
 
-@router.post("/subDel")
+@router.get("/subDel")
 async def subDel(semester,subjectId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
     return await subject_regService.subject_del([subjectId], semester,current_user)
 
