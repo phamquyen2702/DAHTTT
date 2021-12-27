@@ -48,9 +48,10 @@ class Subject_regService:
         for subjectId in coming_registered:
             if subjectId not in registered_subId:
                 to_regis.append(Sub_Reg(Id= current_user.Id,subjectId=subjectId,semester=semester,timestamp=int(time.time())))
-        for subjectId in coming_registered:
-            if subjectId not in registered_subId:
+        for subjectId in registered_subId:
+            if subjectId not in coming_registered:
                 to_del.append(subjectId)
+        res = await self.subject_del(to_del,semester,current_user)
         return await self.connector.subreg_insert(to_regis)
 
     # async def subject_del(self,Id:Optional[str]=None, subjectId:Optional[str]= None):
