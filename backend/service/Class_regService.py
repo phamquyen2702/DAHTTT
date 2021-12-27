@@ -75,6 +75,8 @@ class Class_regService:
         processed = []
         comming = []
         for class_ in classreg.classes:
+            class_ = await self.classService.get_class_by_id(class_.classId)
+            class_ = class_[0]
             tmp[class_.classId] = class_
             semester = class_.semester
             comming.append(class_.classId)
@@ -86,17 +88,17 @@ class Class_regService:
             if obj.classId not in tmp.keys():
                 c = await self.classService.get_class_by_id(obj.classId)
                 tmp[obj.classId] = c[0]
-
+        #print(tmp)
         for classId in comming:
             if classId not in registered_clsId:
                 processed.append(Class_Reg(Id = current_user.Id,classId = classId,semester=semester,timestamp=int(time.time())))
-        ## del class register
+        print("del class register")
         to_del = []
         for classId in registered_clsId:
             if classId not in comming:
                 to_del.append(classId)
         await self.class_del(to_del,current_user)
-        # update number of registerd in class be deleted
+        print("update number of registerd in class be deleted")
         to_update = []
         for class_ in to_del:
             class_ = tmp[class_]
@@ -104,7 +106,7 @@ class Class_regService:
             to_update.append(class_)
         await self.classService.update(to_update)
 
-        # register class not be registerd
+        print("register class not be registerd") 
         await self.connector.classreg_insert(processed)
 
         to_update = []
