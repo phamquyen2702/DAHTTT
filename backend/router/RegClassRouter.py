@@ -28,7 +28,7 @@ router = APIRouter(prefix="/regClass")
 class_regService = Class_regService()
 
 @router.get("/search")
-async def search(semester,Id:Optional[int]=None,classId:Optional[str]=None,current_user: Account = Depends(get_current_active_user)):
+async def search(semester:int,Id:Optional[int]=None,classId:Optional[str]=None,current_user: Account = Depends(get_current_active_user)):
     if current_user.role != 1:
         Id = Id
     else:
@@ -40,13 +40,13 @@ async def classReg(class_reg: ClassRegRequest,current_user: Account = Depends(ge
     if current_user.role != 1:
         raise HTTPException(status_code=402, detail="Not student role")
     return await class_regService.class_reg(class_reg, current_user)
-
+"""
 @router.get("/classDel")
 async def classDel(classId:Optional[str]=None, current_user: Account = Depends(get_current_active_user)):
     if current_user.role != 1:
         raise HTTPException(status_code=402, detail="Not student role")
     return await class_regService.class_del([classId],current_user)
-
+"""
 @router.post("/validate")
 async def validate_class(classes:ValidateReg, current_user: Account = Depends(get_current_active_user) ):
     if current_user.role != 1:

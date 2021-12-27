@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Class_Reg(BaseModel):
     Id: int
-    classId: str
+    classId: int
     semester:int
     timestamp: int
 

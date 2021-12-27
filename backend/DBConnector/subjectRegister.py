@@ -90,6 +90,9 @@ class subjectRegisterConnector:
             except mysql.connector.Error as error:
                 print("Failed to insert record to database rollback: {}".format(error))
                 db.rollback()
+                mycursor.close()
+                db.close()
+                raise HTTPException(status_code=422, detail="Failed to update record to database rollback: {}".format(error))
             mycursor.close()
             db.close()
        
@@ -114,6 +117,9 @@ class subjectRegisterConnector:
             except mysql.connector.Error as error:
                 print("Failed to insert record to database rollback: {}".format(error))
                 db.rollback()
+                mycursor.close()
+                db.close()
+                raise HTTPException(status_code=422, detail="Failed to update record to database rollback: {}".format(error))
             mycursor.close()
             db.close()
        

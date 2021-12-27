@@ -68,17 +68,49 @@ class Class_regService:
         return True
 
     async def class_reg(self,classreg,current_user: Account):
+        tmp ={}
         state = await self.oteService.validate_regis_class_time(current_user)
         if state == False:
             raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
         processed = []
+        comming = []
         for class_ in classreg.classes:
-           # reg.Id = current_user.Id
-            # reg.timestamp = date.today()
-            processed.append(Class_Reg(Id = current_user.Id,classId = class_.classId,semester=class_.semester,timestamp=int(time.time())))
-        await self.connector.classreg_insert(processed)
+            tmp[class_.classId] = class_
+            semester = class_.semester
+            comming.append(class_.classId)
+            #
+        registered = await self.search(Id = current_user.Id,semester=semester,classId=None)
+        registered_clsId = []
+        for obj in registered:
+            registered_clsId.append(obj.classId)
+            if obj.classId not in tmp.keys():
+                c = await self.classService.get_class_by_id(obj.classId)
+                tmp[obj.classId] = c[0]
+
+        for classId in comming:
+            if classId not in registered_clsId:
+                processed.append(Class_Reg(Id = current_user.Id,classId = classId,semester=semester,timestamp=int(time.time())))
+        ## del class register
+        to_del = []
+        for classId in registered_clsId:
+            if classId not in comming:
+                to_del.append(classId)
+        await self.class_del(to_del,current_user)
+        # update number of registerd in class be deleted
         to_update = []
-        for class_ in classreg.classes:
+        for class_ in to_del:
+            class_ = tmp[class_]
+            class_.registered -= 1
+            to_update.append(class_)
+        await self.classService.update(to_update)
+
+        # register class not be registerd
+        await self.connector.classreg_insert(processed)
+
+        to_update = []
+        #print(tmp)
+        for class_ in processed:
+            class_ = tmp[class_.classId]
             class_.registered += 1
             to_update.append(class_)
         await self.classService.update(to_update)
