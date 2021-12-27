@@ -162,7 +162,23 @@ class OTEService:
             return True
         else:
             return False
+    async def validate_regis_class_time(self, student: Account):
+        start_time = self._parse_time(self.config["class"]["start_time"])
+        end_time = self._parse_time(self.config["class"]["end_time"])
 
+        if start_time is None:
+            return False
+
+        if end_time is None:
+            return False
+
+        now = datetime.datetime.now() +datetime.timedelta(hours=7)
+        print(start_time,now,end_time)
+        if start_time <= now <= end_time:
+            return True
+        else:
+            return False
+    """
     async def validate_regis_class_time(self, student: Account):
         now = datetime.datetime.now() +datetime.timedelta(hours=7)
         start_time = self._parse_time(self.config["class"]["start_time"])
@@ -190,3 +206,4 @@ class OTEService:
             return True
         else:
             return False
+    """

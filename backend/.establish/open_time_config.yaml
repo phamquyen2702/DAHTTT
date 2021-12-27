@@ -1,27 +1,13 @@
 subject:
+  start_time: 2021-11-01T10:30
+  end_time: 2021-12-21T10:30
   meta:
-    establish_time: 1640155029.1865728
+    establish_time: 1640582866.029101
 class:
   start_time: 2021-11-01T10:30
-  end_time: 2022-11-21T10:30
-  timeframe:
-    first_year:
-      start_time: 00:00:00
-      end_time: '18:30:00'
-    second_year:
-      start_time: 04:30:00
-      end_time: '18:00:00'
-    third_year:
-      start_time: 04:00:00
-      end_time: '18:30:00'
-    fourth_year:
-      start_time: 04:30:00
-      end_time: '18:00:00'
-    last_year:
-      start_time: '18:00:00'
-      end_time: '23:59:00'
+  end_time: 2021-12-21T10:30
   meta:
-    establish_time: 1640157902.6178844
+    establish_time: 1640582822.7878656
 semester:
   list:
     20201: 20201
