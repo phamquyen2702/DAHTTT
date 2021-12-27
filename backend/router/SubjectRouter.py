@@ -60,7 +60,22 @@ async def search_subject(
         response.headers["Content-Disposition"] = "attachment; filename=export_subject.csv"
         return response
 
-
+@router.get("/checkSubjectId/{subjectId}")
+async def checkSubjectId(subjectId:str):
+    filters = {
+        "subjectId": subjectId,
+        "subjectName": None,
+        "credit": None,
+        "programsemester": None,
+        "schoolId": None,
+        "status": 1,
+        "note": None
+    }
+    c = await subject_service.count(filters=filters)
+    if c==0:
+        return False
+    else:
+        return True
 @router.get("/count")
 async def count_subject(
         subjectId: str = None,

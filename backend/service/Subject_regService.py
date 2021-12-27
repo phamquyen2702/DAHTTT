@@ -39,9 +39,19 @@ class Subject_regService:
         if state == False:
             raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
         processed = []
-        for subject in subreg.subjects:
-            processed.append(Sub_Reg(Id= current_user.Id,subjectId=subject.subjectId,semester=semester,timestamp=int(time.time())))
-        return await self.connector.subreg_insert(processed)
+        registered = await self.search(current_user.Id,semester)
+        registered_subId =[x.subjectId for x in registered]
+        coming_registered = [x.subjectId for x in subreg.subjects]
+
+        to_regis = []
+        to_del = []
+        for subjectId in coming_registered:
+            if subjectId not in registered_subId:
+                to_regis.append(Sub_Reg(Id= current_user.Id,subjectId=subjectId,semester=semester,timestamp=int(time.time())))
+        for subjectId in coming_registered:
+            if subjectId not in registered_subId:
+                to_del.append(subjectId)
+        return await self.connector.subreg_insert(to_regis)
 
     # async def subject_del(self,Id:Optional[str]=None, subjectId:Optional[str]= None):
     #     return await self.connector.subdel(Id,subjectId)
