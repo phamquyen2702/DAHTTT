@@ -35,7 +35,7 @@ async def search( semester : int,Id:Optional[int]=None,subjectId:Optional[str] =
         Id = current_user.Id
     return await subject_regService.search(Id,semester,subjectId)
 
-@router.post("/subReg")
+@router.post("/subReg/{semester}")
 async def subReg( semester,sub_reg: SubjectRegRequest,current_user: Account = Depends(get_current_active_user)):
     return await subject_regService.subject_reg(sub_reg,semester, current_user)
 
