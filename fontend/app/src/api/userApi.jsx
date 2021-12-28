@@ -77,6 +77,30 @@ const userApi = {
       },
     });
   },
+  getLikeId(params) {
+    const url = "/account/get-like-id";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }
+    );
+  },
+  countLikeId(params) {
+    const url = "/account/count-like-id";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }
+    );
+  },
 };
 
 export default userApi;

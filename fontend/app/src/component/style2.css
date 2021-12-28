@@ -138,6 +138,20 @@ table {
     width: 16%;
 }
 
+.filter-school-right3 {
+    margin-top: 0;
+    width: 40%;
+}
+
 .filter-school-right2 {
     width: 40%;
+}
+
+.filter-school-class {
+    margin-top: 3px;
+    width: 17%;
+}
+.filter-school-classs{
+    margin-top: 22px;
+    width: 17%;
 }

@@ -9,6 +9,7 @@ import {
   DialogContentText,
   TextField,
 } from "@material-ui/core";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import "antd/dist/antd.css";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -161,12 +162,15 @@ export const Logout = ({ user, handleLogout }) => {
             >
               <DialogContentText
                 style={{
-                  color: "red",
+                  color: "rgb(100, 7, 7)",
                   paddingBottom: "20px",
                   fontWeight: "500",
                   fontSize: "22px",
                 }}
               >
+                <div>
+                  <AccountBoxIcon style={{ fontSize: "50px" }} />
+                </div>
                 Đổi mật khẩu!
                 <hr style={{ opacity: "0.3" }} />
               </DialogContentText>

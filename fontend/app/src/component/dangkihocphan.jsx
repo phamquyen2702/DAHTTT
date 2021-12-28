@@ -6,35 +6,96 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  MenuItem,
   TextField,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { hocphan } from "../dummydb/dbhocphan";
 import { addToCart, deleteFromCart } from "../reducers/subjectSlice";
 import { DeleteOutlined } from "@ant-design/icons";
 import "./style.scss";
 import { Empty } from "antd";
-
-function Dangkihocphan(props) {
+import subjectApi from "../api/subjectApi";
+import userApi from "../api/userApi";
+import getCookie from "./getcookie";
+import classApi from "../api/classApi";
+function countCredit(list) {
+  let sum = 0;
+  for (let i = 0; i < list.length; i++) {
+    sum += list[i].credit;
+  }
+  return sum;
+}
+function Dangkihocphan({ semesterDk }) {
+ 
+  const [semesters, setSemesters] = useState([]);
+  const [creditUser, setCreditUser] = useState(0);
+  const [valueSemester, setValueSemester] = useState(semesterDk);
   const [listTKB, setListTKB] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({});
   const form = useForm({
     defaultValues: {
-      search: "",
+      subjectId: "",
     },
     resolver: yupResolver(schema),
   });
-  const { register, handleSubmit, getValues } = form;
-  const handleSave = () => {
-    setListTKB(datas);
-    enqueueSnackbar("Success", {
-      variant: "success",
-    });
+  const handleChangeSemester = (event) => {
+    setValueSemester(event.target.value);
+  };
+  const { register, handleSubmit } = form;
+  useEffect(() => {
+    if (semesterDk === null) {
+      window.location.reload();
+    }
+  }, [semesterDk]);
+  useEffect(() => {
+    const fectchData = async () => {
+      const list1 = await classApi.getAllSemester();
+      setSemesters(list1);
+    };
+    fectchData();
+  }, []);
+  useEffect(() => {
+    const fectchData = async () => {
+      const account = getCookie("account");
+      const user = await userApi.get({ email: JSON.parse(account).email });
+      setCreditUser(user.accounts[0].maxcredit);
+      const param = {
+        Id: user.accounts[0].Id,
+        semester: valueSemester,
+      };
+      const data = await subjectApi.getRegisterSub(param);
+      let dataSubject = [];
+      for (let i = 0; i < data.length; i++) {
+        const x = await subjectApi.get({ subjectId: data[i].subjectId });
+        dataSubject.push(x.subject[0]);
+      }
+      setListTKB(dataSubject);
+    };
+    fectchData();
+  }, [valueSemester]);
+  const handleSave = async () => {
+    const datalist = {};
+    datalist.subjects = datas;
+    try {
+      const registerSub = await subjectApi.registerSubject(
+        datalist,
+        semesterDk
+      );
+      if (registerSub === true) {
+        enqueueSnackbar("success", {
+          variant: "success",
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar("error", {
+        variant: "error",
+      });
+    }
   };
   const dispatch = useDispatch();
   //redux
@@ -66,18 +127,25 @@ function Dangkihocphan(props) {
     setStatus(false);
   };
 
-  const handleOnSubmit = () => {
-    const index = hocphan.findIndex((x) => x.mahocphan === getValues("search"));
-    if (index >= 0) {
+  const handleOnSubmit = async (value) => {
+    const existSub = await subjectApi.checkSubjectId(value.subjectId);
+    let sum = countCredit(datas);
+    if (existSub === true) {
+      const data = await subjectApi.get({ subjectId: value.subjectId });
+      const dataAll = {
+        datal: data.subject[0],
+        maxcredit: creditUser,
+        sumCredit: sum,
+      };
       try {
-        const action = addToCart(hocphan[index]);
+        const action = addToCart(dataAll);
         dispatch(action);
       } catch (error) {
         setContentErr(error.message);
         setStatus(true);
       }
     } else {
-      setContentErr(`Mã học phần ${getValues("search")} không tồn tại !`);
+      setContentErr(`Mã học phần ${value.subjectId} không tồn tại !`);
       setStatus(true);
     }
     form.reset();
@@ -89,8 +157,7 @@ function Dangkihocphan(props) {
         <div className="search-malop">
           <form onSubmit={handleSubmit(handleOnSubmit)}>
             <TextField
-              {...register("search")}
-              name="search"
+              {...register("subjectId")}
               autoFocus
               id="outlined-input"
               label="Đăng kí theo mã HP"
@@ -113,7 +180,12 @@ function Dangkihocphan(props) {
             </Button>
           </form>
         </div>
-        <div className="search-hearder-right">Số tín chỉ tối đa: 24</div>
+        <div
+          className="search-hearder-right"
+          style={{ marginTop: "50px", fontWeight: "600" }}
+        >
+          Số tín chỉ tối đa: {creditUser}
+        </div>
       </div>
       <Dialog
         open={status}
@@ -177,12 +249,12 @@ function Dangkihocphan(props) {
             datas.map((data, index) => (
               <tr key={index}>
                 <td>{index}</td>
-                <td>{data.mahocphan}</td>
-                <td>{data.tenhocphan}</td>
-                <td>{data.sotinchi}</td>
+                <td>{data.subjectId}</td>
+                <td>{data.subjectName}</td>
+                <td>{data.credit}</td>
                 <td
                   className="delete"
-                  onClick={() => handleOpenDelete(data.mahocphan)}
+                  onClick={() => handleOpenDelete(data.subjectId)}
                 >
                   <DeleteOutlined />
                 </td>
@@ -226,7 +298,28 @@ function Dangkihocphan(props) {
       <br />
       <hr style={{ width: "97%", margin: "30px auto" }} className="hr-style" />
       <div className="dk-footer">
-        <p className="dk-footer-title">Danh sách học phần đã đăng kí</p>
+        <div style={{ display: "flex" }}>
+          <div className="dk-footer-title">
+            Thông tin đăng kí theo các kì học:{" "}
+          </div>
+          <TextField
+            className="semester-dk"
+            variant="outlined"
+            margin="dense"
+            select
+            sx={20}
+            value={valueSemester}
+            onChange={handleChangeSemester}
+          >
+            {semesters.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </div>
+
+        <br />
         <div className="table-dangki">
           <table style={{ width: "100%", padding: "10px" }}>
             {listTKB.length > 0 && (
@@ -241,9 +334,9 @@ function Dangkihocphan(props) {
             {listTKB.map((data, index) => (
               <tr key={index}>
                 <td>{index}</td>
-                <td>{data.mahocphan}</td>
-                <td>{data.tenhocphan}</td>
-                <td>{data.sotinchi}</td>
+                <td>{data.subjectId}</td>
+                <td>{data.subjectName}</td>
+                <td>{data.credit}</td>
               </tr>
             ))}
           </table>

@@ -1,6 +1,7 @@
 import { FormOutlined } from "@ant-design/icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, MenuItem, TextField } from "@material-ui/core";
+import OfflinePinIcon from "@mui/icons-material/OfflinePin";
 import { Empty, Pagination } from "antd";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -11,8 +12,8 @@ import * as yup from "yup";
 import subjectApi from "../../api/subjectApi";
 import {
   LIMIT_PAGE_DEFAULT,
-  STATUS_DEFAULT,
   SCHOOL_ID_DEFAULT,
+  STATUS_DEFAULT,
 } from "../../dummydb/dataDefault";
 import { headerSubject } from "../../dummydb/headerSubjectCsv";
 import { listkhoavien } from "../../dummydb/khoavien";
@@ -20,6 +21,7 @@ import { liststatus } from "../../dummydb/status";
 import "../style2.css";
 
 function Danhsachhocphan(props) {
+  const [searchLike, setSearchLike] = useState("");
   const [valueStatus, setValueStatus] = useState(STATUS_DEFAULT);
   const [valueSchoolId, setValueSchoolId] = useState(SCHOOL_ID_DEFAULT);
   const { enqueueSnackbar } = useSnackbar();
@@ -31,7 +33,7 @@ function Danhsachhocphan(props) {
   const [limit, setLimit] = useState(LIMIT_PAGE_DEFAULT);
   const match = useRouteMatch();
   const csvReport = {
-    filename: "exports.csv",
+    filename: "subject.csv",
     headers: headerSubject,
     data: datasExport,
   };
@@ -42,51 +44,76 @@ function Danhsachhocphan(props) {
   };
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      if (searchLike === "") {
+        try {
+          const params = {
+            status: valueStatus,
+            schoolId: valueSchoolId,
+            limit: 99999999,
+            offset: 0,
+          };
+          const list = await subjectApi.getFilter(params);
+          setDatasExport(list);
+        } catch (error) {
+          enqueueSnackbar("Error", {
+            variant: "error",
+          });
+        }
+      } else {
         const params = {
-          status: valueStatus,
-          schoolId: valueSchoolId,
+          subjectId: searchLike,
           limit: 99999999,
           offset: 0,
         };
-        const list = await subjectApi.getFilter(params);
-        setDatasExport(list);
-      } catch (error) {
-        enqueueSnackbar("Error", {
-          variant: "error",
-        });
+        const list = await subjectApi.getLikeId(params);
+        setDatasExport(list.subject);
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valueSchoolId, valueStatus, limit, page]);
+  }, [enqueueSnackbar, searchLike, valueSchoolId, valueStatus]);
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const paramsCount = {
-          status: valueStatus,
-          schoolId: valueSchoolId,
-        };
+      if (searchLike === "") {
+        try {
+          const paramsCount = {
+            status: valueStatus,
+            schoolId: valueSchoolId,
+          };
+          const params = {
+            status: valueStatus,
+            schoolId: valueSchoolId,
+            limit: limit,
+            offset: page === 1 ? 0 : (page - 1) * limit,
+          };
+          const count = await subjectApi.count(paramsCount);
+          setCounts(count);
+          const list = await subjectApi.getFilter(params);
+          setDatas(list);
+        } catch (error) {
+          enqueueSnackbar("Error", {
+            variant: "error",
+          });
+        }
+      }
+    };
+    fetchData();
+  }, [valueSchoolId, valueStatus, limit, page, searchLike, enqueueSnackbar]);
+
+  //set page
+  useEffect(() => {
+    const fectchData = async () => {
+      if (searchLike !== "") {
         const params = {
-          status: valueStatus,
-          schoolId: valueSchoolId,
+          subjectId: searchLike,
           limit: limit,
           offset: page === 1 ? 0 : (page - 1) * limit,
         };
-        const count = await subjectApi.count(paramsCount);
-        setCounts(count);
-        const list = await subjectApi.getFilter(params);
-        setDatas(list);
-      } catch (error) {
-        enqueueSnackbar("Error", {
-          variant: "error",
-        });
+        const list = await subjectApi.getLikeId(params);
+        setDatas(list.subject);
       }
     };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valueSchoolId, valueStatus, limit, page]);
-
+    fectchData();
+  }, [valueSchoolId, valueStatus, limit, page, searchLike, enqueueSnackbar]);
   const handleChangeStatus = (event) => {
     setValueStatus(event.target.value);
   };
@@ -109,21 +136,22 @@ function Danhsachhocphan(props) {
     const params = {
       subjectId: value.subjectId,
       limit: limit,
-      offset: 0,
+      offset: page === 1 ? 0 : (page - 1) * limit,
     };
-    const list = await subjectApi.getFilter(params);
-    if (list.length > 0) {
-      setDatas(list);
-    }
-
-    form.reset();
-    if (list.length === 0) {
-      enqueueSnackbar("Không tìm thấy học phần với ID này", {
-        variant: "error",
-      });
-    }
+    const paramsCount = {
+      subjectId: value.subjectId,
+    };
+    const count = await subjectApi.countLikeId(paramsCount);
+    setCounts(count);
+    const list = await subjectApi.getLikeId(params);
+    setDatas(list.subject);
+    setSearchLike(value.subjectId);
+    setPage(1);
   };
-
+  const handleResetSearch = () => {
+    setSearchLike("");
+    window.location.reload();
+  };
   return (
     <div>
       <div className="quanlysinhvien-content">
@@ -169,31 +197,72 @@ function Danhsachhocphan(props) {
               <form onSubmit={handleSubmit(handleOnSubmit)}>
                 <TextField
                   {...register("subjectId")}
-                  autoFocus
+                  variant="outlined"
+                  margin="dense"
                   id="outlined-input"
-                  label="Mã học phần"
+                  placeholder="Tìm kiếm theo mã học phần"
                   type="text"
-                  style={{ width: "160px", marginLeft: "100px" }}
-                />
-                <Button
                   style={{
-                    width: "140px",
-                    marginTop: "12px",
-                    marginLeft: "20px",
-                    fontWeight: "400",
-                    background: "rgb(235, 43, 43)",
-                    color: "white",
+                    width: "180px",
+                    marginLeft: "100px",
+                    marginTop: "11px",
                   }}
-                  variant="contained"
-                  type="submit"
-                >
-                  Tìm kiếm
-                </Button>
+                />
+                {searchLike !== "" && (
+                  <Button
+                    style={{
+                      width: "120px",
+                      height: "39px",
+                      marginTop: "12px",
+                      marginLeft: "20px",
+                      fontWeight: "400",
+                      background: "rgb(235, 43, 43)",
+                      color: "white",
+                    }}
+                    variant="contained"
+                    onClick={handleResetSearch}
+                  >
+                    Reset
+                  </Button>
+                )}
+                {searchLike === "" && (
+                  <Button
+                    style={{
+                      width: "120px",
+                      height: "39px",
+                      marginTop: "12px",
+                      marginLeft: "20px",
+                      fontWeight: "400",
+                      background: "rgb(235, 43, 43)",
+                      color: "white",
+                    }}
+                    variant="contained"
+                    type="submit"
+                  >
+                    Tìm kiếm
+                  </Button>
+                )}
               </form>
             </div>
           </div>
         </div>
         <br />
+        {searchLike === "" && counts !== 0 && (
+          <div style={{ display: "flex", margin: "12px", color: "blue" }}>
+            <div>
+              <OfflinePinIcon />
+            </div>
+            <div>Tìm thấy {counts} kết quả chính xác</div>
+          </div>
+        )}
+        {searchLike !== "" && counts !== 0 && (
+          <div style={{ display: "flex", margin: "12px", color: "blue" }}>
+            <div>
+              <OfflinePinIcon />
+            </div>
+            <div>Tìm thấy {counts} kết quả gần đúng</div>
+          </div>
+        )}
         <div className="table-dangki">
           <table style={{ width: "100%", padding: "10px" }}>
             {datas.length > 0 && (

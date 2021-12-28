@@ -1,10 +1,10 @@
 export const liststatus = [
   {
     value: 0,
-    label: "Đã đóng",
+    label: "Trạng thái đóng",
   },
   {
     value: 1,
-    label: "Đang mở",
+    label: "Trạng thái mở",
   },
 ];

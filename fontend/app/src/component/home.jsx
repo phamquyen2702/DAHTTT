@@ -1,4 +1,5 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useEffect } from "react";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import {
   NavLink,
   Redirect,
@@ -16,6 +17,7 @@ import Quanlylophoc from "./quanlylophoc/quanlylophoc";
 import Quanlysinhvien from "./quanlytaikhoan/quanlysinhvien";
 import "./style.scss";
 import Thongkedangki from "./thongkedangki/thongkedangki";
+import subjectApi from "../api/subjectApi";
 const Dangkihocphan = React.lazy(() => import("./dangkihocphan"));
 const Thongtincanhan = React.lazy(() => import("./thongtincanhan"));
 const Dangkilophoc = React.lazy(() => import("./dangkilophoc"));
@@ -24,12 +26,20 @@ const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
 const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
 
 function Home({ user }) {
+  const [semesterDk, setSemesterDk] = useState();
   const match = useRouteMatch();
   const history = useHistory();
   const account = getCookie("account");
   if (!account) {
     history.push("/Account");
   }
+  useEffect(() => {
+    const fectchData = async () => {
+      const data = await subjectApi.getSemesterRegister();
+      setSemesterDk(data);
+    };
+    fectchData();
+  }, []);
   return (
     <div className="dangki-content">
       <div className="dangki-content-left">
@@ -39,14 +49,16 @@ function Home({ user }) {
             color: "rgb(161, 11, 11)",
             fontWeight: "600",
             marginLeft: "18px",
-            marginTop: "0px",
             marginBottom: "5px",
+            display: "flex",
           }}
         >
+          <p style={{ marginLeft: "12px", marginTop: "5px" }}>
+            <DashboardIcon />
+          </p>
           <span style={{ marginLeft: "12px" }}>Chức năng</span>
         </p>
         <hr style={{ width: "80%" }} />
-        <br />
         <div style={{ marginLeft: "10px" }}>
           {user && user.role === "ROLE_STUDENT" && <MenuSV />}
           {user && user.role === "ROLE_ADMIN" && <Menuadmin />}
@@ -63,10 +75,9 @@ function Home({ user }) {
               path={`${match.path}/thongtinsinhvien`}
               component={Thongtincanhan}
             />
-            <Route
-              path={`${match.path}/dangkihocphan`}
-              component={Dangkihocphan}
-            />
+            <Route path={`${match.path}/dangkihocphan`}>
+              <Dangkihocphan semesterDk={semesterDk} />
+            </Route>
             <Route
               path={`${match.path}/dangkilophoc`}
               component={Dangkilophoc}

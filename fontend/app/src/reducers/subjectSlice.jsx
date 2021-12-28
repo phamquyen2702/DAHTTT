@@ -10,19 +10,27 @@ const subjectSlice = createSlice({
     addToCart(state, action) {
       const newItem = action.payload;
       const index = state.cartItems.findIndex(
-        (x) => x.mahocphan === newItem.mahocphan
+        (x) => x.subjectId === newItem.datal.subjectId
       );
+      const maxCredit = newItem.maxcredit;
       if (index >= 0) {
-        throw new Error(`Mã học phần ${newItem.mahocphan} đã được đăng kí`);
+        throw new Error(
+          `Mã học phần ${newItem.datal.subjectId} đã được đăng kí`
+        );
       } else {
-        state.cartItems.push(newItem);
-        setcookie("cartDKHP", JSON.stringify(state.cartItems), 5);
+        let sum = newItem.sumCredit + newItem.datal.credit;
+        if (sum > maxCredit) {
+          throw new Error(`Số lượng tín chỉ hiện tại là ${sum} đã quá định mức cho phép`);
+        } else {
+          state.cartItems.push(newItem.datal);
+          setcookie("cartDKHP", JSON.stringify(state.cartItems), 5);
+        }
       }
     },
     deleteFromCart(state, action) {
       const mahocphanToDelete = action.payload;
       state.cartItems = state.cartItems.filter(
-        (x) => x.mahocphan !== mahocphanToDelete
+        (x) => x.subjectId !== mahocphanToDelete
       );
       setcookie("cartDKHP", JSON.stringify(state.cartItems), 5);
     },

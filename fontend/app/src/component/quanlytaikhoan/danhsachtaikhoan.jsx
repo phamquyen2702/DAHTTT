@@ -1,6 +1,7 @@
 import { FormOutlined } from "@ant-design/icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, MenuItem, TextField } from "@material-ui/core";
+import OfflinePinIcon from "@mui/icons-material/OfflinePin";
 import { Empty, Pagination } from "antd";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ import {
   LIMIT_PAGE_DEFAULT,
   ROLE_DEFAULT,
   SCHOOLYEAR_DEFAULT,
-  SCHOOL_ID_DEFAULT,
+  SCHOOL_ID_DEFAULT
 } from "../../dummydb/dataDefault";
 import { headerAccount } from "../../dummydb/headerAccountCsv";
 import { listkhoavien } from "../../dummydb/khoavien";
@@ -21,6 +22,7 @@ import { schoolyears } from "../../dummydb/schoolyear";
 import "../style2.css";
 
 function Danhsachtaikhoan(props) {
+  const [searchLike, setSearchLike] = useState("");
   const [valueSchoolyear, setValueSchoolyear] = useState(SCHOOLYEAR_DEFAULT);
   const [valueSchoolId, setValueSchoolId] = useState(SCHOOL_ID_DEFAULT);
   const { enqueueSnackbar } = useSnackbar();
@@ -32,7 +34,7 @@ function Danhsachtaikhoan(props) {
   const [limit, setLimit] = useState(LIMIT_PAGE_DEFAULT);
   const match = useRouteMatch();
   const csvReport = {
-    filename: "exports.csv",
+    filename: "account.csv",
     headers: headerAccount,
     data: datasExport,
   };
@@ -43,54 +45,87 @@ function Danhsachtaikhoan(props) {
   };
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      if (searchLike === "") {
+        try {
+          const params = {
+            schoolyear: valueSchoolyear,
+            schoolId: valueSchoolId,
+            role: ROLE_DEFAULT,
+            limit: 99999999,
+            offset: 0,
+          };
+          const list = await userApi.getFilter(params);
+          setDatasExport(list.accounts);
+        } catch (error) {
+          enqueueSnackbar("Error", {
+            variant: "error",
+          });
+        }
+      } else {
         const params = {
-          schoolyear: valueSchoolyear,
-          schoolId: valueSchoolId,
-          role: "ROLE_STUDENT",
+          Id: searchLike,
+          role: ROLE_DEFAULT,
           limit: 99999999,
           offset: 0,
         };
-        const list = await userApi.getFilter(params);
+        const list = await userApi.getLikeId(params);
         setDatasExport(list.accounts);
-      } catch (error) {
-        enqueueSnackbar("Error", {
-          variant: "error",
-        });
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valueSchoolId, valueSchoolyear, limit, page]);
+  }, [enqueueSnackbar, searchLike, valueSchoolId, valueSchoolyear]);
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const paramsCount = {
-          schoolyear: valueSchoolyear,
-          schoolId: valueSchoolId,
-          role: ROLE_DEFAULT,
-        };
+      if (searchLike === "") {
+        try {
+          const paramsCount = {
+            schoolyear: valueSchoolyear,
+            schoolId: valueSchoolId,
+            role: ROLE_DEFAULT,
+          };
+          const params = {
+            schoolyear: valueSchoolyear,
+            schoolId: valueSchoolId,
+            role: ROLE_DEFAULT,
+            limit: limit,
+            offset: page === 1 ? 0 : (page - 1) * limit,
+          };
+          const count = await userApi.count(paramsCount);
+          setCounts(count);
+          const list = await userApi.getFilter(params);
+          setDatas(list.accounts);
+        } catch (error) {
+          enqueueSnackbar("Error", {
+            variant: "error",
+          });
+        }
+      }
+    };
+    fetchData();
+  }, [
+    valueSchoolId,
+    valueSchoolyear,
+    limit,
+    page,
+    enqueueSnackbar,
+    searchLike,
+  ]);
+  //set page
+  useEffect(() => {
+    const fectchData = async () => {
+      if (searchLike !== "") {
         const params = {
-          schoolyear: valueSchoolyear,
-          schoolId: valueSchoolId,
+          Id: searchLike,
           role: ROLE_DEFAULT,
           limit: limit,
           offset: page === 1 ? 0 : (page - 1) * limit,
         };
-        const count = await userApi.count(paramsCount);
-        setCounts(count);
-        const list = await userApi.getFilter(params);
+        const list = await userApi.getLikeId(params);
         setDatas(list.accounts);
-      } catch (error) {
-        enqueueSnackbar("Error", {
-          variant: "error",
-        });
       }
     };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [valueSchoolId, valueSchoolyear, limit, page]);
-
+    fectchData();
+  }, [limit, page, enqueueSnackbar, searchLike]);
   const handleChangeSchoolyear = (event) => {
     setValueSchoolyear(event.target.value);
   };
@@ -114,19 +149,22 @@ function Danhsachtaikhoan(props) {
       Id: value.Id,
       role: ROLE_DEFAULT,
       limit: limit,
-      offset: 0,
+      offset: page === 1 ? 0 : (page - 1) * limit,
     };
-    const list = await userApi.getFilter(params);
-    if (value.Id > 0) {
-      setDatas(list.accounts);
-    }
-
-    form.reset();
-    if (list.accounts.length === 0) {
-      enqueueSnackbar("Không tìm thấy sinh viên với ID này", {
-        variant: "error",
-      });
-    }
+    const paramsCount = {
+      Id: value.Id,
+      role: ROLE_DEFAULT,
+    };
+    const count = await userApi.countLikeId(paramsCount);
+    setCounts(count);
+    const list = await userApi.getLikeId(params);
+    setDatas(list.accounts);
+    setSearchLike(value.Id);
+    setPage(1);
+  };
+  const handleResetSearch = () => {
+    setSearchLike("");
+    window.location.reload();
   };
   return (
     <div>
@@ -179,25 +217,59 @@ function Danhsachtaikhoan(props) {
                   type="text"
                   style={{ width: "160px", marginLeft: "100px" }}
                 />
-                <Button
-                  style={{
-                    width: "140px",
-                    marginTop: "12px",
-                    marginLeft: "20px",
-                    fontWeight: "400",
-                    background: "rgb(235, 43, 43)",
-                    color: "white",
-                  }}
-                  variant="contained"
-                  type="submit"
-                >
-                  Tìm kiếm
-                </Button>
+                {searchLike !== "" && (
+                  <Button
+                    style={{
+                      width: "140px",
+                      marginTop: "12px",
+                      marginLeft: "20px",
+                      fontWeight: "400",
+                      background: "rgb(235, 43, 43)",
+                      color: "white",
+                    }}
+                    variant="contained"
+                    onClick={handleResetSearch}
+                  >
+                    Reset
+                  </Button>
+                )}
+                {searchLike === "" && (
+                  <Button
+                    style={{
+                      width: "140px",
+                      marginTop: "12px",
+                      marginLeft: "20px",
+                      fontWeight: "400",
+                      background: "rgb(235, 43, 43)",
+                      color: "white",
+                    }}
+                    variant="contained"
+                    type="submit"
+                  >
+                    Tìm kiếm
+                  </Button>
+                )}
               </form>
             </div>
           </div>
         </div>
         <br />
+        {searchLike === "" && counts !== 0 && (
+          <div style={{ display: "flex", margin: "12px", color: "blue" }}>
+            <div>
+              <OfflinePinIcon />
+            </div>
+            <div>Tìm thấy {counts} kết quả chính xác</div>
+          </div>
+        )}
+        {searchLike !== "" && counts !== 0 && (
+          <div style={{ display: "flex", margin: "12px", color: "blue" }}>
+            <div>
+              <OfflinePinIcon />
+            </div>
+            <div>Tìm thấy {counts} kết quả gần đúng</div>
+          </div>
+        )}
         <div className="table-dangki">
           <table style={{ width: "100%", padding: "10px" }}>
             {datas.length > 0 && (

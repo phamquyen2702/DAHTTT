@@ -89,6 +89,74 @@ const subjectApi = {
       },
     });
   },
+  getLikeId(params) {
+    const url = "/subject/get-like-id";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }
+    );
+  },
+  countLikeId(params) {
+    const url = "/subject/count-like-id";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }
+    );
+  },
+  getSemesterRegister() {
+    const url = "/ote/get-semester-subject-register";
+    return axiosClient.get(url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  updateSemesterRegister(params) {
+    const url = "/ote/update-semester-subject-register";
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }
+    );
+  },
+  registerSubject(data, semester) {
+    const url = `/regSubject/subReg/${semester}`;
+    return axiosClient.post(url, data, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  checkSubjectId(subjectId) {
+    const url = `/subject/checkSubjectId/${subjectId}`;
+    return axiosClient.get(url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  getRegisterSub(params) {
+    const url = "/regSubject/search";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
 };
 
 export default subjectApi;
