@@ -68,6 +68,7 @@ class Class_regService:
         return True
 
     async def class_reg(self,classreg,current_user: Account):
+        semester = await self.oteService.get_semester_class_config()
         tmp ={}
         state = await self.oteService.validate_regis_class_time(current_user)
         if state == False:

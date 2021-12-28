@@ -1,0 +1,4 @@
+- chức năng import danh sách csv
+- chức năng cấp lại mật khẩu của admin cho các tài khoản khác
+- giới hạn số tín chỉ khi đăng kí học phần chỉnh xuống 0 thay vì 1
+- sửa bug khi update thông tin lớp học. lúc gửi req truyền params subjectId=, sửa lại thành classId=
