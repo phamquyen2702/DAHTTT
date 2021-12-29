@@ -139,7 +139,8 @@ async def change_password(form:ChangePassword, current_user: Account = Depends(g
 
     res = await accountService.change_password(old_password,new_password,current_user)
     return res
-
+class ImportAccount(BaseModel):
+    a:str
 @router.post("/import")
 async def import_file(file: UploadFile = File(...)):
     content = await file.read()

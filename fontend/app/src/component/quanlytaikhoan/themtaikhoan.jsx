@@ -412,9 +412,11 @@ export const ImportFile = () => {
   const { register, handleSubmit } = useForm();
   const { enqueueSnackbar } = useSnackbar();
   const handleImport = async (value) => {
-    console.log(value.file);
+    console.log(value.file[0]);
     try {
-      await userApi.import(value.file);
+      const data = new FormData();
+      data.append('file', value.file[0]);
+      await userApi.import(data);
       enqueueSnackbar("Success", {
         variant: "success",
       });

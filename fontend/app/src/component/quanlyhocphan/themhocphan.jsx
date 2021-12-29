@@ -243,7 +243,9 @@ export const ImportFile = () => {
   const handleImport = async (value) => {
     console.log(value.file);
     try {
-      await subjectApi.import(value.file);
+      const data = new FormData();
+      data.append('file', value.file[0]);
+      await subjectApi.import(data);
       enqueueSnackbar("Success", {
         variant: "success",
       });
