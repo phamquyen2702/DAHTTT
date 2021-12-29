@@ -79,7 +79,8 @@ class Class_regService:
             class_ = await self.classService.get_class_by_id(class_.classId)
             class_ = class_[0]
             tmp[class_.classId] = class_
-            semester = class_.semester
+            if int(semester) != int(class_.semester):
+                raise HTTPException(status_code=410, detail=f"lớp {class_.classId} không được mở trong học kỳ {semester}")
             comming.append(class_.classId)
             #
         registered = await self.search(Id = current_user.Id,semester=semester,classId=None)
