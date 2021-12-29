@@ -68,7 +68,21 @@ async def count(classId: Optional[int] = None,
                                     registered=registered,
                                     _limit=_limit,
                                     status=status)
-
+@router.get("/checkClassId/{classId}")
+async def count(classId: int):
+    
+    res =  await classService.count(classId=classId,
+                                    subjectId=None,
+                                    semester=None,
+                                    location=None,
+                                    day=None,
+                                    timeStart=None,
+                                    timeEnd=None,
+                                    registered=None,
+                                    _limit=None,
+                                    status=None)
+    if res == 1: return True
+    else : return False
 
 @router.get("/search")
 async def search(classId: Optional[int] = None,
