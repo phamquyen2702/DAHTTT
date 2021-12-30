@@ -23,7 +23,7 @@ class StatisticConnector:
         results = []
         for row in records:
             row = list(row)
-            results.append(StatBySchool(schoolId=row[0],numberSV=row[1])
+            results.append(StatBySchool(schoolId=row[0],soluongSV=row[1])
             )  
         
         mycursor.close()
@@ -45,7 +45,7 @@ class StatisticConnector:
         results = []
         for row in records:
             row = list(row)
-            results.append(StatBySchool(schoolId=row[0],numberSV=row[1])
+            results.append(StatBySchool(schoolId=row[0],soluongSV=row[1])
             )  
         
         mycursor.close()

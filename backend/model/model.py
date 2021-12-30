@@ -63,4 +63,4 @@ class StatByDay(BaseModel):
     numberSV: int
 class StatBySchool(BaseModel):
     schoolId: str
-    numberSV: int
+    soluongSV: int
