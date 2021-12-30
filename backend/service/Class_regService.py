@@ -17,6 +17,7 @@ import time
 from .OTEService import OTEService
 from .ClassService import ClassService
 from .SubjectService import SubjectService
+from .AccountService import AccountService
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 class Class_regService:
@@ -26,8 +27,18 @@ class Class_regService:
         self.oteService = OTEService()
         self.classService = ClassService()
         self.subjectService = SubjectService()
+        self.accountService = AccountService()
     async def search(self,Id,semester,classId,limit=None,offset=None):
-        return await self.connector.search(Id,semester,classId,limit,offset)
+        if limit == None and offset ==None:
+            return await self.connector.search(Id,semester,classId,limit,offset)
+        else:
+            li = await self.connector.search(Id,semester,classId,limit,offset)
+            li = [x.Id for x in li]
+            res = []
+            for x in li:
+                acc = await self.accountService.get_account_by_id(x)
+                res.append(acc[0])
+            return res
     async def count(self,semester,classId):
         return await self.connector.count(semester,classId)
     # async def subject_reg(self,subreg: list[Sub_Reg], current_user:Sub_Reg):
