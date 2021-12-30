@@ -14,7 +14,7 @@ import pandas as pd
 import io, time
 from datetime import date
 from .OTEService import OTEService
-
+from .AccountService import AccountService
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 class Subject_regService:
@@ -22,6 +22,7 @@ class Subject_regService:
         self.connector = subjectRegisterConnector()
         self.settings = Settings()
         self.oteService =  OTEService()
+        self.accountService = AccountService()
 
     async def validate(self, subjects:List[Subject], current_user:Account):
         total = 0
@@ -32,7 +33,16 @@ class Subject_regService:
         else:
             return True
     async def search(self,Id,semester,subjectId=None,limit=None,offset=None):
-        return await self.connector.search(Id,semester,subjectId,limit,offset)
+        if limit == None and offset ==None:
+            return await self.connector.search(Id,semester,subjectId,limit,offset)
+        else:
+            li = await self.connector.search(Id,semester,subjectId,limit,offset)
+            li = [x.Id for x in li]
+            res = []
+            for x in li:
+                acc = await self.accountService.get_account_by_id(x)
+                res.append(acc[0])
+            return res
     async def count(self,semester,subjectId):
         return await self.connector.count(semester,subjectId)
 
