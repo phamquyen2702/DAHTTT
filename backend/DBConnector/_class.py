@@ -202,7 +202,26 @@ class ClassConnector:
         my_cursor.close()
         db.close()
         return results[0]
+    async def count_class_like_subjectId(self,subjectId):
+        db = mysql.connector.connect(
+            host="localhost",
+            user=self.config.db_username,
+            password=self.config.db_password,
+            database=self.config.db_name
+        )
+        my_cursor = db.cursor()
+        if subjectId is not None:
+            print("search class")
+            my_cursor.execute(f"select count(*) from Class where subjectId like '%{subjectId}%'")
 
+        records = my_cursor.fetchall()
+        results = []
+        for row in records:
+            row = list(row)
+            results.append(row[0])
+        my_cursor.close()
+        db.close()
+        return results[0]
     async def get_class_like_subjectId(self,subjectId,limit,offset):
         db = mysql.connector.connect(
             host="localhost",

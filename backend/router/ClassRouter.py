@@ -151,3 +151,7 @@ async def get_class_like_subjectId(subjectId:str ,limit=20,offset=0):
 @router.get("/count-like-id/{classId}")
 async def count_class_like_id(classId:int):
     return await classService.count_class_like_id(classId)
+
+@router.get("/count-like-subjectId/{subjectId}")
+async def count_class_like_subjectId(subjectId:str ):
+    return await classService.count_class_like_subjectId(subjectId)
