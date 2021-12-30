@@ -8,12 +8,12 @@ from config import Settings
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException, Depends, Request
 from .OTEService import OTEService
-import json
+import json,os 
 class StatisticService:
     def __init__(self):
         self.statisticConnector = StatisticConnector()
         self.oteService = OTEService()
-        self.school = json.load(open("document/school.json","r"))
+        self.school = json.load(open(os.path.join("document","school.json"),"r"))
     async def stat_class_reg_by_day(self,semester):
         return await self.statisticConnector.stat_class_reg_by_day(semester)
     async def stat_class_reg_by_school(self,semester):
