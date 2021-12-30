@@ -43,12 +43,18 @@ class ClassService:
     async def get_class_by_id(self, Id: Optional[str] = None):
         cls_ = await self.connector.get_class_by_id(Id)
         return await self.aggerate(cls_)
+
     async def count_class_like_id(self,classId):
         return await self.connector.count_class_like_id(classId)
+
     async def get_class_like_id(self,classId,limit,offset):
-        return await self.connector.get_class_like_id(classId,limit,offset)
+        classes = await self.connector.get_class_like_id(classId,limit,offset)
+        return await self.aggerate(classes)
+
     async def get_class_like_subjectId(self,subjectId,limit,offset):
-        return await self.connector.get_class_like_subjectId(subjectId,limit,offset)
+        classes = await self.connector.get_class_like_subjectId(subjectId,limit,offset)
+        return await self.aggerate(classes)
+        
     async def count_class_like_subjectId(self,subjectId):
         return await self.connector.count_class_like_subjectId(subjectId)
 
