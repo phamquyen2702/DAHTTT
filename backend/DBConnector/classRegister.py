@@ -13,12 +13,9 @@ class classRegisterConnector:
         account = account.dict()
         account = tuple(list(account.values()))
         return account
-    async def search(self,Id,semester,classId=None):
-        sql = f"select * from classregister where semester={semester}"
-        if classId != None:
-            sql += f" and classId='{classId}'"
-        if Id != None:
-            sql += f" and Id='{Id}'"
+    async def count(self,semester,classId):
+        sql = f"select count(*) from classregister where semester={semester} and classId={classId}"
+        print(sql)    
         db = mysql.connector.connect(
                                             host="localhost",
                                             user=self.config.db_username,
@@ -32,7 +29,46 @@ class classRegisterConnector:
             
         except mysql.connector.Error as error:
             print("Failed to insert record to database rollback: {}".format(error))
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            return 0
+        
+        results = []
+        for row in records:
+            row = list(row)
+            
+            results.append(row[0])
+        mycursor.close()
+        db.close()
+        return results[0]
+
+    async def search(self,Id,semester,classId=None,limit=None,offset=None):
+        if limit == None and offset == None:
+            sql = f"select * from classregister where semester={semester}"
+            if classId != None:
+                sql += f" and classId='{classId}'"
+            if Id != None:
+                sql += f" and Id='{Id}'"
+        else:
+            sql = f"select * from classregister where semester={semester} and classId={classId} limit {limit} offset {offset}"
+        print(sql)    
+        db = mysql.connector.connect(
+                                            host="localhost",
+                                            user=self.config.db_username,
+                                            password=self.config.db_password,
+                                            database=self.config.db_name
+                                            )     
+        mycursor = db.cursor()
+        try:
+            mycursor.execute(sql)
+            
+        except mysql.connector.Error as error:
+            print("Failed to insert record to database rollback: {}".format(error))
+        try:
+            records = mycursor.fetchall()
+        except:
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -46,6 +82,8 @@ class classRegisterConnector:
         mycursor.close()
         db.close()
         return results
+
+    
     def do_query(self,accounts:List[tuple],sql_other:str):   
         db = mysql.connector.connect(
                                             host="localhost",

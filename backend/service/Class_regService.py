@@ -26,9 +26,10 @@ class Class_regService:
         self.oteService = OTEService()
         self.classService = ClassService()
         self.subjectService = SubjectService()
-    async def search(self,Id,semester,classId):
-        return await self.connector.search(Id,semester,classId)
-
+    async def search(self,Id,semester,classId,limit=None,offset=None):
+        return await self.connector.search(Id,semester,classId,limit,offset)
+    async def count(self,semester,classId):
+        return await self.connector.count(semester,classId)
     # async def subject_reg(self,subreg: list[Sub_Reg], current_user:Sub_Reg):
     #     processed = []
     #     for reg in subreg:

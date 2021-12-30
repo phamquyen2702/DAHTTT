@@ -31,8 +31,10 @@ class Subject_regService:
             raise HTTPException(status_code=410, detail=f"vượt quá số tín chỉ tối đa {current_user.maxcredit}")
         else:
             return True
-    async def search(self,Id,semester,subjectId=None):
-        return await self.connector.search(Id,semester,subjectId)
+    async def search(self,Id,semester,subjectId=None,limit=None,offset=None):
+        return await self.connector.search(Id,semester,subjectId,limit,offset)
+    async def count(self,semester,subjectId):
+        return await self.connector.count(semester,subjectId)
 
     async def subject_reg(self,subreg, semester,current_user: Account):
         state = await self.oteService.validate_regis_subject_time()

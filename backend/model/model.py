@@ -57,3 +57,10 @@ class Subject(BaseModel):
             status=data[5],
             note=data[6]
         )
+
+class StatByDay(BaseModel):
+    day: str
+    numberSV: int
+class StatBySchool(BaseModel):
+    schoolId: str
+    numberSV: int

@@ -35,6 +35,14 @@ async def search( semester : int,Id:Optional[int]=None,subjectId:Optional[str] =
         Id = current_user.Id
     return await subject_regService.search(Id,semester,subjectId)
 
+@router.get("/get-student-by-subjectId")
+async def get_student_by_sjID(semester:int,subjectId:str,limit:int,offset:int):
+    return await subject_regService.search(None,semester,subjectId,limit,offset)
+
+@router.get("/count-student-by-subjectId")
+async def get_student_by_sjID(semester:int,subjectId:str):
+    return await subject_regService.count(semester,subjectId)
+
 @router.post("/subReg/{semester}")
 async def subReg( semester,sub_reg: SubjectRegRequest,current_user: Account = Depends(get_current_active_user)):
     return await subject_regService.subject_reg(sub_reg,int(semester), current_user)

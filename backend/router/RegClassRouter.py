@@ -33,7 +33,15 @@ async def search(semester:int,Id:Optional[int]=None,classId:Optional[str]=None,c
         Id = Id
     else:
         Id = current_user.Id
-    return await class_regService.search(Id,semester,classId)
+    return await class_regService.search(Id,semester,classId,limit=None,offset=None)
+
+@router.get("/get-student-by-classId")
+async def get_studen_by_classId(classId:int,semester:int,limit:int,offset:int):
+     return await class_regService.search(None,semester,classId,limit,offset)
+@router.get("/count-student-by-classId")
+async def count_studen_by_classId(classId:int,semester:int):
+     return await class_regService.count(semester,classId)
+
 
 @router.post("/classReg")
 async def classReg(class_reg: ClassRegRequest,current_user: Account = Depends(get_current_active_user)):

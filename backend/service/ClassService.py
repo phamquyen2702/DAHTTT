@@ -12,6 +12,7 @@ from fastapi import FastAPI, HTTPException, Depends, Request
 import pandas as pd
 import io
 from .SubjectService import SubjectService
+from .OTEService import OTEService
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 
 
@@ -19,6 +20,7 @@ class ClassService:
     def __init__(self, ):
         self.connector = ClassConnector()
         self.subjectService = SubjectService()
+        self.oteService = OTEService()
         self.settings = Settings()
 
     async def aggerate(self,classes:List[Class]):
@@ -52,11 +54,13 @@ class ClassService:
         return await self.aggerate(classes)
 
     async def get_class_like_subjectId(self,subjectId,limit,offset):
-        classes = await self.connector.get_class_like_subjectId(subjectId,limit,offset)
+        semester = await self.oteService.get_semester_class_config()
+        classes = await self.connector.get_class_like_subjectId(subjectId,semester,limit,offset)
         return await self.aggerate(classes)
-        
+
     async def count_class_like_subjectId(self,subjectId):
-        return await self.connector.count_class_like_subjectId(subjectId)
+        semester = await self.oteService.get_semester_class_config()
+        return await self.connector.count_class_like_subjectId(subjectId,semester)
 
     async def search(self, limit=20, offset=0, **kwargs):
         classes =  await self.connector.search(limit=limit, offset=offset, **kwargs)
