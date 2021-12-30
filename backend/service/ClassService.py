@@ -47,6 +47,9 @@ class ClassService:
         return await self.connector.count_class_like_id(classId)
     async def get_class_like_id(self,classId,limit,offset):
         return await self.connector.get_class_like_id(classId,limit,offset)
+    async def get_class_like_subjectId(self,subjectId,limit,offset):
+        return await self.connector.get_class_like_subjectId(subjectId,limit,offset)
+
     async def search(self, limit=20, offset=0, **kwargs):
         classes =  await self.connector.search(limit=limit, offset=offset, **kwargs)
         return await self.aggerate(classes)

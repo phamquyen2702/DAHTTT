@@ -73,6 +73,10 @@ class Class_regService:
         state = await self.oteService.validate_regis_class_time(current_user)
         if state == False:
             raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
+
+        # kiểm tra trùng thời khóa biểu
+       # await self.validate_register(classreg.classes)
+        
         processed = []
         comming = []
         for class_ in classreg.classes:

@@ -139,9 +139,14 @@ async def import_file(file: UploadFile = File(...)):#, current_user: Account = D
 async def get_class_by_id(classId: int):
     res = await classService.get_class_by_id(classId)
     return res
+
 @router.get("/get-like-id/{classId}")
 async def get_class_like_id(classId:int ,limit=20,offset=0):
     return await classService.get_class_like_id(classId,limit,offset)
+
+@router.get("/get-like-subjectId/{subjectId}")
+async def get_class_like_subjectId(subjectId:str ,limit=20,offset=0):
+    return await classService.get_class_like_subjectId(subjectId,limit,offset)
 
 @router.get("/count-like-id/{classId}")
 async def count_class_like_id(classId:int):
