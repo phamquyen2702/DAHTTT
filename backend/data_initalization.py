@@ -26,17 +26,20 @@ mycursor = mydb.cursor()
 #mycursor.execute("CREATE DATABASE DAHTTT")
 #mycursor.execute("SHOW DATABASES")
 #mycursor.execute("SHOW TABLES")
-
-mycursor.execute("CREATE TABLE classregister (Id INT(32) ,\
+try:
+  mycursor.execute("CREATE TABLE classregister (Id INT(32) ,\
 classId INT(32) ,\
 semester INT(32), timestamp INT(32), primary key (Id,classId))")
-
-mycursor.execute("CREATE TABLE subjectregister (Id INT(32) ,\
+except:
+  pass
+try:  
+  mycursor.execute("CREATE TABLE subjectregister (Id INT(32) ,\
 subjectId VARCHAR(255),semester INT(32) ,\
 timestamp INT(32), primary key (Id,subjectId,semester))")
-
-
-mycursor.execute("CREATE TABLE Account (Id INT(32) PRIMARY KEY,\
+except:
+  pass
+try:
+  mycursor.execute("CREATE TABLE Account (Id INT(32) PRIMARY KEY,\
 email VARCHAR(255) UNIQUE,\
 password VARCHAR(255),\
 fullname VARCHAR(255),\
@@ -52,22 +55,26 @@ program VARCHAR(255),\
 schoolId VARCHAR(255),\
 maxcredit INT(8))")
 
+  sql = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
+  #sql = "UPDATE Account WHERE Id = %s SET  email=%s, password=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s "
 
-sql = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
-#sql = "UPDATE Account WHERE Id = %s SET  email=%s, password=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s "
+  val = (0,"admin@gmail.com","$2b$12$an6B5xNZK4t2gZmVxSEdku6yPM8aeI76ial.8yszxBFl3kNzh9cK6",\
+  "Nguyen Hoang Thuan","abdc","1999-02-08","01234560",1,3)
+  mycursor.execute(sql, val)
+  mydb.commit()
 
-val = (0,"admin@gmail.com","$2b$12$an6B5xNZK4t2gZmVxSEdku6yPM8aeI76ial.8yszxBFl3kNzh9cK6",\
- "Nguyen Hoang Thuan","abdc","1999-02-08","01234560",1,3)
-mycursor.execute(sql, val)
-mydb.commit()
+  mycursor.execute("select * from Account LIMIT 5 OFFSET 0")
+  records = mycursor.fetchall()
+  print("Total number of rows in table: ", mycursor.rowcount)
+  print("\nPrinting each row")
+  for row in records:
+      print(row)
 
-mycursor.execute("select * from Account LIMIT 5 OFFSET 0")
-records = mycursor.fetchall()
-print("Total number of rows in table: ", mycursor.rowcount)
+except:
+  pass
 
-print("\nPrinting each row")
-for row in records:
-    print(row)
+
+
 try:
   mycursor.execute("CREATE TABLE Class (classId INT(32) PRIMARY KEY AUTO_INCREMENT,\
   subjectId	VARCHAR(10),\
