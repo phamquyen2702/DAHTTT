@@ -19,7 +19,7 @@ class StatisticService:
     async def stat_class_reg_by_school(self,semester):
         objs = await self.statisticConnector.stat_class_reg_by_school(semester)
         for obj in objs:
-            obj.schoolId = self.school[obj.schoolId]
+            obj.schoolId = obj.schoolId#self.school[obj.schoolId]
         return objs
     async def stat_subject_reg_by_day(self,semester):
         return await self.statisticConnector.stat_subject_reg_by_day(semester)
