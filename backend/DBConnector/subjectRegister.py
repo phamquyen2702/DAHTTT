@@ -62,13 +62,14 @@ class subjectRegisterConnector:
 
     async def search(self,Id,semester,subjectId=None,limit=None,offset=None):
         if limit == None and offset == None:
-            sql = f"select * from subjectregister where semester={semester} and subjectId='{subjectId}' limit {limit} offset {offset}"
-        else:
             sql = f"select * from subjectregister where semester={semester}"
             if subjectId != None:
                 sql += f" and subjectId='{subjectId}'"
             if Id != None:
                 sql += f" and Id='{Id}'"
+            
+        else:
+            sql = f"select * from subjectregister where semester={semester} and subjectId='{subjectId}' limit {limit} offset {offset}"
         db = mysql.connector.connect(
                                             host="localhost",
                                             user=self.config.db_username,

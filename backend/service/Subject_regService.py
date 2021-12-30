@@ -34,7 +34,7 @@ class Subject_regService:
             return True
     async def search(self,Id,semester,subjectId=None,limit=None,offset=None):
         if limit == None and offset ==None:
-            return await self.connector.search(Id,semester,subjectId,limit,offset)
+            return await self.connector.search(Id,semester,subjectId)
         else:
             li = await self.connector.search(Id,semester,subjectId,limit,offset)
             li = [x.Id for x in li]
