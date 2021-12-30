@@ -13,7 +13,7 @@ class StatisticService:
     def __init__(self):
         self.statisticConnector = StatisticConnector()
         self.oteService = OTEService()
-        self.school = json.load(open(os.path.join("document","school.json"),"r"))
+        self.school = json.load(open(os.path.join("document","school.json"),"r",encoding="utf-8"))
     async def stat_class_reg_by_day(self,semester):
         return await self.statisticConnector.stat_class_reg_by_day(semester)
     async def stat_class_reg_by_school(self,semester):
