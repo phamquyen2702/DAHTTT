@@ -47,6 +47,9 @@ function Themhocphan(props) {
         variant: "success",
       });
       form.reset();
+      setKhoavien(SCHOOL_ID_DEFAULT);
+      setValueStatus(STATUS_DEFAULT)
+
     } catch (error) {
       enqueueSnackbar("Error", {
         variant: "error",

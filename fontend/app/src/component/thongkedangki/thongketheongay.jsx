@@ -1,19 +1,25 @@
 import { MenuItem, TextField } from "@material-ui/core";
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import classApi from "../../api/classApi";
 import "../style2.css";
 import Chartline from "./chartline";
-var listkihoc = [
-  { value: "20201", label: "20201" },
-  { value: "20202", label: "20202" },
-  { value: "20211", label: "20211" },
-  { value: "20212", label: "20212" },
-];
-function Thongketheongay(props) {
-  const [kihoc, setKihoc] = useState("20201");
+
+function Thongketheongay({ semesters, semesterDk }) {
+  const [kihoc, setKihoc] = useState(semesterDk);
+  const [datas, setDatas] = useState([]);
   const handleChangeKihoc = (event) => {
     setKihoc(event.target.value);
   };
+  useEffect(() => {
+    const fectchData = async () => {
+      const param = {
+        semester: kihoc,
+      };
+      const list = await classApi.getThongkeTheoNgay(param);
+      setDatas(list);
+    };
+    fectchData();
+  }, [kihoc]);
   return (
     <div>
       <div style={{ width: "200px" }}>
@@ -28,7 +34,7 @@ function Thongketheongay(props) {
           value={kihoc}
           onChange={handleChangeKihoc}
         >
-          {listkihoc.map((option) => (
+          {semesters.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -36,7 +42,7 @@ function Thongketheongay(props) {
         </TextField>
       </div>
       <div className="quanlysinhvien-content">
-        <Chartline></Chartline>
+        <Chartline datas={datas}></Chartline>
       </div>
     </div>
   );

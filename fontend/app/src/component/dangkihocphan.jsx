@@ -1,3 +1,4 @@
+import { DeleteOutlined } from "@ant-design/icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
@@ -9,19 +10,18 @@ import {
   MenuItem,
   TextField,
 } from "@material-ui/core";
-import { useSnackbar } from "notistack";
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import * as yup from "yup";
-import { addToCart, deleteFromCart } from "../reducers/subjectSlice";
-import { DeleteOutlined } from "@ant-design/icons";
-import "./style.scss";
 import { Empty } from "antd";
+import { useSnackbar } from "notistack";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import classApi from "../api/classApi";
 import subjectApi from "../api/subjectApi";
 import userApi from "../api/userApi";
+import { addToCart, deleteFromCart } from "../reducers/subjectSlice";
 import getCookie from "./getcookie";
-import classApi from "../api/classApi";
+import "./style.scss";
+
 function countCredit(list) {
   let sum = 0;
   for (let i = 0; i < list.length; i++) {
@@ -30,7 +30,6 @@ function countCredit(list) {
   return sum;
 }
 function Dangkihocphan({ semesterDk }) {
- 
   const [semesters, setSemesters] = useState([]);
   const [creditUser, setCreditUser] = useState(0);
   const [valueSemester, setValueSemester] = useState(semesterDk);
@@ -48,17 +47,13 @@ function Dangkihocphan({ semesterDk }) {
   };
   const { register, handleSubmit } = form;
   useEffect(() => {
-    if (semesterDk === null) {
-      window.location.reload();
-    }
-  }, [semesterDk]);
-  useEffect(() => {
     const fectchData = async () => {
       const list1 = await classApi.getAllSemester();
       setSemesters(list1);
     };
     fectchData();
   }, []);
+
   useEffect(() => {
     const fectchData = async () => {
       const account = getCookie("account");
@@ -87,6 +82,7 @@ function Dangkihocphan({ semesterDk }) {
         semesterDk
       );
       if (registerSub === true) {
+        window.location.reload();
         enqueueSnackbar("success", {
           variant: "success",
         });
@@ -97,9 +93,7 @@ function Dangkihocphan({ semesterDk }) {
       });
     }
   };
-  const dispatch = useDispatch();
-  //redux
-  const datas = useSelector((state) => state.subject.cartItems);
+  const datas = getCookie("cartDKHP") ? JSON.parse(getCookie("cartDKHP")) : [];
   const [remove, setRemove] = useState(false);
   const [status, setStatus] = useState(false);
   const [contentErr, setContentErr] = useState("");
@@ -115,8 +109,7 @@ function Dangkihocphan({ semesterDk }) {
   };
 
   const handleAgreeDelete = () => {
-    const action = deleteFromCart(mahocphanRemove);
-    dispatch(action);
+    deleteFromCart(datas, mahocphanRemove);
     setRemove(false);
     setMahocphanRemove("");
   };
@@ -138,8 +131,7 @@ function Dangkihocphan({ semesterDk }) {
         sumCredit: sum,
       };
       try {
-        const action = addToCart(dataAll);
-        dispatch(action);
+        addToCart(datas, dataAll);
       } catch (error) {
         setContentErr(error.message);
         setStatus(true);
@@ -162,8 +154,9 @@ function Dangkihocphan({ semesterDk }) {
               id="outlined-input"
               label="Đăng kí theo mã HP"
               type="text"
-              style={{ width: "200px", margin: "20px" }}
-              required
+              style={{ width: "200px", marginTop: "31px",marginLeft:"16px" }}
+              variant="outlined"
+              margin="dense"
             />
             <Button
               type="submit"
@@ -268,7 +261,7 @@ function Dangkihocphan({ semesterDk }) {
                 fontStyle: "italic",
                 fontSize: "13px",
               }}
-              description="Đăng kí ngay( Empty)"
+              description="(Empty)"
               image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
             />
           )}
@@ -277,22 +270,22 @@ function Dangkihocphan({ semesterDk }) {
       <br />
       <br />
       <br />
-      {datas.length > 0 && (
-        <Button
-          onClick={handleSave}
-          style={{
-            width: "250px",
-            margin: "10px",
-            fontWeight: "600",
-            float: "right",
-            background: "rgb(235, 43, 43)",
-            color: "white",
-          }}
-          variant="contained"
-        >
-          Gửi yêu cầu
-        </Button>
-      )}
+
+      <Button
+        onClick={handleSave}
+        style={{
+          width: "250px",
+          margin: "10px",
+          fontWeight: "600",
+          float: "right",
+          background: "rgb(235, 43, 43)",
+          color: "white",
+        }}
+        variant="contained"
+      >
+        Gửi yêu cầu
+      </Button>
+
       <br />
       <br />
       <br />

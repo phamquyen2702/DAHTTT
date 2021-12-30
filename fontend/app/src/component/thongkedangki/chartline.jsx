@@ -1,47 +1,9 @@
 import React from "react";
 import { Line } from "@ant-design/charts";
 
-const Chartline = () => {
-  var data = [
-    {
-      day: "20-10",
-      numberSV: 3232,
-    },
-    {
-      day: "21-10",
-      numberSV: 412,
-    },
-    {
-      day: "22-10",
-      numberSV: 325,
-    },
-    {
-      day: "23-10",
-      numberSV: 51,
-    },
-    {
-      day: "24-10",
-      numberSV: 2323,
-    },
-    {
-      day: "25-10",
-      numberSV: 1111,
-    },
-    {
-      day: "26-10",
-      numberSV: 3323,
-    },
-    {
-      day: "27-10",
-      numberSV: 10000,
-    },
-    {
-      day: "28-10",
-      numberSV: 700,
-    },
-  ];
+const Chartline = ({datas}) => {
   var config = {
-    data: data,
+    data: datas,
     xField: "day",
     yField: "numberSV",
     label: {},

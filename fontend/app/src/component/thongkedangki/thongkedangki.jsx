@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   NavLink,
   Redirect,
@@ -6,14 +6,23 @@ import {
   Switch,
   useRouteMatch,
 } from "react-router-dom";
+import classApi from "../../api/classApi";
 import Loading from "../Loading";
 import NotFound from "../NotFound";
 import "../style2.css";
 const Thongketheovien = React.lazy(() => import("./thongketheovien"));
 const Thongketheongay = React.lazy(() => import("./thongketheongay"));
 
-function Thongkedangki(props) {
+function Thongkedangki({ semesterDk }) {
+  const [semesters, setSemesters] = useState([]);
   const match = useRouteMatch();
+  useEffect(() => {
+    const fectchData = async () => {
+      const list1 = await classApi.getAllSemester();
+      setSemesters(list1);
+    };
+    fectchData();
+  }, []);
   return (
     <div>
       <hr style={{ width: "100%", margin: "10px auto" }} className="hr-style" />
@@ -53,15 +62,12 @@ function Thongkedangki(props) {
               from={`${match.path}`}
               to={`${match.path}/thongketheongay`}
             />
-            <Route
-              exact
-              path={`${match.path}/thongketheongay`}
-              component={Thongketheongay}
-            />
-            <Route
-              path={`${match.path}/thongketheovien`}
-              component={Thongketheovien}
-            />
+            <Route exact path={`${match.path}/thongketheongay`}>
+              <Thongketheongay semesters={semesters} semesterDk={semesterDk} />
+            </Route>
+            <Route path={`${match.path}/thongketheovien`}>
+              <Thongketheovien semesters={semesters} semesterDk={semesterDk} />
+            </Route>
             <Route component={NotFound} />
           </Switch>
         </Suspense>

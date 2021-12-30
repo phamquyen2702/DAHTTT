@@ -8,7 +8,7 @@ import {
   useHistory,
   useRouteMatch,
 } from "react-router-dom";
-import { ROLE_DEFAULT } from "../dummydb/dataDefault";
+import { EXPIRE_DEFAULT, ROLE_DEFAULT } from "../dummydb/dataDefault";
 import getCookie from "./getcookie";
 import Loading from "./Loading";
 import NotFound from "./NotFound";
@@ -18,6 +18,9 @@ import Quanlysinhvien from "./quanlytaikhoan/quanlysinhvien";
 import "./style.scss";
 import Thongkedangki from "./thongkedangki/thongkedangki";
 import subjectApi from "../api/subjectApi";
+import userApi from "../api/userApi";
+import setcookie from "./setcookie";
+import classApi from "../api/classApi";
 const Dangkihocphan = React.lazy(() => import("./dangkihocphan"));
 const Thongtincanhan = React.lazy(() => import("./thongtincanhan"));
 const Dangkilophoc = React.lazy(() => import("./dangkilophoc"));
@@ -27,16 +30,46 @@ const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
 
 function Home({ user }) {
   const [semesterDk, setSemesterDk] = useState();
+  const [semesterClassDk, setSemesterClassDk] = useState();
   const match = useRouteMatch();
   const history = useHistory();
   const account = getCookie("account");
   if (!account) {
     history.push("/Account");
   }
+
   useEffect(() => {
     const fectchData = async () => {
-      const data = await subjectApi.getSemesterRegister();
-      setSemesterDk(data);
+      const dataS = await subjectApi.getSemesterRegister();
+      const dataClassS = await classApi.getSemesterRegister();
+      setSemesterDk(dataS);
+      setSemesterClassDk(dataClassS);
+      const account = getCookie("account");
+      const user = await userApi.get({ email: JSON.parse(account).email });
+      if (user.accounts[0].role === ROLE_DEFAULT) {
+        const param = {
+          Id: user.accounts[0].Id,
+          semester: dataS,
+        };
+        const paramClass = {
+          Id: user.accounts[0].Id,
+          semester: dataClassS,
+        };
+        const dataSub = await subjectApi.getRegisterSub(param);
+        let dataSubject = [];
+        for (let i = 0; i < dataSub.length; i++) {
+          const x = await subjectApi.get({ subjectId: dataSub[i].subjectId });
+          dataSubject.push(x.subject[0]);
+        }
+        setcookie("cartDKHP", JSON.stringify(dataSubject), EXPIRE_DEFAULT);
+        const dataC = await classApi.getRegisterClass(paramClass);
+        let dataClass = [];
+        for (let i = 0; i < dataC.length; i++) {
+          const x = await classApi.get(dataC[i].classId);
+          dataClass.push(x[0]);
+        }
+        setcookie("cartDKLH", JSON.stringify(dataClass), EXPIRE_DEFAULT);
+      }
     };
     fectchData();
   }, []);
@@ -78,14 +111,12 @@ function Home({ user }) {
             <Route path={`${match.path}/dangkihocphan`}>
               <Dangkihocphan semesterDk={semesterDk} />
             </Route>
-            <Route
-              path={`${match.path}/dangkilophoc`}
-              component={Dangkilophoc}
-            />
-            <Route
-              path={`${match.path}/thongtinlopmo`}
-              component={Thongtinlopmo}
-            />
+            <Route path={`${match.path}/dangkilophoc`}>
+              <Dangkilophoc semesterDk={semesterClassDk} />
+            </Route>
+            <Route path={`${match.path}/thongtinlopmo`}>
+              <Thongtinlopmo semesterDk={semesterClassDk} />
+            </Route>
             <Route path={`${match.path}/thongtincanhan`}>
               {user.role === ROLE_DEFAULT && <Thongtincanhan user={user} />}
               {user.role !== ROLE_DEFAULT && <Thongtinquanly user={user} />}
@@ -94,18 +125,15 @@ function Home({ user }) {
               path={`${match.path}/quanlytaikhoan`}
               component={Quanlysinhvien}
             />
-            <Route
-              path={`${match.path}/quanlylophoc`}
-              component={Quanlylophoc}
-            />
-            <Route
-              path={`${match.path}/quanlyhocphan`}
-              component={Quanlyhocphan}
-            />
-            <Route
-              path={`${match.path}/thongkedangki`}
-              component={Thongkedangki}
-            />
+            <Route path={`${match.path}/quanlylophoc`}>
+              <Quanlylophoc semesterDk={semesterClassDk} />
+            </Route>
+            <Route path={`${match.path}/quanlyhocphan`}>
+              <Quanlyhocphan semesterDk={semesterDk} />
+            </Route>
+            <Route path={`${match.path}/thongkedangki`}>
+              <Thongkedangki semesterDk={semesterClassDk} />
+            </Route>
             <Route component={NotFound} />
           </Switch>
         </Suspense>

@@ -1,36 +1,29 @@
-import getCookie from "../component/getcookie";
 import setcookie from "../component/setcookie";
+import { EXPIRE_DEFAULT } from "../dummydb/dataDefault";
 
-const { createSlice } = require("@reduxjs/toolkit");
-
-const classSlice = createSlice({
-  name: "class",
-  initialState: {
-    cartItems: getCookie("cartDKLH") ? JSON.parse(getCookie("cartDKLH")) : [],
-  },
-  reducers: {
-    addToCart(state, action) {
-      const newItem = action.payload;
-      const index = state.cartItems.findIndex(
-        (x) => x.malophoc === newItem.malophoc
+export const addToCart = (cartClass, classObj) => {
+  const index = cartClass.findIndex(
+    (x) => x.classId === classObj.datal.subjectId
+  );
+  const maxCredit = classObj.maxcredit;
+  if (index >= 0) {
+    throw new Error(`Mã lớp học ${classObj.datal.classId} đã được đăng kí`);
+  } else {
+    let sum = classObj.sumCredit + classObj.datal.credit;
+    if (sum > maxCredit) {
+      throw new Error(
+        `Số lượng tín chỉ hiện tại là ${sum} đã quá định mức cho phép`
       );
-      if (index >= 0) {
-        throw new Error(`Mã lớp học ${newItem.malophoc} đã được đăng kí`);
-      } else {
-        state.cartItems.push(newItem);
-        setcookie("cartDKLH", JSON.stringify(state.cartItems), 5);
-      }
-    },
+    } else {
+      cartClass.push(classObj.datal);
+      setcookie("cartDKLH", JSON.stringify(cartClass), EXPIRE_DEFAULT);
+    }
+  }
+};
 
-    deleteFromCart(state, action) {
-      const malophocdelete = action.payload;
-      state.cartItems = state.cartItems.filter(
-        (x) => x.malophoc !== malophocdelete
-      );
-      setcookie("cartDKLH", JSON.stringify(state.cartItems), 5);
-    },
-  },
-});
-const { actions, reducer } = classSlice;
-export const { addToCart, deleteFromCart } = actions;
-export default reducer;
+export const deleteFromCart=(cartClass,classId)=> {
+  cartClass = cartClass.filter(
+    (x) => x.classId !== classId
+  );
+  setcookie("cartDKLH", JSON.stringify(cartClass), EXPIRE_DEFAULT);
+}

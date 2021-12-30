@@ -6,16 +6,15 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import classApi from "../../api/classApi";
-import subjectApi from "../../api/subjectApi";
 import { STATUS_DEFAULT } from "../../dummydb/dataDefault";
 import { liststatus } from "../../dummydb/status";
 import "../style2.css";
 import "../style3.css";
 import Autocomplete from "@mui/material/Autocomplete";
 
-function Themlophoc(props) {
+function Themlophoc({semesterDk}) {
   const [valueStatus, setValueStatus] = useState(STATUS_DEFAULT);
-  const [valueSemester, setValueSemester] = useState(20201);
+  const [valueSemester, setValueSemester] = useState(semesterDk);
   const [subjectIds, setSubjectIds] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
@@ -37,7 +36,7 @@ function Themlophoc(props) {
       timeStart: 0,
       timeEnd: 0,
       status: STATUS_DEFAULT,
-      semester: 20201,
+      semester: semesterDk,
       location: "",
       limit: 200,
     },
@@ -58,6 +57,8 @@ function Themlophoc(props) {
         variant: "success",
       });
       form.reset();
+      setValueStatus(STATUS_DEFAULT);
+      setValueSemester(semesterDk);
     } catch (error) {
       enqueueSnackbar("Error", {
         variant: "error",
@@ -104,7 +105,6 @@ function Themlophoc(props) {
             <div className="thongtincanhan-contents-input">
               <Autocomplete
                 options={subjectIds}
-                autoSelect={true}
                 variant="standart"
                 fullWidth
                 renderInput={(params) => (
@@ -323,7 +323,7 @@ export const ImportFile = () => {
     console.log(value.file);
     try {
       const data = new FormData();
-      data.append('file', value.file[0]);
+      data.append("file", value.file[0]);
       await classApi.import(data);
       enqueueSnackbar("Success", {
         variant: "success",
@@ -360,7 +360,7 @@ export const ImportFile = () => {
               variant="outlined"
               margin="dense"
               name="file"
-              fullWidth
+              sx={30}
             />
           </div>
         </div>

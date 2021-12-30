@@ -157,6 +157,22 @@ const subjectApi = {
       },
     });
   },
+  getAllStudenBySubjectId(params){
+    const url = "/regSubject/get-student-by-subjectId";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  countAllStudenBySubjectId(params){
+    const url = "/regSubject/count-student-by-subjectId";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  }
 };
 
 export default subjectApi;

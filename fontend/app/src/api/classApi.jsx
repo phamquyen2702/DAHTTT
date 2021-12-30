@@ -129,6 +129,26 @@ const classApi = {
       },
     });
   },
+  getLikeSubjectId(params, id) {
+    const url = `/class/get-like-subjectId/${id}`;
+    return axiosClient.get(
+      url,
+      { params },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }
+    );
+  },
+  countLikeSubjectId(id) {
+    const url = `/class/count-like-subjectId/${id}`;
+    return axiosClient.get(url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
   getSemesterRegister() {
     const url = "/ote/get-semester-class-register";
     return axiosClient.get(url, {
@@ -148,6 +168,62 @@ const classApi = {
         },
       }
     );
+  },
+  registerClass(data) {
+    const url = "/regClass/classReg";
+    return axiosClient.post(url, data, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  checkClassId(classId) {
+    const url = `/class/checkClassId/${classId}`;
+    return axiosClient.get(url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  getRegisterClass(params) {
+    const url = "/regClass/search";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  getAllStudenByClassId(params){
+    const url = "/regClass/get-student-by-classId";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  countAllStudenByClassId(params){
+    const url = "/regClass/count-student-by-classId";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  getThongkeTheoVien(params){
+    const url = "/statistic/get-class-stat-by-school";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+  },
+  getThongkeTheoNgay(params){
+    const url = "/statistic/get-class-stat-by-day";
+    return axiosClient.get(url, {params}, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
   },
 };
 

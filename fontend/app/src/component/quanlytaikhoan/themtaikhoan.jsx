@@ -74,6 +74,10 @@ function Themtaikhoan(props) {
         variant: "success",
       });
       form.reset();
+      setValueGender(GENDER_DEFAULT);
+      setKhoavien(SCHOOL_ID_DEFAULT);
+      setValueRole(ROLE_DEFAULT);
+      setValueSchoolyear(SCHOOLYEAR_DEFAULT);
     } catch (error) {
       enqueueSnackbar("Error", {
         variant: "error",
@@ -415,7 +419,7 @@ export const ImportFile = () => {
     console.log(value.file[0]);
     try {
       const data = new FormData();
-      data.append('file', value.file[0]);
+      data.append("file", value.file[0]);
       await userApi.import(data);
       enqueueSnackbar("Success", {
         variant: "success",

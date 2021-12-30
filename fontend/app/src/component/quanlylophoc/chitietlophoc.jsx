@@ -2,19 +2,20 @@ import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, MenuItem, TextField } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Pagination } from "antd";
+import { Empty, Pagination } from "antd";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
 import { useForm } from "react-hook-form";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import classApi from "../../api/classApi";
 import { STATUS_DEFAULT } from "../../dummydb/dataDefault";
-import { dbaccount } from "../../dummydb/dbaccount";
+import { headerStudent } from "../../dummydb/headerListStudentcsv";
 import "../style2.css";
 import "../style3.css";
 
-function Chitietlophoc(props) {
+function Chitietlophoc({ semesterDk }) {
   const { classId } = useParams();
   const [classOne, setClassOne] = useState("");
   const [subjectIds, setSubjectIds] = useState([]);
@@ -55,7 +56,6 @@ function Chitietlophoc(props) {
   } = form;
   useEffect(() => {
     const setClasss = async () => {
-      //setValue Form
       setValue("subjectId", classOne.subjectId);
       setValueSubjectId(classOne.subjectId);
       setValue("classId", classOne.classId);
@@ -81,7 +81,7 @@ function Chitietlophoc(props) {
   const handleOnSubmit = async (value) => {
     try {
       const params = {
-        subjectId: classId,
+        classId: classId,
       };
       await classApi.update(value, params);
       enqueueSnackbar("Success", {
@@ -110,8 +110,7 @@ function Chitietlophoc(props) {
       }
     };
     handleSubjectId();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [enqueueSnackbar]);
   const handleBlock = async () => {
     try {
       await classApi.lock(classId);
@@ -144,14 +143,6 @@ function Chitietlophoc(props) {
   const handleChangeSemester = (event) => {
     setValueSemester(event.target.value);
   };
-  const row = dbaccount.map((data, index) => (
-    <tr key={index}>
-      <td>{index}</td>
-      <td>{data.masinhvien}</td>
-      <td>{data.name}</td>
-      <td>{data.lopsinhvien}</td>
-    </tr>
-  ));
   return (
     <div className="thongtincanhan">
       <p className="thongtincanhan-title">1. Thông tin lớp học</p>
@@ -403,48 +394,121 @@ function Chitietlophoc(props) {
       <p className="thongtincanhan-title">2. Danh sách sinh viên đăng kí</p>
       <hr style={{ opacity: "0.3", width: "100%" }} />
       <br />
-      <div className="thongtindangkisv-bottom">
-        <div className="table-dangki">
-          <table style={{ width: "100%", padding: "10px" }}>
-            <tr>
-              <th>STT</th>
-              <th>Mã sinh viên</th>
-              <th>Họ và tên</th>
-              <th>Lớp</th>
-            </tr>
-            {row}
-          </table>
-          <Button
-            style={{
-              width: "200px",
-              marginTop: "35px",
-              fontWeight: "400",
-              background: "rgb(235, 43, 43)",
-              color: "white",
-            }}
-            variant="contained"
-          >
-            Export file excel
-          </Button>
-          <Pagination
-            total={500}
-            itemRender={itemRender}
-            style={{ float: "right", marginTop: "40px" }}
-          />
-        </div>
-      </div>
+      <Chitietlopdangki semesterDk={semesterDk} classId={classId} />
     </div>
   );
 }
 
 export default Chitietlophoc;
 
-function itemRender(current, type, originalElement) {
-  if (type === "prev") {
-    return <Link>Previous</Link>;
-  }
-  if (type === "next") {
-    return <Link>Next</Link>;
-  }
-  return originalElement;
-}
+export const Chitietlopdangki = ({ semesterDk, classId }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [datas, setDatas] = useState([]);
+  const [datasExport, setDatasExport] = useState([]);
+  const [counts, setCounts] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const csvReport = {
+    filename: "list_student.csv",
+    headers: headerStudent,
+    data: datasExport,
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const params = {
+          classId: classId,
+          semester: semesterDk,
+          limit: 99999,
+          offset: 0,
+        };
+        const list = await classApi.getAllStudenByClassId(params);
+        setDatasExport(list);
+      } catch (error) {}
+    };
+    fetchData();
+  }, [limit, page, enqueueSnackbar, classId, semesterDk]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const paramsCount = {
+          classId: classId,
+          semester: semesterDk,
+        };
+        const params = {
+          classId: classId,
+          semester: semesterDk,
+          limit: limit,
+          offset: page === 1 ? 0 : (page - 1) * limit,
+        };
+        const count = await classApi.countAllStudenByClassId(paramsCount);
+        setCounts(count);
+        const list = await classApi.getAllStudenByClassId(params);
+        setDatas(list);
+      } catch (error) {}
+    };
+    fetchData();
+  }, [limit, page, enqueueSnackbar, classId, semesterDk]);
+  const handleChangePageAndPageSize = (page, limit) => {
+    setPage(page);
+    setLimit(limit);
+  };
+  return (
+    <div className="thongtindangkisv-bottom">
+      {datas.length !== 0 && (
+        <div className="table-dangki">
+          <table style={{ width: "100%", padding: "10px" }}>
+            <tr>
+              <th>STT</th>
+              <th>Mã sinh viên</th>
+              <th>Họ và tên</th>
+              <th>Khoa viện</th>
+            </tr>
+            {datas.map((data, index) => (
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{data.Id}</td>
+                <td>{data.fullname}</td>
+                <td>{data.schoolId}</td>
+              </tr>
+            ))}
+          </table>
+          <CSVLink {...csvReport}>
+            <Button
+              style={{
+                width: "200px",
+                marginTop: "35px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+            >
+              Export file excel
+            </Button>
+          </CSVLink>
+          <Pagination
+            pageSize={limit}
+            total={counts}
+            page={page}
+            onChange={handleChangePageAndPageSize}
+            pageSizeOptions={[10, 20, 30, 40, 50]}
+            style={{ float: "right", marginTop: "40px" }}
+          />
+        </div>
+      )}
+      {datas.length === 0 && (
+        <Empty
+          style={{
+            color: "red",
+            fontWeight: "600",
+            fontStyle: "italic",
+            fontSize: "13px",
+          }}
+          description="(Empty)"
+          image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+        />
+      )}
+    </div>
+  );
+};

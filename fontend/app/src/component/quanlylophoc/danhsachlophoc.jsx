@@ -22,11 +22,11 @@ function converOpt(list) {
   }
   return opt;
 }
-function Danhsachlophoc(props) {
+function Danhsachlophoc({semesterDk}) {
   const [searchLike, setSearchLike] = useState("");
   const [valueStatus, setValueStatus] = useState(STATUS_DEFAULT);
   const [valueSubjectId, setValueSubjectId] = useState();
-  const [valueSemester, setValueSemester] = useState(20201);
+  const [valueSemester, setValueSemester] = useState(semesterDk);
   const [subjectIds, setSubjectIds] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const { enqueueSnackbar } = useSnackbar();

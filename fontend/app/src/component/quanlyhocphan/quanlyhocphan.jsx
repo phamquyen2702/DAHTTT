@@ -14,7 +14,7 @@ const Themhocphan = React.lazy(() => import("./themhocphan"));
 const Thietlapdangki = React.lazy(() => import("./thietlapdangki"));
 const Chitiethocphan = React.lazy(() => import("./chitiethocphan"));
 
-function Quanlyhocphan(props) {
+function Quanlyhocphan({ semesterDk }) {
   const match = useRouteMatch();
   return (
     <div>
@@ -74,10 +74,9 @@ function Quanlyhocphan(props) {
               path={`${match.path}/danhsachhocphan`}
               component={Danhsachhocphan}
             />
-            <Route
-              path={`${match.path}/danhsachhocphan/:Id`}
-              component={Chitiethocphan}
-            />
+            <Route path={`${match.path}/danhsachhocphan/:Id`}>
+              <Chitiethocphan semesterDk={semesterDk} />
+            </Route>
             <Route path={`${match.path}/themhocphan`} component={Themhocphan} />
             <Route
               path={`${match.path}/thietlapdangki`}

@@ -11,69 +11,97 @@ import {
 import { useSnackbar } from "notistack";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { lophocs } from "../dummydb/dblophocdk";
 import { addToCart, deleteFromCart } from "../reducers/classSlice";
 import { DeleteOutlined } from "@ant-design/icons";
 import "./style.scss";
 import { Empty } from "antd";
 import getCookie from "./getcookie";
+import classApi from "../api/classApi";
+import userApi from "../api/userApi";
 
-//sum tin chỉ
-function sumTinchi(datas) {
+function countCredit(list) {
   let sum = 0;
-  for (let i = 0; i < datas.length; i++) {
-    sum = sum + datas[i].sotinchi;
+  for (let i = 0; i < list.length; i++) {
+    sum += list[i].credit;
   }
   return sum;
 }
-function Dangkilophoc(props) {
+function Dangkilophoc({ semesterDk }) {
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({});
   const form = useForm({
     defaultValues: {
-      search: "",
+      classId: "",
     },
     resolver: yupResolver(schema),
   });
-  const { register, handleSubmit, getValues } = form;
+  const { register, handleSubmit } = form;
   const [contentErr, setContentErr] = useState("");
   const [malophocRemove, setMalophocRemove] = useState("");
   const [listTKB, setListTKB] = useState([]);
-  const [tongtinchi, setTongtinchi] = useState(0);
+  const [creditUser, setCreditUser] = useState(0);
+  const datas = getCookie("cartDKLH") ? JSON.parse(getCookie("cartDKLH")) : [];
 
-  const handleSave = () => {
-    setListTKB(datas);
-    enqueueSnackbar("Success", {
-      variant: "success",
-    });
+  useEffect(() => {
+    const fectchData = async () => {
+      const account = getCookie("account");
+      const user = await userApi.get({ email: JSON.parse(account).email });
+      setCreditUser(user.accounts[0].maxcredit);
+      const param = {
+        Id: user.accounts[0].Id,
+        semester: semesterDk,
+      };
+      const dataC = await classApi.getRegisterClass(param);
+
+      let dataClass = [];
+      for (let i = 0; i < dataC.length; i++) {
+        const x = await classApi.get(dataC[i].classId);
+        dataClass.push(x[0]);
+      }
+      setListTKB(dataClass);
+    };
+    fectchData();
+  }, [semesterDk]);
+  const handleSave = async () => {
+    const datalist = {};
+    datalist.classes = datas;
+    try {
+      const registerClass = await classApi.registerClass(datalist);
+      if (registerClass === true) {
+        window.location.reload();
+        enqueueSnackbar("success", {
+          variant: "success",
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar("error", {
+        variant: "error",
+      });
+    }
   };
-  const dispatch = useDispatch();
-  //redux
-  const datas = useSelector((state) => state.class.cartItems);
-
   const [status, setStatus] = useState(false);
   const [remove, setRemove] = useState(false);
   const title = "";
+  const handleOnSubmit = async (value) => {
+    const existClass = await classApi.checkClassId(value.classId);
+    let sum = countCredit(datas);
 
-  useEffect(() => {
-    setTongtinchi(sumTinchi(datas));
-  }, [datas]);
-
-  const handleOnSubmit = () => {
-    const index = lophocs.findIndex((x) => x.malophoc === getValues("search"));
-
-    if (index >= 0) {
+    if (existClass === true) {
+      const data = await classApi.get(value.classId);
+      const dataAll = {
+        datal: data[0],
+        maxcredit: creditUser,
+        sumCredit: sum,
+      };
       try {
-        const action = addToCart(lophocs[index]);
-        dispatch(action);
+        addToCart(datas, dataAll);
       } catch (error) {
         setContentErr(error.message);
         setStatus(true);
       }
     } else {
-      setContentErr(`Mã lớp học ${getValues("search")} không tồn tại !`);
+      setContentErr(`Mã lớp học ${value.classId} không tồn tại !`);
       setStatus(true);
     }
     form.reset();
@@ -92,8 +120,7 @@ function Dangkilophoc(props) {
   };
 
   const handleAgreeDelete = () => {
-    const action = deleteFromCart(malophocRemove);
-    dispatch(action);
+    deleteFromCart(datas, malophocRemove);
     setRemove(false);
     setMalophocRemove("");
   };
@@ -103,17 +130,17 @@ function Dangkilophoc(props) {
         <div className="search-malop">
           <form onSubmit={handleSubmit(handleOnSubmit)}>
             <TextField
-              name="search"
-              {...register("search")}
-              autoFocus
-              id="outlined-input"
+              name="classId"
+              {...register("classId")}
               label="Đăng kí theo mã LH"
               type="text"
-              style={{ width: "200px", margin: "20px" }}
-              required
+              style={{ width: "200px", marginTop: "31px", marginLeft: "16px" }}
+              variant="outlined"
+              margin="dense"
+              autoFocus
             />
             <Button
-              type="onSubmit"
+              type="submit"
               style={{
                 width: "150px",
                 margin: "32px",
@@ -140,7 +167,6 @@ function Dangkilophoc(props) {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              {/* <Button onClick={handleClose}>Disagree</Button> */}
               <Button
                 onClick={handleClose}
                 autoFocus
@@ -175,8 +201,11 @@ function Dangkilophoc(props) {
             </DialogActions>
           </Dialog>
         </div>
-        <div className="search-hearder-right">
-          Số tín chỉ đã đăng kí : {tongtinchi}
+        <div
+          className="search-hearder-right"
+          style={{ marginTop: "50px", fontWeight: "600" }}
+        >
+          Số tín chỉ tối đa: {creditUser}
         </div>
       </div>
 
@@ -187,7 +216,6 @@ function Dangkilophoc(props) {
               <th>STT</th>
               <th>Mã lớp học</th>
               <th>Mã học phần</th>
-              <th>Tên học phần</th>
               <th>Phòng học</th>
               <th>Số tín chỉ</th>
               <th>Xóa đăng kí</th>
@@ -197,14 +225,13 @@ function Dangkilophoc(props) {
           {datas.map((data, index) => (
             <tr key={index}>
               <td>{index}</td>
-              <td>{data.malophoc}</td>
-              <td>{data.mahocphan}</td>
-              <td className="td-tenhocphan">{data.tenhocphan}</td>
-              <td>{data.phonghoc}</td>
-              <td>{data.sotinchi}</td>
+              <td>{data.classId}</td>
+              <td>{data.subjectId}</td>
+              <td>{data.location}</td>
+              <td>{data.credit}</td>
               <td
                 className="delete"
-                onClick={() => handleOpenDelete(data.malophoc)}
+                onClick={() => handleOpenDelete(data.classId)}
               >
                 <DeleteOutlined />
               </td>
@@ -219,10 +246,12 @@ function Dangkilophoc(props) {
               fontStyle: "italic",
               fontSize: "13px",
             }}
-            description="Đăng kí ngay( Empty)"
+            description="(Empty)"
             image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
           />
         )}
+        <br />
+        <br />
         <Button
           onClick={handleSave}
           style={{
@@ -245,26 +274,23 @@ function Dangkilophoc(props) {
       <div className="dk-footer">
         <p className="dk-footer-title">Thời khóa biểu chi tiết</p>
         <div className="table-dangki">
+          <br />
           <table style={{ width: "100%", padding: "10px" }}>
             {listTKB.length > 0 && (
               <tr>
                 <th>STT</th>
                 <th>Mã học phần</th>
-                <th>Tên học phần</th>
                 <th>Phòng học</th>
-                <th>Thời gian</th>
-                <th>Thứ</th>
+                <th>Tín chỉ</th>
               </tr>
             )}
 
             {listTKB.map((data, index) => (
               <tr key={index}>
                 <td>{index}</td>
-                <td>{data.malophoc}</td>
-                <td>{data.mahocphan}</td>
-                <td className="td-tenhocphan">{data.tenhocphan}</td>
-                <td>{data.phonghoc}</td>
-                <td>{data.sotinchi}</td>
+                <td>{data.subjectId}</td>
+                <td>{data.location}</td>
+                <td>{data.credit}</td>
               </tr>
             ))}
           </table>

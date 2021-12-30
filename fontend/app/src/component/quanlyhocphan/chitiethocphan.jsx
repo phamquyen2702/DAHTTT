@@ -1,19 +1,23 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, MenuItem, TextField } from "@material-ui/core";
-import { Pagination } from "antd";
+import { Empty, Pagination } from "antd";
 import { useSnackbar } from "notistack";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import subjectApi from "../../api/subjectApi";
+import classApi from "../../api/classApi";
 import { SCHOOL_ID_DEFAULT } from "../../dummydb/dataDefault";
 import { listkhoavien } from "../../dummydb/khoavien";
+import { headerStudent } from "../../dummydb/headerListStudentcsv";
+import { headerClassList } from "../../dummydb/headerListClassscsv";
+import { CSVLink } from "react-csv";
 import "../style2.css";
 import "../style3.css";
 
-function Chitiethocphan(props) {
+function Chitiethocphan({ semesterDk }) {
   const { Id } = useParams();
   const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
   const [subject, setSubject] = useState("");
@@ -115,31 +119,7 @@ function Chitiethocphan(props) {
       });
     }
   };
-  const hocphan = [
-    {
-      malophoc: "1991231",
-      phonghoc: "TC401",
-      soluongsv: 300,
-    },
-    {
-      malophoc: "1991231",
-      phonghoc: "TC401",
-      soluongsv: 3000,
-    },
-    {
-      malophoc: "1991231",
-      phonghoc: "TC401",
-      soluongsv: 3000,
-    },
-  ];
-  const row = hocphan.map((data, index) => (
-    <tr key={index}>
-      <td>{index}</td>
-      <td className="td-tenhocphan">{data.malophoc}</td>
-      <td>{data.phonghoc}</td>
-      <td>{data.soluongsv}</td>
-    </tr>
-  ));
+
   return (
     <div className="thongtincanhan">
       <p className="thongtincanhan-title">1. Thông tin học phần</p>
@@ -314,82 +294,247 @@ function Chitiethocphan(props) {
           </Button>
         )}
       </div>
-      <div className="thongtindangkisv-bottom">
-        <hr style={{ width: "100%", marginTop: "5%" }} />
-        <p className="thongtincanhan-title">2. Danh sách lớp giảng dạy</p>
-
-        <div className="table-dangki">
-          <table style={{ width: "100%", padding: "10px" }}>
-            <tr>
-              <th>STT</th>
-              <th>Mã lớp học</th>
-              <th>Phòng học</th>
-              <th>Số lượng sinh viên</th>
-            </tr>
-            {row}
-          </table>
-          <Button
-            style={{
-              width: "200px",
-              marginTop: "35px",
-              fontWeight: "400",
-              background: "rgb(235, 43, 43)",
-              color: "white",
-            }}
-            variant="contained"
-          >
-            Export file excel
-          </Button>
-          <Pagination
-            total={500}
-            itemRender={itemRender}
-            style={{ float: "right", marginTop: "40px" }}
-          />
-        </div>
-      </div>
       <br />
       <br />
-      <div className="table-dangki">
-        <hr style={{ width: "100%", marginTop: "5%" }} />
-        <p className="thongtincanhan-title">3. Danh sách sinh viên đăng kí</p>
-        <table style={{ width: "100%", padding: "10px" }}>
-          <tr>
-            <th>STT</th>
-            <th>Mã sinh viên</th>
-            <th>Họ và tên</th>
-            <th>Lớp</th>
-          </tr>
-          {row}
-        </table>
-        <Button
-          style={{
-            width: "200px",
-            marginTop: "35px",
-            fontWeight: "400",
-            background: "rgb(235, 43, 43)",
-            color: "white",
-          }}
-          variant="contained"
-        >
-          Export file excel
-        </Button>
-        <Pagination
-          total={500}
-          itemRender={itemRender}
-          style={{ float: "right", marginTop: "40px" }}
-        />
-      </div>
+      <hr style={{ opacity: "0.3", width: "100%" }} />
+      <p className="thongtincanhan-title">2. Thông tin lớp giảng dạy</p>
+      <br />
+      <Chitiethocphandangki1 semesterDk={semesterDk} subjectId={Id} />
+      <br />
+      <br />
+      <hr style={{ opacity: "0.3", width: "100%" }} />
+      <p className="thongtincanhan-title">3. Thông tin sinh viên đăng kí</p>
+      <br />
+      <Chitiethocphandangki2 semesterDk={semesterDk} subjectId={Id} />
     </div>
   );
 }
 
 export default Chitiethocphan;
-function itemRender(current, type, originalElement) {
-  if (type === "prev") {
-    return <Link>Previous</Link>;
-  }
-  if (type === "next") {
-    return <Link>Next</Link>;
-  }
-  return originalElement;
-}
+
+export const Chitiethocphandangki1 = ({ semesterDk, subjectId }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [datas, setDatas] = useState([]);
+  const [datasExport, setDatasExport] = useState([]);
+  const [counts, setCounts] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const csvReport = {
+    filename: "list_class.csv",
+    headers: headerClassList,
+    data: datasExport,
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const params = {
+          status: 1,
+          subjectId: subjectId,
+          semester: semesterDk,
+          limit: 99999,
+          offset: 0,
+        };
+        const list = await classApi.getFilter(params);
+        setDatasExport(list);
+      } catch (error) {}
+    };
+    fetchData();
+  }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const paramsCount = {
+          status: 1,
+          subjectId: subjectId,
+          semester: semesterDk,
+        };
+        const params = {
+          status: 1,
+          subjectId: subjectId,
+          semester: semesterDk,
+          limit: limit,
+          offset: page === 1 ? 0 : (page - 1) * limit,
+        };
+        const count = await classApi.count(paramsCount);
+        setCounts(count);
+        const list = await classApi.getFilter(params);
+        setDatas(list);
+      } catch (error) {}
+    };
+    fetchData();
+  }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
+  const handleChangePageAndPageSize = (page, limit) => {
+    setPage(page);
+    setLimit(limit);
+  };
+  return (
+    <div className="thongtindangkisv-bottom">
+      {datas.length !== 0 && (
+        <div className="table-dangki">
+          <table style={{ width: "100%", padding: "10px" }}>
+            <tr>
+              <th>STT</th>
+              <th>Mã lớp học</th>
+              <th>Tên môn học</th>
+              <th>Phòng học</th>
+            </tr>
+            {datas.map((data, index) => (
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{data.classId}</td>
+                <td>{data.subjectName}</td>
+                <td>{data.location}</td>
+              </tr>
+            ))}
+          </table>
+          <CSVLink {...csvReport}>
+            <Button
+              style={{
+                width: "200px",
+                marginTop: "35px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+            >
+              Export file excel
+            </Button>
+          </CSVLink>
+          <Pagination
+            pageSize={limit}
+            total={counts}
+            page={page}
+            onChange={handleChangePageAndPageSize}
+            pageSizeOptions={[10, 20, 30, 40, 50]}
+            style={{ float: "right", marginTop: "40px" }}
+          />
+        </div>
+      )}
+      {datas.length === 0 && (
+        <Empty
+          style={{
+            color: "red",
+            fontWeight: "600",
+            fontStyle: "italic",
+            fontSize: "13px",
+          }}
+          description="(Empty)"
+          image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+        />
+      )}
+    </div>
+  );
+};
+
+export const Chitiethocphandangki2 = ({ semesterDk, subjectId }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [datas, setDatas] = useState([]);
+  const [datasExport, setDatasExport] = useState([]);
+  const [counts, setCounts] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const csvReport = {
+    filename: "list_student.csv",
+    headers: headerStudent,
+    data: datasExport,
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const params = {
+          subjectId: subjectId,
+          semester: semesterDk,
+          limit: 99999,
+          offset: 0,
+        };
+        const list = await subjectApi.getAllStudenBySubjectId(params);
+        setDatasExport(list);
+      } catch (error) {}
+    };
+    fetchData();
+  }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const paramsCount = {
+          subjectId: subjectId,
+          semester: semesterDk,
+        };
+        const params = {
+          subjectId: subjectId,
+          semester: semesterDk,
+          limit: limit,
+          offset: page === 1 ? 0 : (page - 1) * limit,
+        };
+        const count = await subjectApi.countAllStudenBySubjectId(paramsCount);
+        setCounts(count);
+        const list = await subjectApi.getAllStudenBySubjectId(params);
+        setDatas(list);
+      } catch (error) {}
+    };
+    fetchData();
+  }, [limit, page, enqueueSnackbar, semesterDk, subjectId]);
+  const handleChangePageAndPageSize = (page, limit) => {
+    setPage(page);
+    setLimit(limit);
+  };
+  return (
+    <div className="thongtindangkisv-bottom">
+      {datas.length !== 0 && (
+        <div className="table-dangki">
+          <table style={{ width: "100%", padding: "10px" }}>
+            <tr>
+              <th>STT</th>
+              <th>Mã sinh viên</th>
+              <th>Họ và tên</th>
+              <th>Khoa viện</th>
+            </tr>
+            {datas.map((data, index) => (
+              <tr key={index}>
+                <td>{index}</td>
+                <td>{data.Id}</td>
+                <td>{data.fullname}</td>
+                <td>{data.schoolId}</td>
+              </tr>
+            ))}
+          </table>
+          <CSVLink {...csvReport}>
+            <Button
+              style={{
+                width: "200px",
+                marginTop: "35px",
+                fontWeight: "400",
+                background: "rgb(235, 43, 43)",
+                color: "white",
+              }}
+              variant="contained"
+            >
+              Export file excel
+            </Button>
+          </CSVLink>
+          <Pagination
+            pageSize={limit}
+            total={counts}
+            page={page}
+            onChange={handleChangePageAndPageSize}
+            pageSizeOptions={[10, 20, 30, 40, 50]}
+            style={{ float: "right", marginTop: "40px" }}
+          />
+        </div>
+      )}
+      {datas.length === 0 && (
+        <Empty
+          style={{
+            color: "red",
+            fontWeight: "600",
+            fontStyle: "italic",
+            fontSize: "13px",
+          }}
+          description="(Empty)"
+          image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+        />
+      )}
+    </div>
+  );
+};
