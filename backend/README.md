@@ -16,6 +16,8 @@ $ docker-compose up
 
 vào trình duyệt truy cập localhost:8000/docs để đến trang swagger của api
 
+vào trình duyệt truy cập localhost:8000 để vào chương trình
+
 # Window
 
 * Cài đặt mysql trên máy
@@ -27,3 +29,6 @@ vào trình duyệt truy cập localhost:8000/docs để đến trang swagger c�
 * Sửa username và password database trong file data_initalization.py sau đó chạy file này bằng lệnh: python data_initalization.py (bước này để tạo database và init account admin)
 
 * Sửa username và password database trong file config.py sau đó chạy lệnh $python app.py
+
+* Vào trình duyệt truy cập localhost:8000 để vào chương trình
+* Tài khoản quản trị hệ thống: email/pass : admin@gmail.com/admin123
