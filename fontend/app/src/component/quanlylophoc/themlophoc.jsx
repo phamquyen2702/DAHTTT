@@ -82,7 +82,7 @@ function Themlophoc({semesterDk}) {
         setSubjectIds(list);
         setSemesters(list1);
       } catch (error) {
-        enqueueSnackbar("Error", {
+        enqueueSnackbar(error.response.data.detail, {
           variant: "error",
         });
       }

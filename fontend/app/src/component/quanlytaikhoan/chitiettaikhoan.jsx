@@ -142,7 +142,7 @@ function Chitiettaikhoan(props) {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -155,7 +155,7 @@ function Chitiettaikhoan(props) {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

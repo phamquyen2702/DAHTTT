@@ -57,7 +57,7 @@ function Danhsachtaikhoan(props) {
           const list = await userApi.getFilter(params);
           setDatasExport(list.accounts);
         } catch (error) {
-          enqueueSnackbar("Error", {
+          enqueueSnackbar(error.response.data.detail, {
             variant: "error",
           });
         }
@@ -95,7 +95,7 @@ function Danhsachtaikhoan(props) {
           const list = await userApi.getFilter(params);
           setDatas(list.accounts);
         } catch (error) {
-          enqueueSnackbar("Error", {
+          enqueueSnackbar(error.response.data.detail, {
             variant: "error",
           });
         }

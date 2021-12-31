@@ -55,7 +55,7 @@ function Danhsachhocphan(props) {
           const list = await subjectApi.getFilter(params);
           setDatasExport(list);
         } catch (error) {
-          enqueueSnackbar("Error", {
+          enqueueSnackbar(error.response.data.detail, {
             variant: "error",
           });
         }
@@ -90,7 +90,7 @@ function Danhsachhocphan(props) {
           const list = await subjectApi.getFilter(params);
           setDatas(list);
         } catch (error) {
-          enqueueSnackbar("Error", {
+          enqueueSnackbar(error.response.data.detail, {
             variant: "error",
           });
         }
