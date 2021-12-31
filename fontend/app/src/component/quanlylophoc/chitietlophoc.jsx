@@ -424,7 +424,11 @@ export const Chitietlopdangki = ({ semesterDk, classId }) => {
         };
         const list = await classApi.getAllStudenByClassId(params);
         setDatasExport(list);
-      } catch (error) {}
+      } catch (error) {
+        enqueueSnackbar(error.response.data.detail, {
+          variant: "error",
+        });
+      }
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, classId, semesterDk]);
@@ -445,7 +449,11 @@ export const Chitietlopdangki = ({ semesterDk, classId }) => {
         setCounts(count);
         const list = await classApi.getAllStudenByClassId(params);
         setDatas(list);
-      } catch (error) {}
+      } catch (error) {
+        enqueueSnackbar(error.response.data.detail, {
+          variant: "error",
+        });
+      }
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, classId, semesterDk]);

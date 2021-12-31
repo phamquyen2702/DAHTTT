@@ -88,7 +88,7 @@ function Dangkihocphan({ semesterDk }) {
         });
       }
     } catch (error) {
-      enqueueSnackbar("error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -135,6 +135,7 @@ function Dangkihocphan({ semesterDk }) {
       } catch (error) {
         setContentErr(error.message);
         setStatus(true);
+        
       }
     } else {
       setContentErr(`Mã học phần ${value.subjectId} không tồn tại !`);

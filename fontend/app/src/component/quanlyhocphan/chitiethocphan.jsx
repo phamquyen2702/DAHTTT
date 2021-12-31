@@ -98,7 +98,7 @@ function Chitiethocphan({ semesterDk }) {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -114,7 +114,7 @@ function Chitiethocphan({ semesterDk }) {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -336,7 +336,9 @@ export const Chitiethocphandangki1 = ({ semesterDk, subjectId }) => {
         };
         const list = await classApi.getFilter(params);
         setDatasExport(list);
-      } catch (error) {}
+      } catch (error) {enqueueSnackbar(error.response.data.detail, {
+        variant: "error",
+      });}
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
@@ -359,7 +361,9 @@ export const Chitiethocphandangki1 = ({ semesterDk, subjectId }) => {
         setCounts(count);
         const list = await classApi.getFilter(params);
         setDatas(list);
-      } catch (error) {}
+      } catch (error) {enqueueSnackbar(error.response.data.detail, {
+        variant: "error",
+      });}
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
@@ -450,7 +454,11 @@ export const Chitiethocphandangki2 = ({ semesterDk, subjectId }) => {
         };
         const list = await subjectApi.getAllStudenBySubjectId(params);
         setDatasExport(list);
-      } catch (error) {}
+      } catch (error) {
+        enqueueSnackbar(error.response.data.detail, {
+          variant: "error",
+        });
+      }
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
@@ -471,7 +479,11 @@ export const Chitiethocphandangki2 = ({ semesterDk, subjectId }) => {
         setCounts(count);
         const list = await subjectApi.getAllStudenBySubjectId(params);
         setDatas(list);
-      } catch (error) {}
+      } catch (error) {
+        enqueueSnackbar(error.response.data.detail, {
+          variant: "error",
+        });
+      }
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, semesterDk, subjectId]);
