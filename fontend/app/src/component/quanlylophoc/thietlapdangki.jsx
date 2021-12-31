@@ -12,6 +12,16 @@ function Thietlapdangki(props) {
     defaultValues: {
       start_time: "2017-05-24T10:30",
       end_time: "2017-05-24T10:30",
+      start_time1: "T10:30",
+      end_time1: "T10:30",
+      start_time2: "T10:30",
+      end_time2: "T10:30",
+      start_time3: "T10:30",
+      end_time3: "T10:30",
+      start_time4: "T10:30",
+      end_time4: "T10:30",
+      start_time5: "T10:30",
+      end_time5: "T10:30",
     },
     resolver: yupResolver(schema),
   });
@@ -20,14 +30,51 @@ function Thietlapdangki(props) {
   useEffect(() => {
     const fetchOte = async () => {
       const data = await classApi.getOte();
+      console.log("data", data);
       setValue("start_time", `${data.start_time}`);
       setValue("end_time", `${data.end_time}`);
+      setValue("start_time1", `${data.timeframe.first_year.start_time}`);
+      setValue("end_time1", `${data.timeframe.first_year.end_time}`);
+      setValue("start_time4", `${data.timeframe.fourth_year.start_time}`);
+      setValue("end_time4", `${data.timeframe.fourth_year.end_time}`);
+      setValue("start_time5", `${data.timeframe.last_year.start_time}`);
+      setValue("end_time5", `${data.timeframe.last_year.end_time}`);
+      setValue("start_time2", `${data.timeframe.second_year.start_time}`);
+      setValue("end_time2", `${data.timeframe.second_year.end_time}`);
+      setValue("start_time3", `${data.timeframe.third_year.start_time}`);
+      setValue("end_time3", `${data.timeframe.third_year.end_time}`);
     };
     fetchOte();
   }, [setValue]);
   const handleOnSubmit = async (value) => {
     try {
-      const data = await classApi.updateOte(value);
+      const time = {
+        start_time: value.start_time,
+        end_time: value.end_time,
+        timeframe: {
+          first_year: {
+            start_time: value.start_time1,
+            end_time: value.end_time1,
+          },
+          second_year: {
+            start_time: value.start_time2,
+            end_time: value.end_time2,
+          },
+          third_year: {
+            start_time: value.start_time3,
+            end_time: value.end_time3,
+          },
+          fourth_year: {
+            start_time: value.start_time4,
+            end_time: value.end_time4,
+          },
+          last_year: {
+            start_time: value.start_time5,
+            end_time: value.end_time5,
+          },
+        },
+      };
+      const data = await classApi.updateOte(time);
       if (data === true) {
         enqueueSnackbar("success", {
           variant: "success",
@@ -74,17 +121,14 @@ function Thietlapdangki(props) {
         </div>
 
         <div className="table-thietlap">
-          <div className="thietlap-left">Khóa 66:</div>
+          <div className="thietlap-left">Năm nhất:</div>
           <div className="thietlap-right">
             <TextField
               label="Bắt đầu"
               type="time"
-              defaultValue="07:30"
+              {...register("start_time1")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
@@ -92,29 +136,23 @@ function Thietlapdangki(props) {
               style={{ marginLeft: "30px" }}
               label="Kết thúc"
               type="time"
-              defaultValue="07:30"
+              {...register("end_time1")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
           </div>
         </div>
         <div className="table-thietlap">
-          <div className="thietlap-left">Khóa 65:</div>
+          <div className="thietlap-left">Năm hai</div>
           <div className="thietlap-right">
             <TextField
               label="Bắt đầu"
               type="time"
-              defaultValue="07:30"
+              {...register("start_time2")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
@@ -122,29 +160,23 @@ function Thietlapdangki(props) {
               style={{ marginLeft: "30px" }}
               label="Kết thúc"
               type="time"
-              defaultValue="07:30"
+              {...register("end_time2")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
           </div>
         </div>
         <div className="table-thietlap">
-          <div className="thietlap-left">Khóa 64:</div>
+          <div className="thietlap-left">Năm ba:</div>
           <div className="thietlap-right">
             <TextField
               label="Bắt đầu"
               type="time"
-              defaultValue="07:30"
+              {...register("start_time3")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
@@ -152,29 +184,23 @@ function Thietlapdangki(props) {
               style={{ marginLeft: "30px" }}
               label="Kết thúc"
               type="time"
-              defaultValue="07:30"
+              {...register("end_time3")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
           </div>
         </div>
         <div className="table-thietlap">
-          <div className="thietlap-left">Khóa 63:</div>
+          <div className="thietlap-left">Năm tư:</div>
           <div className="thietlap-right">
             <TextField
               label="Bắt đầu"
               type="time"
-              defaultValue="07:30"
+              {...register("start_time4")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
@@ -182,29 +208,23 @@ function Thietlapdangki(props) {
               style={{ marginLeft: "30px" }}
               label="Kết thúc"
               type="time"
-              defaultValue="07:30"
+              {...register("end_time4")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
           </div>
         </div>
         <div className="table-thietlap">
-          <div className="thietlap-left">Khóa 62 trờ về trước:</div>
+          <div className="thietlap-left">Năm cuối:</div>
           <div className="thietlap-right">
             <TextField
               label="Bắt đầu"
               type="time"
-              defaultValue="07:30"
+              {...register("start_time5")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />
@@ -212,12 +232,9 @@ function Thietlapdangki(props) {
               style={{ marginLeft: "30px" }}
               label="Kết thúc"
               type="time"
-              defaultValue="07:30"
+              {...register("end_time5")}
               InputLabelProps={{
                 shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
               }}
               sx={{ width: 150 }}
             />

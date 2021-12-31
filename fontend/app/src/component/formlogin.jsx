@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
@@ -18,12 +18,21 @@ import { login } from "../reducers/userSlice";
 import Dangki from "./dangki";
 import getCookie from "./getcookie";
 import { useDispatch } from "react-redux";
+import classApi from "../api/classApi";
+import { headerClass } from "../dummydb/headerClassCsv";
+import { CSVLink } from "react-csv";
 import "./style.scss";
 
 function Formlogin(props) {
+  const [datasExport, setDatasExport] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [valueRole, setValueRole] = useState("ROLE_STUDENT");
   const history = useHistory();
+  const csvReport = {
+    filename: "class.csv",
+    headers: headerClass,
+    data: datasExport,
+  };
 
   const schema = yup.object().shape({
     email: yup
@@ -80,6 +89,27 @@ function Formlogin(props) {
   const handleCloseDK = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const semesterDk = await classApi.getSemesterRegister();
+        const params = {
+          status: 1,
+          semester: semesterDk,
+          limit: 99999999,
+          offset: 0,
+        };
+        const list = await classApi.getFilter(params);
+        setDatasExport(list);
+      } catch (error) {
+        enqueueSnackbar("Error", {
+          variant: "error",
+        });
+      }
+    };
+    fetchData();
+  }, [enqueueSnackbar]);
   return (
     <div className="content-login">
       <div className="content-login-left">
@@ -159,30 +189,19 @@ function Formlogin(props) {
       </div>
       <div className="content-login-right">
         <div className="content-login-right-top">
-          <Button
-            style={{
-              width: "300px",
-              marginTop: "20px",
-              background: "rgb(161, 11, 11)",
-              color: "white",
-            }}
-            variant="contained"
-          >
-            Thời khóa biểu dự kiến
-          </Button>
-        </div>
-        <div className="content-login-right-bot">
-          <Button
-            style={{
-              width: "300px",
-              marginTop: "20px",
-              background: "rgb(161, 11, 11)",
-              color: "white",
-            }}
-            variant="contained"
-          >
-            Danh sách lớp mở
-          </Button>
+          <CSVLink {...csvReport}>
+            <Button
+              style={{
+                width: "300px",
+                marginTop: "20px",
+                background: "rgb(161, 11, 11)",
+                color: "white",
+              }}
+              variant="contained"
+            >
+              Thời khóa biểu dự kiến
+            </Button>
+          </CSVLink>
         </div>
         <div className="content-login-right-bot">
           <Button
