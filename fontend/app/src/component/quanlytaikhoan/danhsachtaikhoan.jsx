@@ -14,7 +14,7 @@ import {
   LIMIT_PAGE_DEFAULT,
   ROLE_DEFAULT,
   SCHOOLYEAR_DEFAULT,
-  SCHOOL_ID_DEFAULT
+  SCHOOL_ID_DEFAULT,
 } from "../../dummydb/dataDefault";
 import { headerAccount } from "../../dummydb/headerAccountCsv";
 import { listkhoavien } from "../../dummydb/khoavien";
@@ -145,22 +145,24 @@ function Danhsachtaikhoan(props) {
   });
   const { register, handleSubmit } = form;
   const handleOnSubmit = async (value) => {
-    const params = {
-      Id: value.Id,
-      role: ROLE_DEFAULT,
-      limit: limit,
-      offset: page === 1 ? 0 : (page - 1) * limit,
-    };
-    const paramsCount = {
-      Id: value.Id,
-      role: ROLE_DEFAULT,
-    };
-    const count = await userApi.countLikeId(paramsCount);
-    setCounts(count);
-    const list = await userApi.getLikeId(params);
-    setDatas(list.accounts);
-    setSearchLike(value.Id);
-    setPage(1);
+    if (value.Id !== "") {
+      const params = {
+        Id: value.Id,
+        role: ROLE_DEFAULT,
+        limit: limit,
+        offset: page === 1 ? 0 : (page - 1) * limit,
+      };
+      const paramsCount = {
+        Id: value.Id,
+        role: ROLE_DEFAULT,
+      };
+      const count = await userApi.countLikeId(paramsCount);
+      setCounts(count);
+      const list = await userApi.getLikeId(params);
+      setDatas(list.accounts);
+      setSearchLike(value.Id);
+      setPage(1);
+    }
   };
   const handleResetSearch = () => {
     setSearchLike("");

@@ -22,7 +22,7 @@ function converOpt(list) {
   }
   return opt;
 }
-function Danhsachlophoc({semesterDk}) {
+function Danhsachlophoc({ semesterDk }) {
   const [searchLike, setSearchLike] = useState("");
   const [valueStatus, setValueStatus] = useState(STATUS_DEFAULT);
   const [valueSubjectId, setValueSubjectId] = useState();
@@ -167,17 +167,19 @@ function Danhsachlophoc({semesterDk}) {
   });
   const { register, handleSubmit } = form;
   const handleOnSubmit = async (value) => {
-    const params = {
-      limit: limit,
-      offset: page === 1 ? 0 : (page - 1) * limit,
-    };
+    if (value.classId !== "") {
+      const params = {
+        limit: limit,
+        offset: page === 1 ? 0 : (page - 1) * limit,
+      };
 
-    const count = await classApi.countLikeId(value.classId);
-    setCounts(count);
-    const list = await classApi.getLikeId(params, value.classId);
-    setDatas(list);
-    setSearchLike(value.classId);
-    setPage(1);
+      const count = await classApi.countLikeId(value.classId);
+      setCounts(count);
+      const list = await classApi.getLikeId(params, value.classId);
+      setDatas(list);
+      setSearchLike(value.classId);
+      setPage(1);
+    }
   };
   const handleResetSearch = () => {
     setSearchLike("");

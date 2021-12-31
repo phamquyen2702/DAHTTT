@@ -80,17 +80,19 @@ function Thongtinlopmo({ semesterDk }) {
   });
   const { register, handleSubmit } = form;
   const handleOnSubmit = async (value) => {
-    const params = {
-      limit: limit,
-      offset: page === 1 ? 0 : (page - 1) * limit,
-    };
+    if (value.subjectId !== "") {
+      const params = {
+        limit: limit,
+        offset: page === 1 ? 0 : (page - 1) * limit,
+      };
 
-    const count = await classApi.countLikeSubjectId(value.subjectId);
-    setCounts(count);
-    const list = await classApi.getLikeSubjectId(params, value.subjectId);
-    setDatas(list);
-    setSearchLike(value.subjectId);
-    setPage(1);
+      const count = await classApi.countLikeSubjectId(value.subjectId);
+      setCounts(count);
+      const list = await classApi.getLikeSubjectId(params, value.subjectId);
+      setDatas(list);
+      setSearchLike(value.subjectId);
+      setPage(1);
+    }
   };
   const handleChangePageAndPageSize = (page, limit) => {
     setPage(page);
