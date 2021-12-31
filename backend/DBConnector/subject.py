@@ -140,7 +140,12 @@ class SubjectConnector:
         mycursor = db.cursor()
 
         mycursor.execute(sql)
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            mycursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             
@@ -210,7 +215,12 @@ class SubjectConnector:
         mycursor = db.cursor()
 
         mycursor.execute(sql)
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            mycursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             
@@ -230,7 +240,12 @@ class SubjectConnector:
         print(sql)
         mycursor.execute(sql)
 
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            mycursor.close()
+            db.close()
+            return []
         results = []
 
         for row in records:
@@ -252,7 +267,12 @@ class SubjectConnector:
         print(sql)
         mycursor.execute(sql)
 
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            mycursor.close()
+            db.close()
+            return []
         results = []
 
         for row in records:
@@ -274,7 +294,12 @@ class SubjectConnector:
 
         mycursor.execute("select * from Subject where subjectId=%s", (subjectID,))
 
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            mycursor.close()
+            db.close()
+            return []
         results = []
 
         for row in records:
