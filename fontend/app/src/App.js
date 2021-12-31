@@ -110,7 +110,7 @@ export const Logout = ({ user, handleLogout }) => {
       });
       window.location.reload();
     } catch (error) {
-      enqueueSnackbar("password is incorrect", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
