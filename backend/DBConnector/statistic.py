@@ -19,7 +19,12 @@ class StatisticConnector:
         mycursor = db.cursor()
         
         mycursor.execute(sql)
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            mycursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -41,7 +46,12 @@ class StatisticConnector:
         mycursor = db.cursor()
         
         mycursor.execute(sql)
-        records = mycursor.fetchall()
+        try:
+            records = mycursor.fetchall()
+        except:
+            mycursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -71,6 +81,8 @@ class StatisticConnector:
         try:
             records = mycursor.fetchall()
         except:
+            mycursor.close()
+            db.close()
             return []
         results = []
         for row in records:
@@ -100,6 +112,8 @@ class StatisticConnector:
         try:
             records = mycursor.fetchall()
         except:
+            mycursor.close()
+            db.close()
             return []
         results = []
         for row in records:

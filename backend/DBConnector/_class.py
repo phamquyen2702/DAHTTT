@@ -56,7 +56,7 @@ class ClassConnector:
             db.rollback()
             my_cursor.close()
             db.close()
-            raise HTTPException(status_code=500, detail="Can't execute the query")
+            raise HTTPException(status_code=500, detail="Failed to update record to database rollback: {}".format(error))
         my_cursor.close()
         db.close()
 
@@ -91,7 +91,12 @@ class ClassConnector:
         my_cursor = db.cursor()
         print(sql)
         my_cursor.execute(sql)
-        records = my_cursor.fetchall()
+        try:
+            records = my_cursor.fetchall()
+        except:
+            my_cursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -194,7 +199,12 @@ class ClassConnector:
             print("search class")
             my_cursor.execute(f"select count(*) from Class where classId like '%{classId}%'")
 
-        records = my_cursor.fetchall()
+        try:
+            records = my_cursor.fetchall()
+        except:
+            my_cursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -214,7 +224,12 @@ class ClassConnector:
             print("search class")
             my_cursor.execute(f"select count(*) from Class where subjectId like '%{subjectId}%' and status=1 and semester={semester}")
 
-        records = my_cursor.fetchall()
+        try:
+            records = my_cursor.fetchall()
+        except:
+            my_cursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -234,7 +249,12 @@ class ClassConnector:
             print("search class")
             my_cursor.execute(f"select * from Class where subjectId like '%{subjectId}%' and status=1 and semester={semester} limit {limit} offset {offset}")
 
-        records = my_cursor.fetchall()
+        try:
+            records = my_cursor.fetchall()
+        except:
+            my_cursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -265,7 +285,12 @@ class ClassConnector:
             print("search class")
             my_cursor.execute(f"select * from Class where classId like '%{classId}%' limit {limit} offset {offset}")
 
-        records = my_cursor.fetchall()
+        try:
+            records = my_cursor.fetchall()
+        except:
+            my_cursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -295,7 +320,12 @@ class ClassConnector:
         my_cursor = db.cursor()
         
         my_cursor.execute(f"SELECT * FROM Class WHERE day={day} and location = '{location}' and semester = {semester} and status = 1  AND ((timeStart >= {timeStart} and timeStart <= {timeEnd}) or (timeEnd>={timeStart} AND timeEnd <= {timeEnd}) or (timeStart<={timeStart} and timeEnd >= {timeEnd}))")
-        records = my_cursor.fetchall()
+        try:
+            records = my_cursor.fetchall()
+        except:
+            my_cursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
@@ -324,7 +354,12 @@ class ClassConnector:
         my_cursor = db.cursor()
         if Id is not None:
             my_cursor.execute("select * from Class where classId=%s", (Id,))
-        records = my_cursor.fetchall()
+        try:
+            records = my_cursor.fetchall()
+        except:
+            my_cursor.close()
+            db.close()
+            return []
         results = []
         for row in records:
             row = list(row)
