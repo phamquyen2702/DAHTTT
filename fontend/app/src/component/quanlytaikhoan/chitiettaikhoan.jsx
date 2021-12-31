@@ -20,7 +20,6 @@ import {
   SCHOOLYEAR_DEFAULT,
   SCHOOL_ID_DEFAULT,
 } from "../../dummydb/dataDefault";
-import { lophocs } from "../../dummydb/dblophocdk";
 import { listkhoavien } from "../../dummydb/khoavien";
 import { listRole } from "../../dummydb/role";
 import { schoolyears } from "../../dummydb/schoolyear";
@@ -152,6 +151,23 @@ function Chitiettaikhoan(props) {
     try {
       await userApi.unlock(Id);
       window.location.reload();
+      enqueueSnackbar("Success", {
+        variant: "success",
+      });
+    } catch (error) {
+      enqueueSnackbar(error.response.data.detail, {
+        variant: "error",
+      });
+    }
+  };
+  const handleResetPassword = async () => {
+    try {
+      const params = {
+        Id: Id,
+      };
+      user.password=Id;
+
+      await userApi.update(user, params);
       enqueueSnackbar("Success", {
         variant: "success",
       });
@@ -456,6 +472,21 @@ function Chitiettaikhoan(props) {
             </Button>
           </div>
         </form>
+        <Button
+          style={{
+            width: "170px",
+            float: "right",
+            marginTop: "-35px",
+            marginRight: "12px",
+            fontWeight: "400",
+            background: "rgb(235, 43, 43)",
+            color: "white",
+          }}
+          variant="contained"
+          onClick={handleResetPassword}
+        >
+          Reset mật khẩu
+        </Button>
         {user.status === 1 && (
           <Button
             style={{
@@ -490,33 +521,6 @@ function Chitiettaikhoan(props) {
             Mở khóa tài khoản
           </Button>
         )}
-      </div>
-      <div className="thongtindangkisv-bottom">
-        <hr style={{ width: "100%", marginTop: "5%" }} />
-        <p className="thongtincanhan-title">Thông tin đăng kí</p>
-
-        <div className="table-dangki">
-          <table style={{ width: "100%", padding: "10px" }}>
-            <tr>
-              <th>STT</th>
-              <th>Mã lớp học</th>
-              <th>Mã học phần</th>
-              <th>Tên học phần</th>
-              <th>Phòng học</th>
-              <th>Số tín chỉ</th>
-            </tr>
-            {lophocs.map((data, index) => (
-              <tr key={index}>
-                <td>{index}</td>
-                <td>{data.malophoc}</td>
-                <td>{data.mahocphan}</td>
-                <td className="td-tenhocphan">{data.tenhocphan}</td>
-                <td>{data.phonghoc}</td>
-                <td>{data.sotinchi}</td>
-              </tr>
-            ))}
-          </table>
-        </div>
       </div>
     </div>
   );
