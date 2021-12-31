@@ -32,7 +32,7 @@ class SPAStaticFiles(StaticFiles):
 			response = await super().get_response('.', scope)
 		return response
 
-app.mount('/', SPAStaticFiles(directory='dist', html=True), name='dist')
+app.mount('/', SPAStaticFiles(directory='build', html=True), name='build')
 
 
 """
