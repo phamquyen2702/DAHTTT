@@ -37,7 +37,10 @@ function Themtaikhoan(props) {
       .string()
       .required("please enter your email")
       .email("please enter a valid"),
-    Id: yup.string().required("please enter your Id"),
+    Id: yup
+      .string()
+      .required("please enter your Id")
+      .min(6, "Please enter at least 6 characters"),
     fullname: yup.string().required("please enter your fullname"),
     address: yup.string().required("please enter your address"),
     phone: yup.string().required("please enter your phone"),

@@ -19,7 +19,7 @@ function Themhocphan(props) {
   const schema = yup.object().shape({
     subjectId: yup.string().required("please enter your subjectId"),
     subjectName: yup.string().required("please enter your subjectName"),
-    credit: yup.number().min(1, "Please enter at least 1 "),
+    credit: yup.number().min(0, "Please enter at least 0 "),
     note: yup.string().required("please enter your note"),
     programsemester: yup.number().min(1, "Please enter at least 1 "),
   });
