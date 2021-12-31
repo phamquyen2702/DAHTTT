@@ -37,6 +37,28 @@ def update_subject_ote(
         config: Dict = {
                 "start_time": "2021-11-01T10:30",
                 "end_time": "2021-11-21T10:30",
+                "timeframe": {
+                    "first_year": {
+                        "start_time": "00:00",
+                        "end_time": "4:30"
+                    },
+                    "second_year":{
+                        "start_time": "4:30",
+                        "end_time": "9:00"
+                    },
+                    "third_year": {
+                        "start_time": "9:00",
+                        "end_time": "13:30"
+                    },
+                    "fourth_year": {
+                        "start_time": "13:30",
+                        "end_time": "18:00"
+                    },
+                    "last_year": {
+                        "start_time": "18:00",
+                        "end_time": "23:59"
+                    },
+                },
                 "meta": {}
             },):
         #current_user: Account = Depends(get_current_active_user)):

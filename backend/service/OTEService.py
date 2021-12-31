@@ -162,6 +162,7 @@ class OTEService:
             return True
         else:
             return False
+    """
     async def validate_regis_class_time(self, student: Account):
         start_time = self._parse_time(self.config["class"]["start_time"])
         end_time = self._parse_time(self.config["class"]["end_time"])
@@ -180,7 +181,10 @@ class OTEService:
             return False
     """
     async def validate_regis_class_time(self, student: Account):
-        now = datetime.datetime.now() +datetime.timedelta(hours=7)
+        if os.environ.get("MODE") == "docker":
+            now = datetime.datetime.now() +datetime.timedelta(hours=7)
+        else:
+            now = datetime.datetime.now()
         start_time = self._parse_time(self.config["class"]["start_time"])
         end_time = self._parse_time(self.config["class"]["end_time"])
 
@@ -206,4 +210,4 @@ class OTEService:
             return True
         else:
             return False
-    """
+    
