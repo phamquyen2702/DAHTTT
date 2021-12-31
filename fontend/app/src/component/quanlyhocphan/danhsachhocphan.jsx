@@ -133,20 +133,22 @@ function Danhsachhocphan(props) {
   });
   const { register, handleSubmit } = form;
   const handleOnSubmit = async (value) => {
-    const params = {
-      subjectId: value.subjectId,
-      limit: limit,
-      offset: page === 1 ? 0 : (page - 1) * limit,
-    };
-    const paramsCount = {
-      subjectId: value.subjectId,
-    };
-    const count = await subjectApi.countLikeId(paramsCount);
-    setCounts(count);
-    const list = await subjectApi.getLikeId(params);
-    setDatas(list.subject);
-    setSearchLike(value.subjectId);
-    setPage(1);
+    if (value.subjectId !== "") {
+      const params = {
+        subjectId: value.subjectId,
+        limit: limit,
+        offset: page === 1 ? 0 : (page - 1) * limit,
+      };
+      const paramsCount = {
+        subjectId: value.subjectId,
+      };
+      const count = await subjectApi.countLikeId(paramsCount);
+      setCounts(count);
+      const list = await subjectApi.getLikeId(params);
+      setDatas(list.subject);
+      setSearchLike(value.subjectId);
+      setPage(1);
+    }
   };
   const handleResetSearch = () => {
     setSearchLike("");
