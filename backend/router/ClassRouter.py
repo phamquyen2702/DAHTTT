@@ -58,6 +58,7 @@ async def count(classId: Optional[int] = None,
                 status: Optional[str] = None):
     if subjectId == "": subjectId =None
     if semester == "": semester = None
+    if (status == "3") or (status == 3): status = None
     return await classService.count(classId=classId,
                                     subjectId=subjectId,
                                     semester=semester,
@@ -101,6 +102,7 @@ async def search(classId: Optional[int] = None,
     print(classId, type(classId))
     if subjectId == "": subjectId =None
     if semester == "": semester = None
+    if (status == "3") or (status == 3): status = None
     if export == 1:
         limit = None
         offset = None

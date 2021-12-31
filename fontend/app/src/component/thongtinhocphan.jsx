@@ -312,23 +312,7 @@ function Danhsachhocphan(props) {
           />
         )}
       </div>
-      {datas.length > 0 && (
-        <CSVLink {...csvReport}>
-          <Button
-            style={{
-              width: "200px",
-              marginLeft: "10px",
-              fontWeight: "400",
-              background: "rgb(235, 43, 43)",
-              color: "white",
-            }}
-            variant="contained"
-            onClick={handleExport}
-          >
-            Export file excel
-          </Button>
-        </CSVLink>
-      )}
+     
     </div>
   );
 }
