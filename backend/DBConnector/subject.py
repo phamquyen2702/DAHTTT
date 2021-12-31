@@ -75,7 +75,7 @@ class SubjectConnector:
             # reverting changes because of exception
             db.rollback()
             print(data)
-            raise HTTPException("Failed to update record to database rollback: {}".format(error))
+            raise HTTPException(status_code=422, detail="Failed to update record to database rollback: {}".format(error))
         mycursor.close()
         db.close()
 

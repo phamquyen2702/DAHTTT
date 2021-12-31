@@ -25,14 +25,16 @@ class CSVUtils:
         list_col = ["Id", "email","password" , "fullname" , "address" ,"birthday" ,"phone", "status",
                     "role" , "schoolyear" ,"cmnd" , "gender" ,"program" , "schoolId" ,"maxcredit" , ]
         cols = list(df.columns)
-        if not (cols==list_col) :
+        
+        if not (sorted(cols)==sorted(list_col)) :
             raise HTTPException(status_code=422, detail="Invalid format")
         try:
+        #if True:
             for col in list_col:
                 if col in ["Id","status","schoolyear","maxcredit"]:
                     df[col] = pd.to_numeric(df[col], downcast='integer')
         except:
-            raise HTTPException(status_code=422, detail="Invalid datatype int column")
+            raise HTTPException(status_code=422, detail=f"Invalid datatype int column {col}")
         return_accounts =[]
        
         for index, row in df.iterrows():
@@ -53,7 +55,7 @@ class CSVUtils:
     def validate_class(df):
         list_col = ['classId', 'subjectId', 'semester', 'location', 'day', 'timeStart', 'timeEnd', 'registered', 'limit', 'status']
         cols = list(df.columns)
-        if not (cols == list_col):
+        if not (sorted(cols) == sorted(list_col)):
             raise HTTPException(status_code=422, detail="Invalid format")
         try:
             for col in list_col:
@@ -83,7 +85,7 @@ class CSVUtils:
 
         list_col = ["subjectId", "subjectName", "credit", "programsemester", "schoolId", "status", "note"]
         cols = list(df.columns)
-        if not (list(cols) == list_col):
+        if not (sorted(list(cols)) == sorted(list_col)):
             print(cols)
             raise HTTPException(status_code=422, detail="Invalid format column")
 
