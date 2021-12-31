@@ -81,7 +81,10 @@ class CSVUtils:
     @staticmethod
     def validate_subject(df):
         # convert NAN to None
-        df["note"] = df["note"].fillna("", inplace=True)
+        try:
+            df["note"] = df["note"].fillna("", inplace=True)
+        except:
+            raise HTTPException(status_code=422, detail="No column 'note' in file")
 
         list_col = ["subjectId", "subjectName", "credit", "programsemester", "schoolId", "status", "note"]
         cols = list(df.columns)

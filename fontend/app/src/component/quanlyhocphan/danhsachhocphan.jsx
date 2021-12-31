@@ -90,7 +90,7 @@ function Danhsachhocphan(props) {
           const list = await subjectApi.getFilter(params);
           setDatas(list);
         } catch (error) {
-          enqueueSnackbar(error.response.data.detail, {
+          enqueueSnackbar("Error", {
             variant: "error",
           });
         }
