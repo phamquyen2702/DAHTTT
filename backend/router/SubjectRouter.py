@@ -48,7 +48,7 @@ async def search_subject(
         "note": note
     }
     if status == 3: filters["status"] = None
-    if schoolId == "": filters["schoolId"] = None
+    if schoolId == "all": filters["schoolId"] = None
     if export:
         limit = None
         offset = None
@@ -98,7 +98,7 @@ async def count_subject(
         "note": note
     }
     if status == 3: filters["status"] = None
-    if schoolId == "" :filters["schoolId"] = None
+    if schoolId == "all" :filters["schoolId"] = None
     subjects = await subject_service.count(filters=filters)
     return subjects
 

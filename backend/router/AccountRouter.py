@@ -98,6 +98,7 @@ async def count(Id : Optional[Union[int,str]]=None, email: Optional[str]=None, f
                 schoolId : Optional[str]=None, maxcredit: Optional[int]=None,):
     if Id == "":Id = None
     if status == 3:status=None
+    if schoolId == "all": schoolId = None
     role = accountService.parse_role[role]
     return await accountService.count(Id = Id, email=email, fullname = fullname,address =address,\
                                             birthday=birthday, phone=phone,status=status, role=role,\
@@ -113,6 +114,7 @@ async def search(Id : Optional[Union[int,str]]=None, email: Optional[str]=None, 
     role = accountService.parse_role[role]
     if Id == "":Id = None
     if status == 3:status=None
+    if schoolId == "all": schoolId = None
     if export == 1:
         limit = None
         offset = None  
