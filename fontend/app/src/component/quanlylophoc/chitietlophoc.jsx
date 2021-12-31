@@ -88,7 +88,7 @@ function Chitietlophoc({ semesterDk }) {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

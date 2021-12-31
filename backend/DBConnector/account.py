@@ -3,7 +3,7 @@ from config import Settings
 from model.model import *
 from fastapi import HTTPException
 from typing import List, Optional
-
+import time
 class AccountConnector:
     def __init__(self, ):
         self.config = Settings()
@@ -59,6 +59,7 @@ class AccountConnector:
     async def insert(self,accounts : List[Account]):
         others = []
         students = []
+        start = time.time()
         for acc in accounts:
             try:
                 if self.validate(acc):
@@ -68,15 +69,15 @@ class AccountConnector:
                         others.append(acc)                   
             except:
                 raise HTTPException(status_code=422, detail="Invalid Schema")
-
+        print("validate time in connector",time.time()-start)
         students = [self.object2data(x) for x in students]
         others = [self.object2data(x) for x in others]
         others = [(*x[:9],) for x in others ]
         if len(others):
-            print(others)
+           # print(others)
             self.do_query(others,self.sql_insert_other)
         if len(students):
-            print(students)
+           # print(students)
             self.do_query(students,self.sql_insert_student)
         return True
     async def lock(self,Id,status):

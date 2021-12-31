@@ -51,7 +51,7 @@ function Themhocphan(props) {
       setValueStatus(STATUS_DEFAULT)
 
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -253,7 +253,7 @@ export const ImportFile = () => {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

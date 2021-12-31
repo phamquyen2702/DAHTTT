@@ -76,7 +76,8 @@ function Dangkilophoc({ semesterDk }) {
         });
       }
     } catch (error) {
-      enqueueSnackbar("error", {
+      console.log("error",error.response.data.detail)
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

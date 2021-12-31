@@ -81,7 +81,7 @@ function Thietlapdangki(props) {
         });
       }
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -297,7 +297,7 @@ export const Thietlapkihoc = () => {
         });
       }
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

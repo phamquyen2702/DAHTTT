@@ -9,7 +9,7 @@ from config import Settings
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException, Depends, Request
 import pandas as pd
-import io
+import io, time
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="account/login")
 class AccountService:
@@ -70,24 +70,28 @@ class AccountService:
             session_time = timedelta(minutes=self.settings.expire_minutes)
             return JWTUtils.create_access_token(data={"email":login_object.email},expires_delta= session_time)
         else:
-            raise HTTPException(status_code=402, detail="Unautorized")
+            raise HTTPException(status_code=402, detail="sai tài khoản hoặc mật khẩu")
     async def change_password(self,old_password,new_password,current_user:Account):
         if JWTUtils.verify_password(old_password, current_user.password):
             hashed_password = JWTUtils.get_password_hash(new_password)
             res = await self.connector.update_password(current_user.Id, hashed_password)
             return res
         else:
-            raise HTTPException(status_code=402, detail="wrong old password")
+            raise HTTPException(status_code=402, detail="mật khẩu cũ sai")
 
     async def import_file(self,content):
         df = CSVUtils.read_content(content)
         accounts = CSVUtils.validate_account(df)
         processed = []
+        start = time.time()
         for acc in accounts:
+            start = time.time()
             acc.password = JWTUtils.get_password_hash(acc.password)
+            #print("validate time in service",time.time()-start)
             if type(acc.role) == str:
                 acc.role = self.parse_role[acc.role]
             processed.append(acc)
+        
         res = await self.connector.insert(processed)
 
     async def export_file(self,accounts:List[Account]):

@@ -60,7 +60,7 @@ function Themlophoc({semesterDk}) {
       setValueStatus(STATUS_DEFAULT);
       setValueSemester(semesterDk);
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -329,7 +329,7 @@ export const ImportFile = () => {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

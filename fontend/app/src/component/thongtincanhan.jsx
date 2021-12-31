@@ -91,7 +91,7 @@ function Thongtincanhan({ user }) {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

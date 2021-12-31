@@ -79,7 +79,7 @@ function Themtaikhoan(props) {
       setValueRole(ROLE_DEFAULT);
       setValueSchoolyear(SCHOOLYEAR_DEFAULT);
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }
@@ -425,7 +425,7 @@ export const ImportFile = () => {
         variant: "success",
       });
     } catch (error) {
-      enqueueSnackbar("Error", {
+      enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
     }

@@ -60,7 +60,7 @@ function Danhsachlophoc({semesterDk}) {
           const list = await classApi.getFilter(params);
           setDatasExport(list);
         } catch (error) {
-          enqueueSnackbar("Error", {
+          enqueueSnackbar(error.response.data.detail, {
             variant: "error",
           });
         }
@@ -96,7 +96,7 @@ function Danhsachlophoc({semesterDk}) {
           const list = await classApi.getFilter(params);
           setDatas(list);
         } catch (error) {
-          enqueueSnackbar("Error", {
+          enqueueSnackbar(error.response.data.detail, {
             variant: "error",
           });
         }
@@ -123,7 +123,7 @@ function Danhsachlophoc({semesterDk}) {
         setSubjectIds(list);
         setSemesters(list1);
       } catch (error) {
-        enqueueSnackbar("Error", {
+        enqueueSnackbar(error.response.data.detail, {
           variant: "error",
         });
       }

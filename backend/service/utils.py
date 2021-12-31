@@ -9,7 +9,7 @@ import pandas as pd
 from model.model import Account, Class, Subject
 import yaml
 import numpy as np
-
+import time
 
 class CSVUtils:
     @staticmethod
@@ -21,6 +21,7 @@ class CSVUtils:
 
     @staticmethod
     def validate_account(df):
+        start = time.time()
         list_col = ["Id", "email","password" , "fullname" , "address" ,"birthday" ,"phone", "status",
                     "role" , "schoolyear" ,"cmnd" , "gender" ,"program" , "schoolId" ,"maxcredit" , ]
         cols = list(df.columns)
@@ -45,7 +46,7 @@ class CSVUtils:
             except:
                 #print(row)
                 raise HTTPException(status_code=422, detail="Invalid datatype")
-        #print(return_accounts)
+        print("time validate in utils",time.time()-start)
         return return_accounts
 
     @staticmethod

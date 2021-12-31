@@ -103,7 +103,7 @@ function Formlogin(props) {
         const list = await classApi.getFilter(params);
         setDatasExport(list);
       } catch (error) {
-        enqueueSnackbar("Error", {
+        enqueueSnackbar(error.response.data.detail, {
           variant: "error",
         });
       }
