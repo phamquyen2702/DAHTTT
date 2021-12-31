@@ -7,4 +7,8 @@ export const liststatus = [
     value: 1,
     label: "Trạng thái mở",
   },
+  {
+    value: 3,
+    label: "Tất cả",
+  },
 ];

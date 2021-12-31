@@ -82,5 +82,9 @@ export const listkhoavien = [
   {
     value: "KGDQP",
     label: "Khoa Giáo dục Quốc phòng",
-  }
+  },
+  {
+    value: "all",
+    label: "Toàn trường",
+  },
 ];
