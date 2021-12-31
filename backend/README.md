@@ -22,9 +22,9 @@ vào trình duyệt truy cập localhost:8000 để vào chương trình
 
 * Cài đặt mysql trên máy
 
-* Cài đặt python, add environment variable trong lúc cài python
+* Cài đặt python 3, add environment variable trong lúc cài python 3
 
-* Mở terminal, cd đến thư mục backend, chạy lệnh pip install -r requirements.txt
+* Mở terminal, cd đến thư mục backend, chạy lệnh $ python -m pip install -r requirements.txt
 
 * Sửa username và password database trong file data_initalization.py sau đó chạy file này bằng lệnh: python data_initalization.py (bước này để tạo database và init account admin)
 
