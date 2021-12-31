@@ -25,8 +25,10 @@ const Dangkihocphan = React.lazy(() => import("./dangkihocphan"));
 const Thongtincanhan = React.lazy(() => import("./thongtincanhan"));
 const Dangkilophoc = React.lazy(() => import("./dangkilophoc"));
 const Thongtinlopmo = React.lazy(() => import("./thongtinlopmo"));
-
+const Thongtinhocphan = React.lazy(() => import("./thongtinhocphan"));
 const Thongtinquanly = React.lazy(() => import("./thongtinquanly"));
+
+
 
 function Home({ user }) {
   const [semesterDk, setSemesterDk] = useState();
@@ -117,6 +119,9 @@ function Home({ user }) {
             <Route path={`${match.path}/thongtinlopmo`}>
               <Thongtinlopmo semesterDk={semesterClassDk} />
             </Route>
+            <Route path={`${match.path}/thongtinhocphan`}>
+              <Thongtinhocphan semesterDk={semesterClassDk} />
+            </Route>
             <Route path={`${match.path}/thongtincanhan`}>
               {user.role === ROLE_DEFAULT && <Thongtincanhan user={user} />}
               {user.role !== ROLE_DEFAULT && <Thongtinquanly user={user} />}
@@ -194,6 +199,18 @@ export const MenuSV = () => {
           }}
         >
           Thông tin lớp mở
+        </NavLink>
+      </li>
+      <li style={{ paddingTop: "5px", listStyle: "none" }}>
+        <NavLink
+          style={{ textDecoration: "none" }}
+          to={`${match.url}/thongtinhocphan`}
+          activeStyle={{
+            fontWeight: "bold",
+            color: "rgb(161, 11, 11)",
+          }}
+        >
+          Thông tin học phần
         </NavLink>
       </li>
     </ul>
