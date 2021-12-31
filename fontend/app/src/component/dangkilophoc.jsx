@@ -19,6 +19,7 @@ import { Empty } from "antd";
 import getCookie from "./getcookie";
 import classApi from "../api/classApi";
 import userApi from "../api/userApi";
+import { TimeStartConvert,TimeEndConvert } from "../dummydb/time";
 
 function countCredit(list) {
   let sum = 0;
@@ -279,18 +280,28 @@ function Dangkilophoc({ semesterDk }) {
             {listTKB.length > 0 && (
               <tr>
                 <th>STT</th>
+                <th>Mã lớp học</th>
                 <th>Mã học phần</th>
+                <th>Tên học phần</th>
                 <th>Phòng học</th>
                 <th>Tín chỉ</th>
+                <th>Thứ</th>
+                <th>Thời gian</th>
               </tr>
             )}
 
             {listTKB.map((data, index) => (
               <tr key={index}>
                 <td>{index}</td>
+                <td>{data.classId}</td>
                 <td>{data.subjectId}</td>
+                <td>{data.subjectName}</td>
                 <td>{data.location}</td>
                 <td>{data.credit}</td>
+                <td>{data.day}</td>
+                <td>
+                  {TimeStartConvert[data.timeStart]} - {TimeEndConvert[data.timeEnd]}
+                </td>
               </tr>
             ))}
           </table>
