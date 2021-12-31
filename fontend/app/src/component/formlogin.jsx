@@ -19,18 +19,20 @@ import Dangki from "./dangki";
 import getCookie from "./getcookie";
 import { useDispatch } from "react-redux";
 import classApi from "../api/classApi";
-import { headerClass } from "../dummydb/headerClassCsv";
+import { headerTKB } from "../dummydb/headerTKBcsv";
 import { CSVLink } from "react-csv";
 import "./style.scss";
+import { ROLE_DEFAULT } from "../dummydb/dataDefault";
+import { TimeStartConvert,TimeEndConvert } from "../dummydb/time";
 
 function Formlogin(props) {
   const [datasExport, setDatasExport] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [valueRole, setValueRole] = useState("ROLE_STUDENT");
+  const [valueRole, setValueRole] = useState(ROLE_DEFAULT);
   const history = useHistory();
   const csvReport = {
-    filename: "class.csv",
-    headers: headerClass,
+    filename: "TKB.csv",
+    headers: headerTKB,
     data: datasExport,
   };
 
@@ -46,7 +48,7 @@ function Formlogin(props) {
   });
   const form = useForm({
     defaultValues: {
-      role: "ROLE_STUDENT",
+      role: ROLE_DEFAULT,
       email: "",
       password: "",
     },
@@ -101,6 +103,9 @@ function Formlogin(props) {
           offset: 0,
         };
         const list = await classApi.getFilter(params);
+        for(let i =0;i<list.length;i++){
+          list[i].time=`${TimeStartConvert[list[i].timeStart]}-${TimeEndConvert[list[i].timeEnd]}`
+        }
         setDatasExport(list);
       } catch (error) {
         enqueueSnackbar(error.response.data.detail, {
