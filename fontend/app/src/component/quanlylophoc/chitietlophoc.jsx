@@ -351,7 +351,7 @@ function Chitietlophoc({ semesterDk }) {
               variant="contained"
               type="submit"
             >
-              Cập nhật học phần
+              Cập nhật lớp học
             </Button>
           </div>
         </form>

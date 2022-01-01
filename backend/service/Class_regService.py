@@ -29,6 +29,7 @@ class Class_regService:
         self.subjectService = SubjectService()
         self.accountService = AccountService()
     async def search(self,Id,semester,classId,limit=None,offset=None):
+        semester = await self.oteService.get_semester_class_config() 
         if limit == None and offset ==None:
             return await self.connector.search(Id,semester,classId,limit,offset)
         else:
@@ -40,6 +41,7 @@ class Class_regService:
                 res.append(acc[0])
             return res
     async def count(self,semester,classId):
+        semester = await self.oteService.get_semester_class_config() 
         return await self.connector.count(semester,classId)
     # async def subject_reg(self,subreg: list[Sub_Reg], current_user:Sub_Reg):
     #     processed = []

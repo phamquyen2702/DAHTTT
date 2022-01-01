@@ -36,11 +36,11 @@ async def search(semester:int,Id:Optional[int]=None,classId:Optional[str]=None,c
     return await class_regService.search(Id,semester,classId,limit=None,offset=None)
 
 @router.get("/get-student-by-classId")
-async def get_studen_by_classId(classId:int,semester:int,limit:int,offset:int):
-     return await class_regService.search(None,semester,classId,limit,offset)
+async def get_studen_by_classId(classId:int,limit:int,offset:int):
+     return await class_regService.search(None,None,classId,limit,offset)
 @router.get("/count-student-by-classId")
-async def count_studen_by_classId(classId:int,semester:int):
-     return await class_regService.count(semester,classId)
+async def count_studen_by_classId(classId:int):
+     return await class_regService.count(None,classId)
 
 
 @router.post("/classReg")
