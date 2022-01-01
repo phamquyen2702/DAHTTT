@@ -33,6 +33,7 @@ class Subject_regService:
         else:
             return True
     async def search(self,Id,semester,subjectId=None,limit=None,offset=None):
+        semester = await  self.oteService.get_semester_subject_config()
         if limit == None and offset ==None:
             return await self.connector.search(Id,semester,subjectId)
         else:
@@ -44,6 +45,7 @@ class Subject_regService:
                 res.append(acc[0])
             return res
     async def count(self,semester,subjectId):
+        semester = await self.oteService.get_semester_subject_config()
         return await self.connector.count(semester,subjectId)
 
     async def subject_reg(self,subreg, semester,current_user: Account):
