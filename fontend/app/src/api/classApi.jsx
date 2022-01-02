@@ -37,21 +37,19 @@ const classApi = {
     );
   },
 
-  lock(params) {
-    const url = "/class/lock";
+  lock(id) {
+    const url = `/class/lock/${id}`;
     return axiosClient.get(
       url,
-      { params },
       {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       }
     );
   },
-  unlock(params) {
-    const url = "/class/unlock";
+  unlock(id) {
+    const url = `/class/unlock/${id}`;
     return axiosClient.get(
       url,
-      { params },
       {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       }
