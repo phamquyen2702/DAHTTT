@@ -33,13 +33,13 @@ async def update(_class: Class, classId: str):# current_user: Account = Depends(
     return res
 
 
-@router.post("/lock/{classId}")
+@router.get("/lock/{classId}")
 async def lock(classId: int):#, current_user: Account = Depends(get_current_active_user)):
     res = await classService.lock_one(classId)
     return res
 
 
-@router.post("/unlock/{classId}")
+@router.get("/unlock/{classId}")
 async def unlock(classId: int):#, current_user: Account = Depends(get_current_active_user)):
     res = await classService.unlock_one(classId)
     return res
