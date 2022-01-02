@@ -54,7 +54,9 @@ gender VARCHAR(255),\
 program VARCHAR(255),\
 schoolId VARCHAR(255),\
 maxcredit INT(8))")
-
+except:
+  pass
+try:
   sql = "INSERT INTO Account (Id, email, password, fullname, address, birthday, phone, status, role) VALUES (%s,%s, %s, %s, %s, %s,%s,%s,%s)"
   #sql = "UPDATE Account WHERE Id = %s SET  email=%s, password=%s, fullname=%s, address=%s, birthday=%s, phone=%s, status=%s, role=%s "
 
@@ -69,9 +71,9 @@ maxcredit INT(8))")
   print("\nPrinting each row")
   for row in records:
       print(row)
-
 except:
   pass
+
 
 
 

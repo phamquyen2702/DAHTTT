@@ -156,6 +156,7 @@ async def import_subject(file: UploadFile = File(...)):#, current_user: Account 
 #     return res
 @router.get("/get-all-subject-id")
 async def get_all_subject_id(status=1):
+    status = 1
     return await subject_service.get_all_subject_id(status)
 
 @router.post("/export")
