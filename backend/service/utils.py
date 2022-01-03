@@ -16,7 +16,10 @@ class CSVUtils:
     def read_content(content):
         with open("test.csv", 'wb') as f:
             f.write(content)
-        df = pd.read_csv('test.csv')
+        try:
+            df = pd.read_csv('test.csv')
+        except:
+            raise HTTPException(status_code=422, detail="Invalid format")
         return df
 
     @staticmethod
