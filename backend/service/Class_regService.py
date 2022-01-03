@@ -66,21 +66,23 @@ class Class_regService:
         for class_ in list_class:
             #class_ = await self.classService.get_class_by_id(id_)
             id_ = class_.classId
-            if class_[0].status != 1: 
+            if class_.status != 1: 
                 raise HTTPException(status_code=410, detail=f"lớp {id_} bị khóa")
-            if class_[0].registered >= class_[0].limit:
+            if class_.registered >= class_.limit:
                 raise HTTPException(status_code=410, detail=f"lớp {id_} đầy")
             listClass += class_
             #c = await self.subjectService.get_subject_by_id(class_[0].subjectId)
-            total += class_[0].credit
+            total += class_.credit
         print("total registered credit",total)
         if total > current_user.maxcredit:
             raise HTTPException(status_code=410, detail="vượt quá số tín chỉ tối đa")
+        """
         for i, class1 in enumerate(listClass):
             for j, class2 in enumerate(listClass):
                 if i==j : continue
                 if not self.check_time(class1,class2):
                     raise HTTPException(status_code=410, detail=f"trùng lịch học 2 lớp {class1.classId} và {class2.classId}")
+        """
         return True
 
     async def class_reg(self,classreg,current_user: Account):
@@ -91,7 +93,7 @@ class Class_regService:
             raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
 
         # kiểm tra trùng thời khóa biểu
-       # await self.validate_register(classreg.classes)
+        await self.validate_register(classreg.classes,current_user)
         
         processed = []
         comming = []

@@ -28,6 +28,8 @@ class Subject_regService:
         total = 0
         for sub in subjects:
             total += sub.credit
+            if sub.status == 0:
+                raise HTTPException(status_code=410, detail=f"học phần {sub.subjectId} bị khóa")
         if total > current_user.maxcredit:
             raise HTTPException(status_code=410, detail=f"vượt quá số tín chỉ tối đa {current_user.maxcredit}")
         else:
@@ -54,6 +56,10 @@ class Subject_regService:
         state = await self.oteService.validate_regis_subject_time()
         if state == False:
             raise HTTPException(status_code=410, detail="không phải thời điểm đăng kí")
+
+        await self.validate(subreg.subjects,current_user)
+
+
         processed = []
         registered = await self.search(current_user.Id,semester)
         registered_subId =[x.subjectId for x in registered]
