@@ -95,6 +95,8 @@ class OTEService:
     def update_subject_ote(self, config):
         if self._parse_time(config["start_time"]) > self._parse_time(config["end_time"]):
             raise HTTPException(status_code=410, detail="thời gian kết thúc sau thời gian bắt đầu")
+        if self._parse_time(config["end_time"]) < datetime.datetime.now():
+            raise HTTPException(status_code=410, detail="thời gian mở đăng kí đã qua")
         establish_time = time.time()
         config["meta"]={}
         config["meta"]["establish_time"] = establish_time
@@ -106,6 +108,8 @@ class OTEService:
     def update_class_ote(self, config):
         if self._parse_time(config["start_time"]) > self._parse_time(config["end_time"]):
             raise HTTPException(status_code=410, detail="thời gian kết thúc sau thời gian bắt đầu")
+        if self._parse_time(config["end_time"]) < datetime.datetime.now():
+            raise HTTPException(status_code=410, detail="thời gian mở đăng kí đã qua")
         establish_time = time.time()
         config["meta"]={}
         config["meta"]["establish_time"] = establish_time
