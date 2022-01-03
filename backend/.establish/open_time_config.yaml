@@ -20,7 +20,7 @@ class:
       start_time: '18:00'
       end_time: '21:00'
     last_year:
-      start_time: '21:00'
+      start_time: '14:00'
       end_time: '23:59'
   meta:
     establish_time: 1641200641.862172

@@ -81,7 +81,7 @@ async def count(classId: int):
                                     timeEnd=None,
                                     registered=None,
                                     _limit=None,
-                                    status=None)
+                                    status=1)
     if res == 1: return True
     else : return False
 
