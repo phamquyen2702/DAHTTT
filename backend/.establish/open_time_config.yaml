@@ -1,11 +1,11 @@
 subject:
   start_time: 2021-11-01T10:30
-  end_time: 2022-02-05T10:30
+  end_time: 2022-02-10T10:30
   meta:
-    establish_time: 1641135578.3238382
+    establish_time: 1641200005.258651
 class:
   start_time: 2021-11-01T10:30
-  end_time: 2022-01-31T10:30
+  end_time: 2022-02-04T10:30
   timeframe:
     first_year:
       start_time: 00:00
@@ -23,7 +23,7 @@ class:
       start_time: '21:00'
       end_time: '23:59'
   meta:
-    establish_time: 1640918890.3737195
+    establish_time: 1641135979.6133838
 semester:
   list:
     20201: 20201

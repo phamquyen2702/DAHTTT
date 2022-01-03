@@ -5,7 +5,7 @@ from model.model import Account
 import os
 import time
 import datetime
-
+from fastapi import FastAPI, HTTPException
 
 class OTEService:
     def __init__(self, ):
@@ -93,6 +93,8 @@ class OTEService:
             print("LOADED OTE")
 
     def update_subject_ote(self, config):
+        if self._parse_time(config["start_time"]) > self._parse_time(config["end_time"]):
+            raise HTTPException(status_code=410, detail="thời gian kết thúc sau thời gian bắt đầu")
         establish_time = time.time()
         config["meta"]={}
         config["meta"]["establish_time"] = establish_time
@@ -102,6 +104,8 @@ class OTEService:
         return True
 
     def update_class_ote(self, config):
+        if self._parse_time(config["start_time"]) > self._parse_time(config["end_time"]):
+            raise HTTPException(status_code=410, detail="thời gian kết thúc sau thời gian bắt đầu")
         establish_time = time.time()
         config["meta"]={}
         config["meta"]["establish_time"] = establish_time
