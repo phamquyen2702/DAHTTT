@@ -70,7 +70,7 @@ async def checkSubjectId(subjectId:str):
         "credit": None,
         "programsemester": None,
         "schoolId": None,
-        "status": 1,
+        "status":None,
         "note": None
     }
     c = await subject_service.count(filters=filters)
