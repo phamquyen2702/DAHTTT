@@ -5,7 +5,7 @@ function CheckTime(list, timeStart, day) {
     (x) => x.timeStart <= timeStart && x.timeEnd >= timeStart
   );
   const indexDay = list.findIndex((x) => x.day === day);
-  if ( indexDay >= 0 && indexTimeStart >= 0) {
+  if (indexDay >= 0 && indexTimeStart >= 0) {
     return indexDay;
   }
   return "";
@@ -21,7 +21,10 @@ export const addToCart = (cartClass, classObj) => {
   const timeStart = classObj.datal.timeStart;
   const day = classObj.datal.day;
   const maxCredit = classObj.maxcredit;
-  if (index >= 0) {
+  const statusDK = classObj.datal.status;
+  if (statusDK === 0) {
+    throw new Error(`Lớp ${classObj.datal.classId} đã bị hủy`);
+  } else if (index >= 0) {
     throw new Error(`Mã lớp học ${classObj.datal.classId} đã được đăng kí`);
   } else if (index1 >= 0) {
     throw new Error(`Mã học phần ${classObj.datal.subjectId} đã được đăng kí`);

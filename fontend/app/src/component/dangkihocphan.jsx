@@ -241,7 +241,7 @@ function Dangkihocphan({ semesterDk }) {
 
           {datas &&
             datas.map((data, index) => (
-              <tr key={index}>
+              <tr key={index} style={data.status === 0 ? { color: "red" } : { color: "blue" }}>
                 <td>{index}</td>
                 <td>{data.subjectId}</td>
                 <td>{data.subjectName}</td>
@@ -326,7 +326,7 @@ function Dangkihocphan({ semesterDk }) {
             )}
 
             {listTKB.map((data, index) => (
-              <tr key={index}>
+              <tr key={index} style={data.status === 0 ? { color: "red" } : { color: "blue" }}>
                 <td>{index}</td>
                 <td>{data.subjectId}</td>
                 <td>{data.subjectName}</td>

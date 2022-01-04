@@ -19,7 +19,7 @@ import { Empty } from "antd";
 import getCookie from "./getcookie";
 import classApi from "../api/classApi";
 import userApi from "../api/userApi";
-import { TimeStartConvert,TimeEndConvert } from "../dummydb/time";
+import { TimeStartConvert, TimeEndConvert } from "../dummydb/time";
 
 function countCredit(list) {
   let sum = 0;
@@ -76,7 +76,6 @@ function Dangkilophoc({ semesterDk }) {
         });
       }
     } catch (error) {
-      console.log("error",error.response.data.detail)
       enqueueSnackbar(error.response.data.detail, {
         variant: "error",
       });
@@ -225,7 +224,7 @@ function Dangkilophoc({ semesterDk }) {
           )}
 
           {datas.map((data, index) => (
-            <tr key={index}>
+            <tr key={index} style={data.status === 0 ? { color: "red" } : { color: "blue" }}>
               <td>{index}</td>
               <td>{data.classId}</td>
               <td>{data.subjectId}</td>
@@ -292,7 +291,7 @@ function Dangkilophoc({ semesterDk }) {
             )}
 
             {listTKB.map((data, index) => (
-              <tr key={index}>
+              <tr key={index} style={data.status === 0 ? { color: "red" } : { color: "blue" }}>
                 <td>{index}</td>
                 <td>{data.classId}</td>
                 <td>{data.subjectId}</td>
@@ -301,7 +300,8 @@ function Dangkilophoc({ semesterDk }) {
                 <td>{data.credit}</td>
                 <td>{data.day}</td>
                 <td>
-                  {TimeStartConvert[data.timeStart]} - {TimeEndConvert[data.timeEnd]}
+                  {TimeStartConvert[data.timeStart]} -{" "}
+                  {TimeEndConvert[data.timeEnd]}
                 </td>
               </tr>
             ))}
