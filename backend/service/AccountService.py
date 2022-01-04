@@ -64,6 +64,8 @@ class AccountService:
             raise HTTPException(status_code=402, detail="Unautorized")
         if user[0].role == 0:
             raise HTTPException(status_code=400, detail="Inactive user")
+        if user[0].status == 0:
+            raise HTTPException(status_code=400, detail="Inactive user")
         
         user = user[0]
         if JWTUtils.verify_password(login_object.password, user.password):
