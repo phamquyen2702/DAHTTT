@@ -39,7 +39,7 @@ class ClassService:
         return res
     async def search_collision(self,class_:Class):
         res = await self.connector.search_collision(semester=class_.semester,day=class_.day,location=class_.location,timeEnd=class_.timeEnd,timeStart=class_.timeStart)
-        if len(res):
+        if len(res) and (class_.classId != res[0].classId):
             raise HTTPException(status_code=422, detail=f"lớp {class_.classId} trùng thời khóa biểu với lớp {res[0].classId}")
         
     async def get_class_by_id(self, Id: Optional[str] = None):
