@@ -41,7 +41,17 @@ class ClassService:
         res = await self.connector.search_collision(semester=class_.semester,day=class_.day,location=class_.location,timeEnd=class_.timeEnd,timeStart=class_.timeStart)
         if len(res) and (class_.classId != res[0].classId):
             raise HTTPException(status_code=422, detail=f"lớp {class_.classId} trùng thời khóa biểu với lớp {res[0].classId}")
-        
+    async def transform(self,classes:List[Class]):
+        res = []
+        for c in classes:
+            if c.status == 3:
+                c_ = await self.get_class_by_id(c.classId)
+                c.status = c_[0].status
+                res.append(c)
+            else:
+                res.append(c)
+        return res
+
     async def get_class_by_id(self, Id: Optional[str] = None):
         cls_ = await self.connector.get_class_by_id(Id)
         return await self.aggerate(cls_)
@@ -72,6 +82,7 @@ class ClassService:
     async def update_one(self, _class: Class):
         await self.search_collision(_class)
         _class = await self.aggerate([_class])
+        _class = await self.transform(_class)
         return await self.connector.update(_class)
 
     async def lock_one(self, classId: int):
