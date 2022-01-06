@@ -23,6 +23,7 @@ import {
 import { listkhoavien } from "../../dummydb/khoavien";
 import { listRole } from "../../dummydb/role";
 import { schoolyears } from "../../dummydb/schoolyear";
+import AlertRemove from "../alertRemove";
 import "../style2.css";
 import "../style3.css";
 
@@ -34,6 +35,20 @@ function Chitiettaikhoan(props) {
   const [valueSchoolyear, setValueSchoolyear] = useState(SCHOOLYEAR_DEFAULT);
   const [user, setUser1] = useState("");
   const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -499,7 +514,7 @@ function Chitiettaikhoan(props) {
               color: "white",
             }}
             variant="contained"
-            onClick={handleBlock}
+            onClick={handleOpen}
           >
             Khóa tài khoản
           </Button>
@@ -516,12 +531,24 @@ function Chitiettaikhoan(props) {
               color: "white",
             }}
             variant="contained"
-            onClick={handleUnBlock}
+            onClick={handleOpen1}
           >
             Mở khóa tài khoản
           </Button>
         )}
       </div>
+      <AlertRemove
+        open={open}
+        handleCancel={handleClose}
+        handleOk={handleBlock}
+        message={`Bạn có chắc chắn muốn khóa tài khoản ${Id}?`}
+      ></AlertRemove>
+      <AlertRemove
+        open={open1}
+        handleCancel={handleClose1}
+        handleOk={handleUnBlock}
+        message={`Bạn có chắc chắn muốn mở khóa tài khoản ${Id}?`}
+      ></AlertRemove>
     </div>
   );
 }

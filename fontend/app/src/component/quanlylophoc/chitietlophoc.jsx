@@ -12,6 +12,7 @@ import * as yup from "yup";
 import classApi from "../../api/classApi";
 import { STATUS_DEFAULT } from "../../dummydb/dataDefault";
 import { headerStudent } from "../../dummydb/headerListStudentcsv";
+import AlertRemove from "../alertRemove";
 import "../style2.css";
 import "../style3.css";
 
@@ -24,6 +25,20 @@ function Chitietlophoc({ semesterDk }) {
   const [valueSubjectId, setValueSubjectId] = useState("");
   const [valueSemester, setValueSemester] = useState(20201);
   const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
   const schema = yup.object().shape({
     subjectId: yup.string().required("please enter your subjectId"),
     classId: yup.number().min(1, "Please enter at least 1 "),
@@ -367,7 +382,7 @@ function Chitietlophoc({ semesterDk }) {
               color: "white",
             }}
             variant="contained"
-            onClick={handleBlock}
+            onClick={handleOpen}
           >
             Khóa lớp học
           </Button>
@@ -384,12 +399,24 @@ function Chitietlophoc({ semesterDk }) {
               color: "white",
             }}
             variant="contained"
-            onClick={handleUnBlock}
+            onClick={handleOpen1}
           >
             Mở khóa lớp học
           </Button>
         )}
       </div>
+      <AlertRemove
+        open={open}
+        handleCancel={handleClose}
+        handleOk={handleBlock}
+        message={`Bạn có chắc chắn muốn khóa lớp học ${classId}?`}
+      ></AlertRemove>
+      <AlertRemove
+        open={open1}
+        handleCancel={handleClose1}
+        handleOk={handleUnBlock}
+        message={`Bạn có chắc chắn muốn mở khóa lớp học ${classId}?`}
+      ></AlertRemove>
       <br />
       <p className="thongtincanhan-title">2. Danh sách sinh viên đăng kí</p>
       <hr style={{ opacity: "0.3", width: "100%" }} />

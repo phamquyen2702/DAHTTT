@@ -13,14 +13,11 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import "./style.scss";
-import { useDispatch } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { registers } from "../reducers/userSlice";
 import userApi from "../api/userApi";
 function Dangki({ open, handleCloseDK }) {
   const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -36,7 +33,10 @@ function Dangki({ open, handleCloseDK }) {
       .oneOf([yup.ref("password")], "Password does not match"),
     fullname: yup.string().required("please enter your fullname"),
     address: yup.string().required("please enter your address"),
-    phone: yup.string().required("please enter your phone").matches(phoneRegExp, 'Phone number is not valid'),
+    phone: yup
+      .string()
+      .required("please enter your phone")
+      .matches(phoneRegExp, "Phone number is not valid"),
     birthday: yup.string().required("please enter your birthday"),
   });
   const formDK = useForm({
@@ -58,10 +58,7 @@ function Dangki({ open, handleCloseDK }) {
   } = formDK;
   const handleOnSubmitDK = async (values) => {
     try {
-     // const action = registers(values);
-     // const resultAction = await dispatch(action);
-     // unwrapResult(resultAction);
-      const data = await userApi.register(values)
+      await userApi.register(values);
       handleCloseDK();
       formDK.reset();
       enqueueSnackbar("Success", {

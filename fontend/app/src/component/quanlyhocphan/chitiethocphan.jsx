@@ -16,12 +16,26 @@ import { headerClassList } from "../../dummydb/headerListClassscsv";
 import { CSVLink } from "react-csv";
 import "../style2.css";
 import "../style3.css";
-
+import AlertRemove from "../alertRemove";
 function Chitiethocphan({ semesterDk }) {
   const { Id } = useParams();
   const [khoavien, setKhoavien] = useState(SCHOOL_ID_DEFAULT);
   const [subject, setSubject] = useState("");
   const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
   const schema = yup.object().shape({
     subjectName: yup.string().required("please enter your subjectName"),
     credit: yup.number().min(1, "Please enter at least 1 "),
@@ -271,7 +285,7 @@ function Chitiethocphan({ semesterDk }) {
               color: "white",
             }}
             variant="contained"
-            onClick={handleBlock}
+            onClick={handleOpen}
           >
             Khóa học phần
           </Button>
@@ -288,12 +302,24 @@ function Chitiethocphan({ semesterDk }) {
               color: "white",
             }}
             variant="contained"
-            onClick={handleUnBlock}
+            onClick={handleOpen1}
           >
             Mở khóa học phần
           </Button>
         )}
       </div>
+      <AlertRemove
+        open={open}
+        handleCancel={handleClose}
+        handleOk={handleBlock}
+        message={`Bạn có chắc chắn muốn khóa học phần ${Id}?`}
+      ></AlertRemove>
+      <AlertRemove
+        open={open1}
+        handleCancel={handleClose1}
+        handleOk={handleUnBlock}
+        message={`Bạn có chắc chắn muốn mở khóa học phần ${Id}?`}
+      ></AlertRemove>
       <br />
       <br />
       <hr style={{ opacity: "0.3", width: "100%" }} />
@@ -336,9 +362,11 @@ export const Chitiethocphandangki1 = ({ semesterDk, subjectId }) => {
         };
         const list = await classApi.getFilter(params);
         setDatasExport(list);
-      } catch (error) {enqueueSnackbar(error.response.data.detail, {
-        variant: "error",
-      });}
+      } catch (error) {
+        enqueueSnackbar(error.response.data.detail, {
+          variant: "error",
+        });
+      }
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
@@ -361,9 +389,11 @@ export const Chitiethocphandangki1 = ({ semesterDk, subjectId }) => {
         setCounts(count);
         const list = await classApi.getFilter(params);
         setDatas(list);
-      } catch (error) {enqueueSnackbar(error.response.data.detail, {
-        variant: "error",
-      });}
+      } catch (error) {
+        enqueueSnackbar(error.response.data.detail, {
+          variant: "error",
+        });
+      }
     };
     fetchData();
   }, [limit, page, enqueueSnackbar, subjectId, semesterDk]);
