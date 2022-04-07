@@ -92,8 +92,8 @@ try:
   sql = "INSERT INTO Class (subjectId, semester, location, day, timeStart, timeEnd, registered, `limit`, status) VALUES (" \
       "%s,%s, %s, %s, %s, %s,%s,%s,%s) "
   val = (0, 20211, "TC-403", 2, 1, 4, 0, 120, 1)
-  mycursor.execute(sql, val)
-  mydb.commit()
+  #mycursor.execute(sql, val)
+  #mydb.commit()
 except:
   print("Table Class is arleady exists")
 
@@ -118,8 +118,8 @@ sql = "INSERT INTO Subject (subjectId, subjectName, credit, programsemester, sch
 #
 try:
     val = ("IT0001", "Đồ án hệ thống thông tin", 3, 5, "KCNTT", 1)
-    mycursor.execute(sql, val)
-    mydb.commit()
+    #mycursor.execute(sql, val)
+    #mydb.commit()
 except:
     print("")
 
