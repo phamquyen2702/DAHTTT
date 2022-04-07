@@ -1,8 +1,8 @@
 subject:
   start_time: 2021-11-01T10:30
-  end_time: 2022-02-02T10:30
+  end_time: 2022-02-03T10:30
   meta:
-    establish_time: 1641200619.7856705
+    establish_time: 1641483218.2227674
 class:
   start_time: 2021-11-01T10:30
   end_time: 2022-02-02T10:30
@@ -20,7 +20,7 @@ class:
       start_time: '18:00'
       end_time: '21:00'
     last_year:
-      start_time: '00:00'
+      start_time: 00:00
       end_time: '23:59'
   meta:
     establish_time: 1641200641.862172
